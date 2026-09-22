@@ -193,4 +193,42 @@ involved.
 
 Full record: `K13-WarRoom/docs/BEFORE_AND_AFTER.md`.
 
+<!--bc:before-after-capture-2026-09-22-->
+### 2026-09-22 · Before & After: capturing the visual change is part of hm++
+**When a merge changes something a person can see, `hm++` is not finished until Before & After
+has it.** The studio records what shipped in five places and what it **looked like** in none; this
+is the one that keeps the picture. Two commands, from the War Room:
+
+```
+python3 .k13/beforeafter before --key <KEY> --url <live url> --sel "<css of the section>" \
+        --section "<recurring category, e.g. Hero>" --label "<this capture's title>" \
+        --desc "<one or two plain sentences>" --who "<who shipped it>" \
+        --request "<where the ask lives>" --pr <n> --apply        # BEFORE you merge
+python3 .k13/beforeafter after --key <KEY> --commit <merge sha> --apply   # after the merge
+```
+
+The `after` step verifies the production deployment on Vercel itself, on that merge commit, then
+shoots the same URL again. **`hm` and `hm-1` never capture**: nothing reaches production, so there
+is no "after".
+
+**What it refuses on its own:** EDISYN is never photographed, and a pair with no real difference is
+filed as `no_visible_change` rather than as a picture of nothing.
+
+**Every capture names its request** (a scope line, a `tasks/todo.md` item, a dated note, or
+`Kazim, verbal, <date>`); our own idea is honestly `K13 initiated`. If the ask has no home yet,
+writing it into the project's scope or todo is the first step, before the capture.
+
+**A site that opens with an intro overlay** needs a longer settle than the 2.5s default, or every
+shot is a picture of the intro: prefix the command with `BEFOREAFTER_SETTLE=9`.
+
+**Why:** Kazim asked on 2026-09-22 why Before & After had nothing from that day's Egg & Out work.
+It had nothing because nobody ran it: seven `hm++` merges went out and not one was captured. The
+rule existed only in the War Room's own `CLAUDE.md`, so a session onboarded from the genome dropped
+a journal note on every one of those merges, because the journal ritual is in the genome, and
+captured none, because this one was not. The step is now in the genome (section 3) and here, so a
+fresh agent in any project meets it where it works.
+
+Full spec and decision record: War Room `CLAUDE.md` section "Before & After" and
+`docs/BEFORE_AND_AFTER.md`.
+
 <!--K13_BROADCAST_END-->
