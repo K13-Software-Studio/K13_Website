@@ -231,4 +231,36 @@ fresh agent in any project meets it where it works.
 Full spec and decision record: War Room `CLAUDE.md` section "Before & After" and
 `docs/BEFORE_AND_AFTER.md`.
 
+<!--bc:write-once-no-shared-file-2026-09-22-->
+### 2026-09-22 · Write a rule once, and never into a file many sessions edit by hand
+**Write a rule once, and never into a file many sessions edit by hand.**
+
+Two rules, both from the 2026-09-22 session where Claude's memory index turned out to be full
+and the cause turned out to be the same one behind the journal erasing itself.
+
+**1. Write it once.** A correction or a standing rule goes to this project's
+`.claude/Lessons.md`, or to its `CLAUDE.md` when it is a standing rule. Write a Claude memory
+note **only when the fact has no browsable home**: a tool's trap, or something about a person.
+The old rule said "both, not either", so every correction was written twice. `CLAUDE.md` has no
+size limit and the memory index has a hard one, so the double writing broke memory first: 56 of
+121 notes were a second copy of a rule already written elsewhere, and the index quietly stopped
+loading the newest notes.
+
+**2. No shared file that many sessions write by hand.** This is the shape behind the journal
+erasing itself, the shared checkout losing another tab's edits, and the memory index silently
+dropping notes: one file, many writers, and the loser is never told. A document more than one
+session writes must be either **split**, so each writer owns its own file, or **generated** from
+something that already exists. And whatever assembles the shared view must **say out loud what it
+dropped**: silent loss is the failure, not the dropping.
+
+**What this changed for you: `.claude/Lessons.md` is generated now.** Each lesson is its own file
+under `.claude/lessons/`. Do not append to `Lessons.md`; it will be overwritten, deliberately.
+
+    k13-lesson --new "the rule you just learned"    # creates the file, correctly numbered
+    k13-lesson --write                              # regenerates Lessons.md
+
+The generator refuses to overwrite a `Lessons.md` whose headings are not all backed by a file, so
+a lesson appended by hand stops the run and is never lost. The migration itself was verified byte
+for byte in every repo before anything was written.
+
 <!--K13_BROADCAST_END-->
