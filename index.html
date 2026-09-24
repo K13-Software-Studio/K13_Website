@@ -188,6 +188,12 @@ section{position:relative;z-index:2}
 .cap-col .stk{display:flex;flex-direction:column;gap:0}
 .cap-col .stk span{font-family:var(--mono);font-size:13.5px;color:var(--ink-2);padding:9px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between}
 .cap-col .stk span em{font-style:normal;color:var(--faint);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.craft{margin-top:clamp(48px,6vw,76px);padding-top:clamp(28px,3.5vw,40px);border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(24px,4vw,56px)}
+.craft-head h3{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em;line-height:1.2}
+.craft-head p{color:var(--muted);font-size:15.5px;line-height:1.6}
+.craft-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.craft-list li{border-top:2px solid var(--ink);padding-top:14px;color:var(--muted);font-size:15px;line-height:1.55;display:flex;flex-direction:column;gap:8px}
+.craft-list .lvl{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
 
 /* ---------- about strip ---------- */
 .about{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
@@ -308,6 +314,8 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
   .hero-grid{grid-template-columns:1fr;gap:44px}
   .cards{grid-template-columns:1fr}
   .cap-grid{grid-template-columns:1fr}
+  .craft{grid-template-columns:1fr}
+  .craft-list{grid-template-columns:repeat(2,minmax(0,1fr))}
   .about-grid{grid-template-columns:1fr;gap:44px}
   .portrait{width:100%;max-width:430px;margin:0 auto}
   /* caption stays on the photo, compacted to clear the shoe (person right edge <=60% in the lower band) */
@@ -325,6 +333,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
   .row:hover{padding-left:6px}
 }
 @media(max-width:600px){
+  .craft-list{grid-template-columns:1fr}
   nav .nl{display:none}
   .hero-meta{gap:14px}
 }
@@ -396,7 +405,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
           <div class="div"></div>
           <div class="stats">
             <div class="st"><b data-count="16">0</b><span>shipped</span></div>
-            <div class="st"><b data-count="10">0</b><span>live now</span></div>
+            <div class="st"><b data-count="13">0</b><span>live now</span></div>
             <div class="st"><b>1</b><span>builder</span></div>
           </div>
         </aside>
@@ -419,8 +428,8 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
     <div class="cards">
       <div class="card rv">
         <div class="num">01</div>
-        <h3>One person, the whole build</h3>
-        <p>Product thinking, design, engineering and launch are handled by the same hands. Nothing gets lost in the gap between people, because there is no gap.</p>
+        <h3>One person accountable, start to finish</h3>
+        <p>You deal with me from the first call to the launch. Behind me works Team K13, a crew of AI specialists for design, code, testing and security, and nothing they make reaches you before it passes my desk.</p>
         <div class="tint" style="background:var(--wash-blue)"></div>
       </div>
       <div class="card rv">
@@ -510,8 +519,27 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
         <span class="rdesc">Every bottle steps on a scale, so the liquor that used to quietly walk out the back door has nowhere left to hide.</span>
         <span class="rmeta"><span class="tag">SaaS · Inventory</span><span class="go">Open ↗</span></span>
       </a>
+      <a class="row" href="https://lobsterlab.us" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/lobsterlab-live.jpg" data-c>
+        <span class="rnum">11</span>
+        <span class="rname">Lobster Lab</span>
+        <span class="rdesc">A Tiger Hospitality seafood spot, moved off a rented menu platform onto a site it finally owns, lobster rolls first.</span>
+        <span class="rmeta"><span class="tag">Restaurant · Migration</span><span class="go">Open ↗</span></span>
+      </a>
+      <a class="row" href="https://cosmos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/cosmos-live.jpg" data-c>
+        <span class="rnum">12</span>
+        <span class="rname">Cosmos Burger</span>
+        <span class="rdesc">Smash burgers from Tiger Hospitality, served loud: bold color, big type, and a menu you can almost taste from the couch.</span>
+        <span class="rmeta"><span class="tag">Restaurant · Brand</span><span class="go">Open ↗</span></span>
+      </a>
+      <a class="row" href="https://carlos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/carlos-live.jpg" data-c>
+        <span class="rnum">13</span>
+        <span class="rname">Carlos Almaraz</span>
+        <span class="rdesc">A living memorial for a founder of Los Four, the painter who turned Los Angeles into a dream of fire.</span>
+        <span class="rmeta"><span class="tag">Editorial · Memorial</span><span class="go">Open ↗</span></span>
+      </a>
     </div>
     <p class="index-foot rv">Also cooking in the studio: <b>an AI copilot</b> that finally pays attention in your meetings, <b>a sports private equity home</b> that is all thesis and no hype, <b>a gallery grade site</b> for an LA interior designer, <b>a project control room</b> that flags which job is stuck and who owns it, and <b>factory vision</b> that catches the flaw a tired eye misses.</p>
+    <p class="index-foot rv">Built for the studio itself: <b>a war room</b> that keeps every project, deadline and loose end on one screen, <b>a UI library</b> of parts already proven on live sites, and <b>a 3D office</b> where Team K13 clocks in.</p>
   </div>
 </section>
 
@@ -557,6 +585,18 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
         </div>
       </div>
     </div>
+    <div class="craft rv">
+      <div class="craft-head">
+        <h3>Four levels of craft, chosen part by part</h3>
+        <p>Not every part of a site deserves the same effort. You see each level on your own site before you choose, and I will tell you where not to spend.</p>
+      </div>
+      <ol class="craft-list">
+        <li><span class="lvl">Essential</span><span>It works, it is clean, nothing is missing. Most sites should be exactly this.</span></li>
+        <li><span class="lvl">Signature</span><span>It carries your character instead of looking like anyone's.</span></li>
+        <li><span class="lvl">Tailored</span><span>Cut for you alone. It only exists on your site.</span></li>
+        <li><span class="lvl">Immersive</span><span>The part people remember and show someone else. Two or three per site, at most.</span></li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -576,11 +616,11 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
         </figcaption>
       </figure>
       <div class="rv">
-        <p>I don't run an agency. I'm one builder who treats every project like <span class="hl">it has my name on it,</span> because it does. I would rather make six things I believe in than sixty I don't.</p>
+        <p>I don't run an agency. I'm one builder who treats every project like <span class="hl">it has my name on it,</span> because it does. One name on the door, a whole crew behind it: that crew is Team K13. I would rather make six things I believe in than sixty I don't.</p>
         <div class="facts">
           <div class="f"><span class="k">Status</span><span class="v">Open for a new project</span></div>
           <div class="f"><span class="k">Based</span><span class="v">Worldwide, remote</span></div>
-          <div class="f"><span class="k">Track record</span><span class="v">16 shipped, 10 live</span></div>
+          <div class="f"><span class="k">Track record</span><span class="v">16 shipped, 13 live</span></div>
           <div class="f"><span class="k">What earns a yes</span><span class="v">A real connection</span></div>
         </div>
       </div>
