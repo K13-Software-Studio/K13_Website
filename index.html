@@ -662,7 +662,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
     <div class="foot">
       <span class="fb"><span class="k">K<i>13</i></span> Software Studio</span>
       <span>Clear software, shipped by one builder.</span>
-      <span><a href="mailto:projects.k13@gmail.com" data-c>projects.k13@gmail.com</a> · © 2026</span>
+      <span><a href="mailto:projects.k13@gmail.com" data-c>projects.k13@gmail.com</a> · © <span data-current-year>2026</span></span>
     </div>
   </div>
 </footer>
@@ -672,6 +672,9 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
 (function(){
 "use strict";
 var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* footer year: never goes stale by hand; the typed year is the no-JS fallback */
+document.querySelectorAll("[data-current-year]").forEach(function(el){el.textContent=new Date().getFullYear();});
 
 /* smooth scroll */
 var lenis=null;
