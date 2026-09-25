@@ -385,7 +385,7 @@ function letters(mount){
    soft one and can never let the yolk escape, grease streaks smear out behind. Click jiggles,
    double click flips it with a spatula. */
 function eggcursor(mount){
-  var c=card(mount,{title:"Runny Egg",from:"Egg & Out",instr:"Move around the pan. Click for a jiggle, double click for the flip.",stageClass:"wb-pan"});
+  var c=card(mount,{title:"Runny Egg",from:"Egg & Out",instr:"Move around the pan. Left click jiggles the yolk, right click flips the egg.",stageClass:"wb-pan"});
   var stage=c.stage, layer=el("div","eg-layer"); layer.setAttribute("aria-hidden","true"); stage.appendChild(layer);
   var streaks=[];
   [[15,3.5,0],[10,3,-10],[10,3,10]].forEach(function(s){ var d=el("div","eg-streak"); d.style.width=s[0]+"px"; d.style.height=s[1]+"px"; layer.appendChild(d); streaks.push({el:d,x:0,y:0,vx:0,vy:0,lat:s[2],w:s[0]}); });
@@ -414,8 +414,9 @@ function eggcursor(mount){
   new IntersectionObserver(function(es){ live=es[0].isIntersecting; if(live){ size(); go(); } },{threshold:.2}).observe(mount);
   function at(e){ var r=stage.getBoundingClientRect(); tx=clamp(e.clientX-r.left,0,W); ty=clamp(e.clientY-r.top,0,H); touched=true; }
   stage.addEventListener("pointermove",at,{passive:true});
-  stage.addEventListener("pointerdown",function(e){ at(e); hot=true; shake(); }); stage.addEventListener("pointerup",function(){ hot=false; }); stage.addEventListener("pointerleave",function(){ hot=false; });
-  stage.addEventListener("dblclick",flip);
+  stage.addEventListener("pointerdown",function(e){ at(e); hot=true; if(e.button===2) flip(); else if(e.button===0) shake(); });
+  stage.addEventListener("contextmenu",function(e){ e.preventDefault(); });          /* right click is the spatula, not a menu */ stage.addEventListener("pointerup",function(){ hot=false; }); stage.addEventListener("pointerleave",function(){ hot=false; });
+  stage.addEventListener("dblclick",flip);                                            /* touch has no right button: double tap flips */
   var shaking=false,flipping=false;
   function shake(){ if(shaking||reduced) return; shaking=true; yolk.classList.add("shake"); setTimeout(function(){ yolk.classList.remove("shake"); shaking=false; },520); c.read.innerHTML='<span>Wobble.</span>'; }
   function flip(){ if(flipping||reduced) return; flipping=true; [yolkWrap,whiteWrap].forEach(function(f){ f.classList.add("flipping"); }); setTimeout(function(){ [yolkWrap,whiteWrap].forEach(function(f){ f.classList.remove("flipping"); }); flipping=false; },800); c.read.innerHTML='<span>Spatula. Browned underneath.</span>'; }
