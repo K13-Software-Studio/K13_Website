@@ -658,3 +658,8 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
   header.menu-open nav .nl::after{display:none}
   header.menu-open nav .btn{margin-top:6px;justify-content:center}
 }
+
+/* QA 2026-09-25: the fading overlay must never swallow a click */
+#k13intro.up{pointer-events:none}
+#k13intro.up *{pointer-events:none!important}
+.craft-tag .replay{display:inline-flex;align-items:center;min-height:24px;padding:0 4px;margin:0 -4px}

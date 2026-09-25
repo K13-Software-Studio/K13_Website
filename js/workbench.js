@@ -246,18 +246,19 @@ function miramar(mount){
   var sign=el("div","wb-marquee",'<div class="wb-board"><span class="wb-board-t">MIRAMAR</span><span class="wb-board-s">Food hall · est. 1938 · reach <span class="wb-hunt" data-hunt>13</span></span></div><div class="wb-bulbs" role="group" aria-label="Marquee bulbs"></div><div class="wb-mctl"><button type="button" class="wb-start">Start the show</button><span class="wb-hunt wb-row13">Row <span data-hunt>13</span></span></div>');
   c.stage.appendChild(sign);
   var row=sign.querySelector(".wb-bulbs"), start=sign.querySelector(".wb-start"), bulbs=[], N=7;
-  var seq=[], at=0, playing=false, accepting=false, best=0; try{ best=+(localStorage.getItem("k13-marquee")||0); }catch(e){}
+  var seq=[], at=0, playing=false, accepting=false, best=0, gen=0; try{ best=+(localStorage.getItem("k13-marquee")||0); }catch(e){}
   for(var i=0;i<N;i++){ (function(i){ var b=el("button","wb-bulb"); b.type="button"; b.setAttribute("aria-label","Bulb "+(i+1)); b.style.setProperty("--d",i);
     b.addEventListener("click",function(){ press(i); }); row.appendChild(b); bulbs.push(b); })(i); }
   function flash(i,ms){ var b=bulbs[i]; b.classList.add("on"); setTimeout(function(){ b.classList.remove("on"); },ms||380); }
   function status(t){ c.read.innerHTML='<span>'+t+'</span>'; }
   function play(){
+    var g=gen; if(!seq.length) return;
     playing=true; accepting=false; at=0; sign.classList.add("showing"); status('Round <b>'+seq.length+'</b>. Watch the sign.');
     var gap=reduced?900:Math.max(360,620-seq.length*20), k=0;
-    (function step(){ if(k>=seq.length){ playing=false; accepting=true; sign.classList.remove("showing"); status('Round <b>'+seq.length+'</b>. Your turn: '+seq.length+' bulb'+(seq.length>1?'s':'')+'.'); if(bulbs[0]) bulbs[seq[0]]&&null; return; }
+    (function step(){ if(g!==gen) return; if(k>=seq.length){ playing=false; accepting=true; sign.classList.remove("showing"); status('Round <b>'+seq.length+'</b>. Your turn: '+seq.length+' bulb'+(seq.length>1?'s':'')+'.'); if(bulbs[0]) bulbs[seq[0]]&&null; return; }
       flash(seq[k],gap*0.6); k++; setTimeout(step,gap); })();
   }
-  function grow(){ seq.push(Math.floor(Math.random()*N)); setTimeout(play,reduced?200:500); }
+  function grow(){ var g=gen; seq.push(Math.floor(Math.random()*N)); setTimeout(function(){ if(g===gen) play(); },reduced?200:500); }
   function press(i){
     if(!accepting){ if(!playing&&!seq.length) flash(i,200); return; }
     flash(i,220);
@@ -268,10 +269,10 @@ function miramar(mount){
     if(at===seq.length){ accepting=false;
       if(seq.length>=13){ sign.classList.add("lit"); if(!reduced){ sign.classList.add("chase"); setTimeout(function(){ sign.classList.remove("chase"); },2400); } best=13; try{ localStorage.setItem("k13-marquee","13"); }catch(e){}
         status('<b>Thirteen. Doors open, opening night.</b>'); start.textContent="Play again"; start.hidden=false; return; }
-      status('<b>'+seq.length+'</b> right.'); setTimeout(grow,450); }
+      status('<b>'+seq.length+'</b> right.'); var g=gen; setTimeout(function(){ if(g===gen) grow(); },450); }
   }
-  start.addEventListener("click",function(){ seq=[]; start.hidden=true; sign.classList.remove("lit"); grow(); var b=bulbs[0]; if(b) setTimeout(function(){ b.focus({preventScroll:true}); },50); });
-  c.reset.addEventListener("click",function(){ seq=[]; at=0; playing=false; accepting=false; start.textContent="Start the show"; start.hidden=false; sign.classList.remove("lit","chase","showing"); status(best?'Best so far: <b>'+best+'</b>.':''); c.untouch(); });
+  start.addEventListener("click",function(){ gen++; seq=[]; start.hidden=true; sign.classList.remove("lit"); grow(); var b=bulbs[0]; if(b) setTimeout(function(){ b.focus({preventScroll:true}); },50); });
+  c.reset.addEventListener("click",function(){ gen++; seq=[]; at=0; playing=false; accepting=false; bulbs.forEach(function(b){ b.classList.remove("on"); }); start.textContent="Start the show"; start.hidden=false; sign.classList.remove("lit","chase","showing"); status(best?'Best so far: <b>'+best+'</b>.':''); c.untouch(); });
   status(best?'Best so far: <b>'+best+'</b>.':'');
 }
 
