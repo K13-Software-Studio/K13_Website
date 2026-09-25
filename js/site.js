@@ -103,7 +103,21 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     "Teaching factory cameras to catch the flaw tired eyes miss",
     "Giving a production line a second set of eyes that never blink",
     "Spotting the bad part before it ever reaches the box",
-    "Catching defects at line speed, one frame at a time"
+    "Catching defects at line speed, one frame at a time",
+    "Moving a seafood kitchen off a rented menu platform, onto a site it finally owns",
+    "Serving smash burgers loud, on a site you can almost taste from the couch",
+    "Building a living memorial for the painter who made Los Angeles a dream of fire",
+    "Rebuilding a marine brand's site on spec, to show them what it could be",
+    "Giving a hood cleaning crew one screen for every customer and every job",
+    "Putting every conversation a tattoo studio has into one inbox, one phone number",
+    "Opening a merch drop store with no framework and no backend, just a cart that works",
+    "Modelling every deal four ways for a private investment club, downside first",
+    "Keeping a founder's cards, statements and credit score on one quiet screen",
+    "Helping a friend pull whole playlists down without the busywork",
+    "Teaching an affiliate video pipeline to skip the day when nothing is good enough",
+    "Running the whole studio from one board that says out loud when it's stale",
+    "Collecting the best interface details on the web, with honest provenance",
+    "Turning the studio's characters into a small 3D office"
   ];
   for(var j=items.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1));var t=items[j];items[j]=items[k];items[k]=t;}
   feed.textContent=items[0];
@@ -323,5 +337,28 @@ document.addEventListener("DOMContentLoaded",function(){
   if(!(window.K13&&window.K13.hunt&&window.K13.hunt.place)) return;
   document.querySelectorAll("[data-hunt]").forEach(function(el){ window.K13.hunt.place(el); });
 });
+
+
+/* wall of work: pause control (it moves for longer than five seconds), and it rests when off screen */
+(function(){
+  var wall=document.getElementById("wall"), t=document.getElementById("wallToggle"); if(!wall||!t) return;
+  var user=false;
+  t.addEventListener("click",function(){ user=!user; wall.classList.toggle("paused",user); t.setAttribute("aria-pressed",String(user)); t.textContent=user?"Play the wall":"Pause the wall"; });
+  new IntersectionObserver(function(es){ if(!user) wall.classList.toggle("paused",!es[0].isIntersecting); }).observe(wall);
+})();
+
+/* drafting motifs: ruler ticks drawn once, then each layer drifts at its own depth */
+(function(){
+  var g=document.querySelector(".motif.m2 .ticks");
+  if(g){ var ns="http://www.w3.org/2000/svg"; for(var x=0;x<=520;x+=13){ var l=document.createElementNS(ns,"line"); var tall=(x/13)%5===0; l.setAttribute("x1",x); l.setAttribute("x2",x); l.setAttribute("y1",30); l.setAttribute("y2",tall?12:22); g.appendChild(l); } }
+  var box=document.querySelector(".motifs"); if(!box) return;
+  function fit(){ box.style.height=document.documentElement.scrollHeight+"px"; }
+  fit(); window.addEventListener("load",fit); window.addEventListener("resize",fit);
+  if(reduced) return;
+  var layers=Array.prototype.map.call(box.querySelectorAll(".motif"),function(el){ return {el:el,d:parseFloat(el.getAttribute("data-depth"))||0}; });
+  var ticking=false;
+  function update(){ ticking=false; var y=window.scrollY||0; layers.forEach(function(l){ l.el.style.transform="translate3d(0,"+(-y*l.d).toFixed(1)+"px,0) rotate("+(y*l.d*0.02).toFixed(2)+"deg)"; }); }
+  window.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true}); update();
+})();
 
 })();
