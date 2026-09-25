@@ -149,8 +149,8 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
 
 /* work index cursor preview */
 (function(){
-  var peek=document.getElementById("peek"), img=document.getElementById("peekImg");
-  if(!peek || !window.matchMedia("(hover:hover)").matches) return;
+  var peek=document.getElementById("peek"), vid=document.getElementById("peekVid");
+  if(!peek || !vid || !window.matchMedia("(hover:hover)").matches) return;
   var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
   function loop(){ cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
     peek.style.transform="translate("+cx+"px,"+cy+"px) translate(-50%,-50%) scale("+(active?1:.94)+") rotate(-2deg)";
@@ -158,8 +158,13 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     raf = (active||moving) ? requestAnimationFrame(loop) : null; }
   function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
   document.querySelectorAll(".row[data-peek]").forEach(function(row){
-    row.addEventListener("mouseenter",function(){ var src="assets/shots/webp/"+row.getAttribute("data-peek")+"-1500.webp"; if(img.getAttribute("src")!==src) img.setAttribute("src",src); active=true; peek.classList.add("on"); kick(); });
-    row.addEventListener("mouseleave",function(){ active=false; peek.classList.remove("on"); kick(); });
+    row.addEventListener("mouseenter",function(){
+      var n=row.getAttribute("data-peek"), src="assets/shots/loops/"+n+".mp4";
+      vid.poster="assets/shots/webp/"+n+"-1500.webp";
+      if(vid.getAttribute("src")!==src){ vid.setAttribute("src",src); vid.load(); }
+      if(!reduced){ var pr=vid.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+      active=true; peek.classList.add("on"); kick(); });
+    row.addEventListener("mouseleave",function(){ active=false; peek.classList.remove("on"); vid.pause(); kick(); });
   });
   document.addEventListener("mousemove",function(e){ tx=e.clientX+150; ty=e.clientY; if(active) kick(); },{passive:true});
 })();
@@ -369,6 +374,50 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){ set(btn.getAttribute("aria-expanded")!=="true"); });
   document.querySelectorAll("#siteNav a").forEach(function(a){ a.addEventListener("click",function(){ set(false); }); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&hdr.classList.contains("menu-open")){ set(false); btn.focus(); } });
+})();
+
+
+/* moving screens on the wall: desktop with hover only, loops load when the wall is near, never on phones */
+(function(){
+  var wall=document.getElementById("wall"); if(!wall||reduced||!window.matchMedia("(hover:hover) and (min-width:920px)").matches) return;
+  var upgraded=false;
+  function upgrade(){
+    if(upgraded) return; upgraded=true;
+    wall.querySelectorAll(".wall-tile img").forEach(function(im){
+      var n=(im.getAttribute("src").match(/webp\/(.+)-750\.webp$/)||[])[1]; if(!n) return;
+      var v=document.createElement("video"); v.muted=true; v.loop=true; v.playsInline=true; v.preload="metadata"; v.setAttribute("aria-hidden","true");
+      v.poster=im.getAttribute("src"); v.src="assets/shots/loops/"+n+".mp4"; v.width=750; v.height=469;
+      im.replaceWith(v); v.addEventListener("loadeddata",function(){ v.parentNode.setAttribute("data-loaded",""); });
+    });
+  }
+  var t=document.getElementById("wallToggle"), inView=false;
+  function userPaused(){ return !!(t&&t.getAttribute("aria-pressed")==="true"); }
+  function playAll(on){ wall.querySelectorAll("video").forEach(function(v){ if(on){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else v.pause(); }); }
+  /* loops are fetched a little before the wall arrives, and play only while it is actually on screen */
+  new IntersectionObserver(function(es){ if(es[0].isIntersecting) upgrade(); },{rootMargin:"400px 0px"}).observe(wall);
+  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; playAll(inView&&!userPaused()); },{threshold:.05}).observe(wall);
+  if(t) t.addEventListener("click",function(){ setTimeout(function(){ playAll(inView&&!userPaused()); },0); });
+})();
+
+/* loading states: the shimmer stops the moment a picture is in */
+document.querySelectorAll(".row .rthumb, .wall-tile img, .door-pic img").forEach(function(im){
+  var box=im.classList.contains("rthumb")?im:im.parentNode; function done(){ box.setAttribute("data-loaded",""); }
+  if(im.complete&&im.naturalWidth) done(); else { im.addEventListener("load",done); im.addEventListener("error",done); }
+});
+
+/* a note for whoever opens the console */
+try{ console.log("%cK13 Software Studio","font:600 18px Fraunces,Georgia,serif;color:#141D35","\nHand-built, one page, no framework, no tracker. Thirteen small 13s are hidden on this page; the footer keeps count. Curious about the code? projects.k13@gmail.com"); }catch(e){}
+
+
+/* the three stories open in place; one at a time keeps the list readable */
+(function(){
+  var btns=document.querySelectorAll(".story-btn"); if(!btns.length) return;
+  btns.forEach(function(b){ b.addEventListener("click",function(){
+    var open=b.getAttribute("aria-expanded")==="true", panel=document.getElementById(b.getAttribute("aria-controls"));
+    btns.forEach(function(o){ if(o!==b){ o.setAttribute("aria-expanded","false"); var p=document.getElementById(o.getAttribute("aria-controls")); if(p) p.hidden=true; o.firstChild.textContent="Read the story "; } });
+    b.setAttribute("aria-expanded",String(!open)); panel.hidden=open; b.firstChild.textContent=open?"Read the story ":"Close the story ";
+    if(!open) panel.querySelectorAll(".rv").forEach(function(r){ r.classList.add("in"); });
+  }); });
 })();
 
 })();

@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  Hello, curious one. This page is hand-built: one HTML file, two stylesheets, three scripts,
+  no framework, no tracker. Everything you see loads from this domain, plus two font hosts.
+  There are thirteen small "13"s hidden on the page. The console has a note for you too.
+  K13 Software Studio, San Diego. projects.k13@gmail.com
+-->
 <html lang="en" class="k13-held">
 <head>
 <meta charset="UTF-8">
@@ -19,9 +25,9 @@
 <meta name="twitter:title" content="K13 Software Studio · Software That Feels Obvious">
 <meta name="twitter:description" content="Two people. Sixteen shipped, thirteen live. Software that feels obvious.">
 <meta name="twitter:image" content="https://k13projects.com/assets/og/k13-og.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/fraunces-normal-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/workbench.css">
@@ -93,7 +99,7 @@
 <div class="wash wash-2"></div>
 <div class="wash wash-3"></div>
 
-<div class="peek" id="peek"><div class="fr"><div class="top"><i></i><i></i><i></i></div><img id="peekImg" alt=""></div></div>
+<div class="peek" id="peek"><div class="fr"><div class="top"><i></i><i></i><i></i></div><video id="peekVid" muted loop playsinline preload="none" aria-hidden="true"></video></div></div>
 
 <header id="hdr">
   <div class="bg"></div>
@@ -119,7 +125,7 @@
       <div class="hero-copy">
         <span class="eyebrow rv"><span>K<span data-hunt>13</span> Software Studio · San Diego, working worldwide</span></span>
         <h1 class="rv">Software that feels obvious, built by two people who <span class="ci">answer.</span></h1>
-        <p class="hero-sub rv">We're two people, not a queue. You talk to the people who build it, from the first sketch to the deploy, and it always ends up feeling simpler than the work underneath it was.</p>
+        <p class="hero-sub rv">Two people, not a queue. You talk to the ones who build it, and it ends up feeling simpler than the work underneath.</p>
         <div class="hero-cta rv">
           <a class="btn sheen" href="#contact" data-c>Start a project</a>
           <a class="btn ghost" href="#work" data-c>See the work</a>
@@ -155,7 +161,7 @@
 
 <!-- ===================== WALL OF WORK ===================== -->
 <section class="wall" id="wall" aria-labelledby="clientsTitle">
-  <div class="wrap wall-head"><span class="eyebrow" id="clientsTitle">Who we've worked with</span><span class="wall-sub">Restaurant groups, founders, makers and a university market. All <span data-hunt>13</span> screens below are live.</span></div>
+  <div class="wrap wall-head"><span class="eyebrow" id="clientsTitle">Who we've worked with</span><span class="wall-sub">All <span data-hunt>13</span> screens below are live.</span></div>
   <div class="wrap">
     <ul class="logo-wall rv">
       <li class="logo logo-ink"><img src="assets/clients/tiger-hospitality.webp" alt="Tiger Hospitality" loading="lazy" decoding="async"></li>
@@ -189,7 +195,7 @@
         <span class="eyebrow">Who it's for</span>
         <h2 class="h2">Four kinds of client, one <i>standard.</i></h2>
       </div>
-      <p class="sec-note">Tap a door and the <span data-hunt>13</span> projects below sort themselves. Every link opens the live site.</p>
+      <p class="sec-note">Tap a door. The <span data-hunt>13</span> projects below sort themselves.</p>
     </div>
     <div class="door-grid" id="doorGrid">
       <div class="door rv" data-door="hospitality">
@@ -241,25 +247,25 @@
         <span class="eyebrow">How we work</span>
         <h2 class="h2">Three rules we don't <i>bend.</i></h2>
       </div>
-      <p class="sec-note">No account managers, no handoffs, no surprises. The way the work gets made is the reason it holds up.</p>
+      <p class="sec-note">The way the work gets made is why it holds up.</p>
     </div>
     <div class="cards">
       <div class="card rv sheen">
         <div class="num">01</div>
         <h3>Two people, no one in between</h3>
-        <p>You talk to the people who build it, from the first call to launch. No account managers, no handoff to a junior, and nothing reaches you before it works where your visitors will see it.</p>
+        <p>You talk to the people who build it, first call to launch. Nothing reaches you before it works where your visitors will see it.</p>
         <div class="tint tint-blue"></div>
       </div>
       <div class="card rv sheen">
         <div class="num">02</div>
         <h3>Slow where it counts</h3>
-        <p>We move fast on the easy parts and carefully on the ones that bite later: accessibility, security, the parts nobody notices until they fail.</p>
+        <p>Fast on the easy parts. Careful on the ones that bite later: accessibility, security, the parts nobody notices until they fail.</p>
         <div class="tint tint-mint"></div>
       </div>
       <div class="card rv sheen">
         <div class="num">03</div>
         <h3>Honest from the first reply</h3>
-        <p>If a project isn't a fit, you hear that within a day, with a better direction instead of a maybe. We'd rather send you somewhere good than fill a calendar with the wrong work.</p>
+        <p>If a project isn't a fit, you hear it within a day, with a better direction. We'd rather send you somewhere good than fill a calendar.</p>
         <div class="tint tint-peach"></div>
       </div>
     </div>
@@ -274,7 +280,7 @@
         <span class="eyebrow">Selected work</span>
         <h2 class="h2">Real products, on <i>real</i> domains.</h2>
       </div>
-      <p class="sec-note">Hover a row to preview it inline. Every one of these is live in production, checked by hand, not assumed.</p>
+      <p class="sec-note">Hover a row to see it move. Every one is live, checked by hand.</p>
     </div>
     <div class="door-reset" id="doorReset" hidden><span id="doorResetLabel">Showing one kind of client.</span> <button type="button" class="reset-link" id="doorResetBtn">Show all 13</button></div>
     <div class="index" id="index">
@@ -284,6 +290,13 @@
         <span class="rdesc">One roof for a family of restaurant brands, with a map where every pin is a new neighborhood.</span>
         <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Brand · Maps</span><span class="go">Open ↗</span></span>
       </a>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w01">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w01" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>One restaurant group, six concepts, six separate sites. One of them was about to lose the rented platform it lived on, with a hard cutoff date.</p></div><div class="story-step"><span class="story-k">What we built</span><p>A flagship with a map where every pin is a location, and a rebuilt site for each concept: menus the teams update themselves, catering enquiries that land in a real inbox, structured data for every restaurant.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>Seven live sites under one roof, a perfect search score on the flagship, and a family that can open a new neighbourhood by adding one pin.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>7</b><span>live sites</span></div><div class="story-fact"><b>600+</b><span>commits across the family</span></div><div class="story-fact"><b>Nov 2025</b><span>since</span></div><div class="story-fact"><b>100</b><span>flagship search score</span></div></div>
+        </div>
+      </div>
       <a class="row sheen" id="w02" href="https://lavida.fit" target="_blank" rel="noopener noreferrer" data-peek="lavida-live" data-door="hospitality" data-c>
         <span class="rnum">02</span>
         <span class="rname">La Vida San Diego</span>
@@ -308,6 +321,13 @@
         <span class="rdesc">A 20,000 square foot public market at UC San Diego, accessible and stable from day one.</span>
         <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">CMS · A11y</span><span class="go">Open ↗</span></span>
       </a>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w05">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w05" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>A 20,000 square foot public market at UC San Diego needed its site before the doors opened, and it had to work for every student from day one.</p></div><div class="story-step"><span class="story-k">What we built</span><p>A Next.js site the market's own team runs through a CMS, a bookings form that actually delivers, and a map of the vendors. Accessibility was a requirement, not a pass at the end.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>Live since spring 2026. The page paints in about half a second and ships a full set of security headers.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>Apr 2026</b><span>first commit</span></div><div class="story-fact"><b>69</b><span>commits</span></div><div class="story-fact"><b>0.53s</b><span>time to paint</span></div><div class="story-fact"><b>2026-09-25</b><span>checked</span></div></div>
+        </div>
+      </div>
       <a class="row sheen" id="w06" href="https://globalforkfh.com" target="_blank" rel="noopener noreferrer" data-peek="globalfork-live" data-door="hospitality" data-c>
         <span class="rnum">06</span>
         <span class="rname">Global Fork</span>
@@ -338,6 +358,13 @@
         <span class="rdesc">Every bottle steps on a scale, so the liquor that used to quietly walk out the back door has nowhere left to hide.</span>
         <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">SaaS · Inventory</span><span class="go">Open ↗</span></span>
       </a>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w10">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w10" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>Bars lose liquor they never ring up, and nobody counts bottles at 2am. Our own product, built for the Turkish market.</p></div><div class="story-step"><span class="story-k">What we built</span><p>Every bottle steps on a scale. A counting engine with 27 passing tests turns weight into pours, event-sourced stock makes every change auditable, and row-level security keeps each bar's numbers its own.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>The first working build took five days. It paints in under a third of a second and connects to point-of-sale and e-invoice systems.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>5 days</b><span>first build</span></div><div class="story-fact"><b>27 passing</b><span>engine tests</span></div><div class="story-fact"><b>0.28s</b><span>time to paint</span></div><div class="story-fact"><b>Jun 2026</b><span>built</span></div></div>
+        </div>
+      </div>
       <a class="row sheen" id="w11" href="https://lobsterlab.us" target="_blank" rel="noopener noreferrer" data-peek="lobsterlab-live" data-door="hospitality" data-c>
         <span class="rnum">11</span>
         <span class="rname">Lobster Lab</span>
@@ -371,7 +398,7 @@
         <span class="eyebrow">What we build</span>
         <h2 class="h2">Three lanes, two <i>people.</i></h2>
       </div>
-      <p class="sec-note">The tools matter less than knowing when to reach for each. These ship the work above.</p>
+      <p class="sec-note">Knowing when to reach for each matters more than the tools.</p>
     </div>
     <div class="cap-grid">
       <div class="cap-col rv">
@@ -408,7 +435,7 @@
     <div class="craft rv">
       <div class="craft-head">
         <h3>Four levels of craft, seen live on this page.</h3>
-        <p>Not every part of a site deserves the same effort. Flip the switch to see exactly which level went where on this page, and why: we'll tell you where not to spend just as readily as where we did.</p>
+        <p>Not every part of a site deserves the same effort. Flip the switch to see which level went where on this page, and why.</p>
       </div>
       <div class="showroom">
         <button class="switch" type="button" role="switch" aria-checked="false" id="showroom" aria-describedby="showroomHelp">
@@ -435,7 +462,7 @@
         <span class="eyebrow">How you can check</span>
         <h2 class="h2">Proof, not <i>promises.</i></h2>
       </div>
-      <p class="sec-note">Anyone can say they care about quality. Here is exactly what that means when we ship something of yours, and when we last checked.</p>
+      <p class="sec-note">What "we care about quality" means in numbers, and when we last checked.</p>
     </div>
     <ol class="proof">
       <li class="rv"><b>Zero accessibility violations, checked with axe-core.</b><span>Nobody using a keyboard or a screen reader gets stuck on this site.</span><time datetime="2026-09-25" data-record="a11y">Checked 2026-09-25</time></li>
@@ -484,6 +511,10 @@
             <p>Builds the infrastructure behind every deploy: the parts we sell on top of.</p>
           </div>
         </div>
+        <blockquote class="note-from" data-draft="Kazim: your words go here; this is a draft">
+          <p>I'd rather build six things I'm proud of than sixty I'm not. If you're reading this far, you probably feel the same about your own work. That's usually enough to start.</p>
+          <footer><img src="assets/sig-kazim.svg" alt="" width="120" height="40" aria-hidden="true"><span>Kazim K., Principal</span></footer>
+        </blockquote>
         <div class="facts">
           <div class="f"><span class="k">Status</span><span class="v">Open for a new project</span></div>
           <div class="f"><span class="k">Based</span><span class="v">San Diego and Belgium, worldwide remote</span></div>
@@ -502,7 +533,7 @@
       <div class="contact-text">
         <span class="eyebrow rv">Start a project</span>
         <h2 class="big rv big-gap">Have something worth <i>building?</i></h2>
-        <p class="rv">Tell us what it is and why it matters to you. A few taps, in your own words. You'll hear back within a day, with real thoughts either way.</p>
+        <p class="rv">A few taps, in your own words. You'll hear back within a day, with real thoughts either way.</p>
         <a class="mail rv" href="mailto:projects.k13@gmail.com?subject=Project%20inquiry" data-c>Or just email <b>projects.k13@gmail.com</b>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 L17 7 M9 7 H17 V15"/></svg>
         </a>
@@ -573,9 +604,9 @@
     <div class="sec-head rv">
       <div>
         <span class="eyebrow">The workbench</span>
-        <h2 class="h2">Two things from the work, made <i>playable.</i></h2>
+        <h2 class="h2">Things from the work, made <i>playable.</i></h2>
       </div>
-      <p class="sec-note">A mirror that turns any stroke into a composition, and a marquee that remembers what you forget. Light all <span data-hunt>13</span> to open the doors.</p>
+      <p class="sec-note">Desk toys made from the work. No rules, no reading. Light all <span data-hunt>13</span> to open the doors.</p>
     </div>
     <div class="bench">
       <div class="bench-card rv" data-game="carlos"></div>
