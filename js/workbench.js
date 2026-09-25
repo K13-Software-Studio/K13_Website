@@ -447,7 +447,10 @@ function sandwich(mount){
   var stage=c.stage;
   var wrap=el("div","sb-wrap"); stage.appendChild(wrap);
   var steps=el("ol","sb-steps"); wrap.appendChild(steps);
-  var scroller=el("div","sb-scroller"); scroller.tabIndex=0; scroller.setAttribute("role","region"); scroller.setAttribute("aria-label","The build. Scroll or use the arrow keys to drop each layer in."); wrap.appendChild(scroller);
+  var scroller=el("div","sb-scroller"); scroller.tabIndex=0; scroller.setAttribute("role","region"); scroller.setAttribute("aria-label","The build. Scroll or use the arrow keys to drop each layer in.");
+  scroller.setAttribute("data-lenis-prevent","");                                    /* the page's smooth scroll must not swallow the wheel over the pan */
+  scroller.addEventListener("pointerdown",function(){ scroller.focus({preventScroll:true}); });
+  wrap.appendChild(scroller);
   var track=el("div","sb-track"); scroller.appendChild(track);
   var sticky=el("div","sb-sticky"); track.appendChild(sticky);
   var box=el("div","sb-box"); sticky.appendChild(box);
