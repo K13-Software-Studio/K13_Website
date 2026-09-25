@@ -52,96 +52,7 @@
 .wb-next:hover{background:var(--ink)}
 :root[data-theme="dark"] .wb-next{color:#0F1629}
 
-/* ---------- 1. Pour Check ---------- */
-.wb-bar{min-height:250px}
-.wb-shelf{position:absolute;left:14px;right:150px;bottom:14px;top:48px;display:flex;justify-content:space-around;align-items:flex-end;gap:6px}
-.wb-slot{display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .35s var(--pop)}
-.wb-slot.on{transform:translateY(-6px)}
-.wb-bottle{width:38px;height:112px;padding:0;cursor:pointer;border-radius:8px}
-.wb-bottle svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 12px rgba(20,29,53,.22));transition:transform .3s var(--pop)}
-.wb-bottle:hover svg{transform:translateY(-3px) rotate(-3deg)}
-.wb-glass{fill:rgba(255,255,255,.75);stroke:var(--ink);stroke-width:1.5}
-.wb-fill{fill:var(--blue);opacity:.85}
-.wb-label{fill:var(--paper-2);stroke:var(--line-2);stroke-width:1}
-.wb-btag{font-family:var(--mono);font-size:11px;color:var(--muted);min-height:1.3em}
-.wb-slot.on .wb-btag{color:var(--ink);font-weight:500}
-.wb-accuse{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink);border:1px solid var(--line-3);border-radius:100px;padding:0 10px;min-height:28px;background:var(--paper-2);transition:border-color .3s var(--work),color .3s var(--work)}
-.wb-accuse:hover{border-color:var(--blue);color:var(--blue)}
-.wb-slot.thief .wb-fill{fill:#C2410C}
-.wb-slot.thief .wb-btag{color:var(--blue)}
-.wb-slot.thief .wb-accuse{background:var(--blue);color:#fff;border-color:var(--blue)}
-.wb-slot.wrong .wb-accuse{text-decoration:line-through;opacity:.6}
-.win .wb-slot.thief{animation:wb-caught .7s var(--pop)}
-@keyframes wb-caught{0%{transform:scale(1)}40%{transform:scale(1.14) rotate(-4deg)}100%{transform:scale(1)}}
-.wb-scale{position:absolute;right:16px;bottom:14px;width:118px;height:56px}
-.wb-plate{position:absolute;left:0;right:0;top:0;height:14px;border-radius:6px;background:var(--ink);box-shadow:0 8px 16px -8px rgba(20,29,53,.6)}
-.wb-scale.on .wb-plate{animation:wb-thunk .35s var(--pop)}
-@keyframes wb-thunk{0%{transform:translateY(0)}40%{transform:translateY(5px)}100%{transform:translateY(2px)}}
-.wb-lcd{position:absolute;left:0;right:0;bottom:0;height:34px;border-radius:8px;background:var(--paper-2);border:1px solid var(--line-2);font-family:var(--mono);font-size:15px;color:var(--ink);display:flex;align-items:center;justify-content:center;letter-spacing:.06em;font-variant-numeric:tabular-nums}
-.wb-scale.on .wb-lcd{color:var(--blue);border-color:var(--blue)}
-.wb-scale .wb-hunt{position:absolute;right:-2px;top:-18px}
-.wb-attract .wb-slot:nth-child(1){animation:wb-bob 2.4s var(--ease) infinite}
-.wb-attract .wb-slot:nth-child(2){animation:wb-bob 2.4s var(--ease) .4s infinite}
-.wb-attract .wb-slot:nth-child(3){animation:wb-bob 2.4s var(--ease) .8s infinite}
-@keyframes wb-bob{0%,100%{translate:0 0}50%{translate:0 -6px}}
-
-/* ---------- 2. The Cold Math ---------- */
-.wb-tmb{padding:48px 14px 30px;min-height:0;display:flex;flex-direction:column;gap:10px}
-.wb-hud{position:absolute;left:14px;top:16px;display:flex;gap:16px;font-family:var(--mono);font-size:11px;color:var(--muted)}
-.wb-hud b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
-.wb-hud.up .k{color:#1E8A66;animation:wb-pop .5s var(--pop)}.wb-hud.down .k{color:#B94612;animation:wb-pop .5s var(--pop)}
-@keyframes wb-pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
-.wb-hud b{display:inline-block}
-.wb-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
-.wb-bet{text-align:left;border-radius:12px;background:var(--paper-2);border:1.5px solid var(--line-2);padding:14px;display:flex;flex-direction:column;gap:5px;transition:border-color .3s var(--work),transform .3s var(--work),box-shadow .3s var(--work)}
-.wb-bet:hover:not(:disabled){transform:translateY(-3px);border-color:var(--blue)}
-.wb-bet:disabled{cursor:default}
-.wb-bet.chosen{border-color:var(--blue);box-shadow:0 0 0 3px rgba(185,70,18,.14)}
-.wb-bet-n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
-.wb-bet-l{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.wb-bet-p{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-.wb-bet-p b{color:var(--ink);font-weight:500}
-.wb-ev{font-family:var(--mono);font-size:12.5px;font-weight:500;min-height:1.4em}
-.wb-ev.plus{color:#1E8A66}.wb-ev.minus{color:#B94612}
-:root[data-theme="dark"] .wb-ev.plus,:root[data-theme="dark"] .wb-hud.up .k{color:#3ED39F}
-.wb-verdict{grid-column:1/-1;text-align:center;padding:14px 0;display:flex;flex-direction:column;gap:4px}
-.wb-verdict b{font-family:var(--disp);font-weight:600;font-size:40px;color:var(--blue);line-height:1}
-.wb-verdict span{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-.wb-verdict em{font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--ink)}
-.wb-attract .wb-bet:nth-child(1){animation:wb-lift 2.4s var(--ease) infinite}
-.wb-attract .wb-bet:nth-child(2){animation:wb-lift 2.4s var(--ease) 1.2s infinite}
-@keyframes wb-lift{0%,100%{translate:0 0;border-color:var(--line-2)}50%{translate:0 -4px;border-color:var(--blue)}}
-.wb-slip{position:absolute;left:14px;bottom:4px;font-family:var(--mono);font-size:11px;color:var(--faint)}
-
-/* ---------- 3. One Roof ---------- */
-.wb-map{min-height:240px;display:flex;flex-direction:column}
-.wb-mapwrap{position:relative;flex:1;min-height:240px}
-.wb-svg{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
-.wb-svg:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
-.wb-sea{fill:#E3ECF5}
-.wb-land{fill:var(--paper-2)}
-.wb-bay{fill:#E3ECF5}
-.wb-coast{stroke:var(--ink);stroke-width:1.2}
-.wb-river{stroke:#BFD3E6;stroke-width:3;stroke-linecap:round}
-:root[data-theme="dark"] .wb-sea,:root[data-theme="dark"] .wb-bay{fill:#132338}
-.wb-pin path{fill:var(--blue);stroke:#fff;stroke-width:1.2}
-.wb-pin.you{animation:wb-drop .45s var(--pop) both}
-.wb-pin.real circle{fill:var(--ink);stroke:#fff;stroke-width:1.5}
-.wb-pin.real{animation:wb-appear .4s var(--ease) .35s both}
-.wb-pin text{font-family:var(--mono);font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--paper-2);stroke-width:3px;stroke-linejoin:round}
-.wb-miss{stroke:var(--blue);stroke-width:1.2;stroke-dasharray:3 3;animation:wb-appear .4s var(--ease) .3s both}
-@keyframes wb-drop{from{opacity:0;translate:0 -18px}to{opacity:1;translate:0 0}}
-@keyframes wb-appear{from{opacity:0}to{opacity:1}}
-.wb-cross{opacity:0;pointer-events:none}.wb-cross.on{opacity:1}
-.wb-cross circle{fill:none;stroke:var(--ink);stroke-width:1.6}.wb-cross path{stroke:var(--ink);stroke-width:1.6}
-.wb-ask{position:absolute;left:12px;top:12px;z-index:3;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--paper-2);border:1px solid var(--line-2);border-radius:100px;padding:7px 12px}
-.wb-ask b{color:var(--blue);font-weight:600;text-transform:none;letter-spacing:0;font-family:var(--disp);font-size:15px}
-.wb-map .wb-score{top:auto;bottom:10px;left:auto;right:12px}
-.wb-hunt-map{position:absolute;right:12px;bottom:30px}
-.wb-hunt-map2{position:absolute;left:10px;bottom:8px}
-.wb-attract .wb-ask{animation:wb-lift 2.4s var(--ease) infinite}
-
-/* ---------- 4. Fire Palette ---------- */
+/* ---------- 1. Fire Palette ---------- */
 .wb-paint{display:flex;flex-direction:column;min-height:0;background:transparent;border:none;border-radius:0;overflow:visible;position:relative}
 .wb-pal{display:flex;gap:8px;align-items:center;padding:0 0 10px;flex-wrap:wrap}
 .wb-swatch{width:30px;height:30px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px var(--line-2);transition:transform .3s var(--pop),box-shadow .3s var(--work)}
@@ -153,7 +64,7 @@
 .wb-ring.on{opacity:1}
 .wb-paint .wb-reset{top:auto;bottom:10px;right:10px}
 
-/* ---------- 5. Opening Night ---------- */
+/* ---------- 2. Opening Night ---------- */
 .wb-sign{display:grid;place-items:center;padding:24px 14px;background:var(--ink);border-color:var(--ink);min-height:230px}
 .wb-marquee{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:16px}
 .wb-board{width:100%;border:3px solid var(--wash-peach);border-radius:10px;padding:18px 16px;text-align:center;background:linear-gradient(180deg,#1A2440,#141D35);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:box-shadow .3s var(--work)}
@@ -219,3 +130,6 @@
 .wb-accuse{white-space:nowrap}
 .wb-bulbs{flex-wrap:nowrap;gap:clamp(6px,2vw,12px)}
 .wb-bulb{width:clamp(30px,9vw,40px);height:clamp(30px,9vw,40px);flex:none}
+/* a found mark always reads in ink on its peach chip, whatever text it sits in */
+.hunt-mark.found,.eyebrow .hunt-mark.found,.sec-note .hunt-mark.found,.wall-sub .hunt-mark.found{color:var(--ink);background:var(--wash-peach)}
+.sec-note .hunt-mark,.wall-sub .hunt-mark,.wb-foot .hunt-mark{min-width:0;margin:0;padding:0 1px;font:inherit;color:inherit;letter-spacing:inherit}

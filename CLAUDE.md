@@ -31,7 +31,7 @@
 Static HTML/CSS/JS — **no build step, no `package.json`**. Since 2026-09-25 (beta_v8 "The
 Workbench") the files are: `index.html` (markup only), `css/site.css`, `css/workbench.css`,
 `css/404.css`, `js/intro.js` (the opening film), `js/site.js` (nav, reveals, feed, doors, showroom,
-stepper), `js/workbench.js` (the five games and the hidden layer). Lenis for smooth scroll
+stepper), `js/workbench.js` (the two workbench pieces, Fire Palette and Opening Night, and the hidden layer). Lenis for smooth scroll
 (jsDelivr, SRI-pinned). Google Fonts. Contact is a client-side `mailto:` composer with "Open in
 Gmail" and "Copy the message" beside it, not a backend form. The opening film lives at
 `assets/intro/`; design prototypes live in the gitignored `docs/prototypes/` and in
