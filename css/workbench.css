@@ -94,6 +94,49 @@
 .wb-sign .wb-reset{background:rgba(255,255,255,.1);color:#F6EEDC;border-color:rgba(255,255,255,.3);box-shadow:none}
 .wb-sign .wb-reset:hover{color:#FFD27A;border-color:#FFD27A}
 
+/* ---------- 3. Endless Spiral ---------- */
+.wb-egg{background:transparent;border:none;border-radius:0;overflow:visible;position:relative;display:flex;align-items:center;justify-content:center}
+.wb-eggcv{width:100%;aspect-ratio:1/1;display:block;border-radius:12px;background:#F6EEDC;border:1px solid var(--line);touch-action:none;cursor:grab}
+.wb-eggcv:active{cursor:grabbing}
+.wb-eggcv:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* ---------- 4. Night Shift Deck ---------- */
+.wb-deck{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px 14px;background:#1B1B22;border-color:#1B1B22}
+.wb-plat{position:relative;width:min(220px,52vw);height:min(220px,52vw);border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#26252E 0 3px,#1C1B22 3px 6px);box-shadow:0 14px 30px -10px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.06);touch-action:none;cursor:grab}
+.wb-plat:active{cursor:grabbing}
+.wb-plat:focus-visible{outline:2px solid #F0762F;outline-offset:4px}
+.wb-grooves{position:absolute;inset:0;border-radius:50%}
+.wb-glint{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 40deg,transparent 0 30%,rgba(255,255,255,.22) 35%,transparent 42% 100%);opacity:.6;pointer-events:none}
+.wb-attract .wb-glint{animation:wb-glint-sweep 4.5s linear infinite}
+@keyframes wb-glint-sweep{to{transform:rotate(360deg)}}
+.wb-label{position:absolute;inset:33%;border-radius:50%;background:#A8430E;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15),0 2px 8px rgba(0,0,0,.4)}
+.wb-label-t{font-family:var(--disp);font-weight:600;font-size:13px;color:#F6EEDC;letter-spacing:.02em}
+.wb-label-s{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#F6EEDC;margin-top:2px;opacity:.9}
+.wb-vu{display:flex;gap:5px;align-items:flex-end;height:26px}
+.wb-vu span{width:5px;height:100%;border-radius:2px;background:#F0762F;transform-origin:bottom;transform:scaleY(.08)}
+.wb-dctl{display:flex;gap:10px;align-items:center}
+.wb-play{font-family:var(--body);font-weight:600;font-size:13.5px;color:#1B1B22;background:#F6EEDC;border-radius:100px;padding:0 18px;min-height:36px;transition:transform .3s var(--pop),background .3s var(--work),color .3s var(--work)}
+.wb-play:hover{transform:translateY(-2px)}
+.wb-play[aria-pressed="true"]{background:#F0762F;color:#1B1B22}
+.wb-sound{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:#E7E2D8;min-height:36px;padding:0 4px}
+.wb-sound .knob{width:28px;height:16px;border-radius:100px;background:#3A3944;position:relative;transition:background .3s var(--work)}
+.wb-sound .knob::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#F6EEDC;transition:transform .3s var(--pop)}
+.wb-sound[aria-checked="true"] .knob{background:#F0762F}
+.wb-sound[aria-checked="true"] .knob::after{transform:translateX(12px)}
+.wb-deck .wb-reset{background:rgba(255,255,255,.1);color:#F6EEDC;border-color:rgba(255,255,255,.3);box-shadow:none}
+.wb-deck .wb-reset:hover{color:#F0762F;border-color:#F0762F}
+
+/* ---------- 5. Loose Type ---------- */
+.wb-tray-wrap{min-height:280px;padding:20px}
+.wb-tray{position:relative;width:100%;height:236px}
+.wb-tile{position:absolute;left:0;top:0;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;border-radius:14px;user-select:none;transition:box-shadow .2s var(--work)}
+.wb-tile.grabbed{cursor:grabbing;box-shadow:0 10px 22px -8px rgba(20,29,53,.35)}
+.wt-k{width:clamp(50px,14vw,66px);height:clamp(50px,14vw,66px);font-family:var(--disp);font-weight:700;font-size:clamp(30px,9vw,42px);color:var(--ink);background:var(--paper-2);border:1px solid var(--line)}
+.wt-13{width:clamp(66px,17vw,84px);height:clamp(50px,14vw,66px);font-family:var(--disp);font-weight:700;font-size:clamp(28px,8vw,38px);color:var(--blue);background:var(--paper-2);border:1px solid var(--line)}
+.wt-tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--paper-2);border:1px solid var(--line-2);border-radius:100px;height:30px;width:auto;padding:0 14px;white-space:nowrap}
+.wb-tidy{position:absolute;left:10px;top:10px;z-index:4;display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 6px 14px -8px rgba(20,29,53,.35);transition:color .3s var(--work),border-color .3s var(--work)}
+.wb-tidy:hover{color:var(--blue);border-color:var(--blue)}
+
 /* ---------- night shift switch (footer) ---------- */
 .night-switch{display:inline-flex;align-items:center;gap:8px;min-height:24px;font-family:var(--mono);font-size:12.5px;color:var(--muted);padding:2px 0}
 .night-switch .knob{width:30px;height:18px;border-radius:100px;background:var(--line-3);position:relative;transition:background .3s var(--work)}

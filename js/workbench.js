@@ -141,6 +141,245 @@ function miramar(mount){
   status(best?'Best so far: <b>'+best+'</b>.':'');
 }
 
+/* ======================= 3. Endless Spiral (Egg & Out) ======================= */
+/* Their wordmark spirals on without end. Grab it and spin it; flick it and it keeps turning. */
+var FONT_DISP=null;
+function egg(mount){
+  var c=card(mount,{title:"Endless Spiral",from:"Egg & Out",instr:"Grab the spiral and spin it. Flick it hard and it keeps going.",stageClass:"wb-egg"});
+  var cv=el("canvas","wb-eggcv"); cv.setAttribute("role","img"); cv.setAttribute("aria-label","A spiral made of the words EGG AND OUT, repeating outward. Drag in a circle to spin it, or use the left and right arrow keys."); cv.tabIndex=0; c.stage.appendChild(cv);
+  var ctx=cv.getContext("2d"), W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
+  if(!FONT_DISP) FONT_DISP=(getComputedStyle(document.documentElement).getPropertyValue("--disp")||"serif").trim();
+  var YOLK="#8A5206", ORANGE="#B94612", CREAM="#F6EEDC";
+  var STR="EGG & OUT   ", widths=null, fontPx=16;
+  function buildWidths(){ ctx.font="600 "+fontPx+"px "+FONT_DISP; widths={}; for(var i=0;i<STR.length;i++){ var ch=STR[i]; if(widths[ch]==null) widths[ch]=Math.max(2,ctx.measureText(ch).width); } }
+  var angle=0, vel=0, settle=null, dragging=false, lastAng=0, lastT=0, keyDir=0, keyHeldT=0, frameT=0, inView=false, raf=null, gen=0;
+  function size(){ var r=cv.getBoundingClientRect(); if(!r.width) return; W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); fontPx=Math.max(10,Math.min(W,H)*0.052); buildWidths(); draw(); }
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=CREAM; ctx.fillRect(0,0,W,H);
+    var cx=W/2, cy=H/2, maxR=Math.min(W,H)*0.47, innerR=Math.max(10,maxR*0.12), turns=3.1;
+    var b=(maxR-innerR)/(turns*2*Math.PI);
+    var speed=Math.abs(vel), stretch=1+Math.min(1.1,speed/9), blur=reduced?0:Math.min(2.4,Math.max(0,speed-2.2)*0.4);
+    ctx.font="600 "+fontPx+"px "+FONT_DISP; ctx.textBaseline="middle"; ctx.textAlign="center";
+    ctx.filter=blur>0.05?("blur("+blur+"px)"):"none";
+    var theta=(innerR/b)||0.001, thetaStart=theta, maxTheta=turns*2*Math.PI+theta, i=0, guard=0;
+    while(theta<maxTheta && guard<400){
+      guard++; var ch=STR[i%STR.length]; i++;
+      var w=widths[ch]||fontPx*0.55, ds=(ch===" "?w*0.9:w+fontPx*0.09);
+      if(ch!==" "){
+        var r=b*theta, ang=theta+angle, x=cx+r*Math.cos(ang), y=cy+r*Math.sin(ang), lap=Math.floor((theta-thetaStart)/(2*Math.PI));
+        ctx.save(); ctx.translate(x,y); ctx.rotate(ang+Math.PI/2);
+        if(stretch>1.02) ctx.scale(1,stretch);
+        ctx.fillStyle=(lap%2===0)?ORANGE:YOLK; ctx.fillText(ch,0,0); ctx.restore();
+      }
+      theta+=ds/(b*Math.sqrt(1+theta*theta));
+    }
+    ctx.filter="none";
+  }
+  function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left-W/2,y:e.clientY-r.top-H/2}; }
+  cv.addEventListener("pointerdown",function(e){ e.preventDefault(); cv.setPointerCapture(e.pointerId); dragging=true; settle=null; vel=0; var p=pos(e); lastAng=Math.atan2(p.y,p.x); lastT=performance.now(); c.read.innerHTML="<span>Spinning.</span>"; });
+  cv.addEventListener("pointermove",function(e){ if(!dragging) return; var p=pos(e), a=Math.atan2(p.y,p.x), d=a-lastAng; if(d>Math.PI) d-=2*Math.PI; else if(d<-Math.PI) d+=2*Math.PI; var now=performance.now(), dt=Math.max(1,now-lastT)/1000; angle+=d; vel=reduced?0:(vel*0.7+(d/dt)*0.3); lastAng=a; lastT=now; if(reduced) draw(); });
+  function endDrag(){ if(!dragging) return; dragging=false; if(reduced){ vel=0; } else if(Math.abs(vel)>0.6){ c.read.innerHTML="<span>Flicked.</span>"; } }
+  cv.addEventListener("pointerup",endDrag); cv.addEventListener("pointercancel",endDrag);
+  cv.addEventListener("keydown",function(e){
+    if(e.key==="ArrowLeft"){ e.preventDefault(); keyDir=-1; } else if(e.key==="ArrowRight"){ e.preventDefault(); keyDir=1; } else return;
+  });
+  cv.addEventListener("keyup",function(e){ if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ keyDir=0; keyHeldT=0; } });
+  function step(now){
+    if(!inView){ raf=null; return; }
+    var dt=Math.min(0.05,frameT?((now-frameT)/1000):0.016); frameT=now;
+    if(!dragging){
+      if(keyDir){
+        if(reduced){ angle+=keyDir*0.05; } else { keyHeldT=Math.min(1,keyHeldT+dt*0.9); vel+=keyDir*(3+keyHeldT*15)*dt; settle=null; }
+      } else if(!reduced){
+        if(settle){
+          var t=(now-settle.t0)/1000, zeta=.42, wn=8, wd=wn*Math.sqrt(1-zeta*zeta), env=Math.exp(-zeta*wn*t);
+          vel=settle.v0*env*Math.cos(wd*t); if(env<0.02){ settle=null; vel=0; }
+        } else if(Math.abs(vel)>0.45){
+          vel*=Math.pow(0.9,dt*60); if(Math.abs(vel)<0.45) settle={v0:vel,t0:now};
+        } else if(Math.abs(vel)>0.001){ vel*=Math.pow(0.86,dt*60); if(Math.abs(vel)<0.02) vel=0; }
+        if(!settle && Math.abs(vel)<0.2 && mount.classList.contains("wb-attract")) vel+=(0.14-vel)*dt*1.5;
+      }
+      angle+=vel*dt;
+    }
+    draw(); raf=requestAnimationFrame(step);
+  }
+  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(inView){ if(!W) size(); if(!raf) raf=requestAnimationFrame(step); } },{threshold:.1}).observe(mount);
+  c.reset.addEventListener("click",function(){ gen++; angle=0; vel=0; settle=null; dragging=false; keyDir=0; keyHeldT=0; c.read.innerHTML=""; draw(); c.untouch(); });
+  window.addEventListener("resize",size); setTimeout(size,0);
+}
+
+/* ======================= 4. Night Shift Deck (CENGO) ======================= */
+/* A record on a turntable. Drag a circle to scratch it, let go and it spins back up. */
+function cengo(mount){
+  var c=card(mount,{title:"Night Shift Deck",from:"CENGO",instr:"Drag the record in a circle to scratch it. Space plays or pauses. Sound stays off until you switch it on.",stageClass:"wb-deck"});
+  c.stage.insertAdjacentHTML("beforeend",
+    '<div class="wb-plat" tabindex="0" role="img" aria-label="A record on a turntable. Drag in a circle to scratch it, or use the left and right arrow keys. Space plays or pauses.">'+
+      '<div class="wb-grooves"></div><div class="wb-glint"></div>'+
+      '<div class="wb-label"><span class="wb-label-t">CENGO</span><span class="wb-label-s">Night Shift</span></div>'+
+    '</div>'+
+    '<div class="wb-vu" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>'+
+    '<div class="wb-dctl">'+
+      '<button type="button" class="wb-play" aria-pressed="false">Play</button>'+
+      '<button type="button" class="wb-sound" role="switch" aria-checked="false" aria-label="Sound"><span class="knob" aria-hidden="true"></span><span>Sound</span></button>'+
+    '</div>');
+  var plat=c.stage.querySelector(".wb-plat"), vu=[].slice.call(c.stage.querySelectorAll(".wb-vu span")), playBtn=c.stage.querySelector(".wb-play"), soundBtn=c.stage.querySelector(".wb-sound");
+  var angle=0, vel=0, dragging=false, lastAng=0, lastDragT=0, keyDir=0, keyHeldT=0, playing=false, soundOn=false, inView=false, raf=null, frameT=0, vuPhase=0, gen=0;
+  var TARGET=230, IDLE=16;
+  function setAngle(){ plat.style.transform="rotate("+angle+"deg)"; }
+  function pos(e){ var r=plat.getBoundingClientRect(); return {x:e.clientX-r.left-r.width/2,y:e.clientY-r.top-r.height/2}; }
+  plat.addEventListener("pointerdown",function(e){ e.preventDefault(); plat.setPointerCapture(e.pointerId); dragging=true; var p=pos(e); lastAng=Math.atan2(p.y,p.x)*180/Math.PI; lastDragT=performance.now(); c.read.innerHTML="<span>Scratching.</span>"; });
+  plat.addEventListener("pointermove",function(e){ if(!dragging) return; var p=pos(e), a=Math.atan2(p.y,p.x)*180/Math.PI, d=a-lastAng; if(d>180) d-=360; else if(d<-180) d+=360; var now=performance.now(), dt=Math.max(1,now-lastDragT)/1000; angle+=d; vel=reduced?0:(vel*0.6+(d/dt)*0.4); lastAng=a; lastDragT=now; setAngle(); });
+  function endDrag(){ if(!dragging) return; dragging=false; if(reduced) vel=0; }
+  plat.addEventListener("pointerup",endDrag); plat.addEventListener("pointercancel",endDrag);
+  function togglePlay(){ playing=!playing; playBtn.setAttribute("aria-pressed",String(playing)); playBtn.textContent=playing?"Pause":"Play"; c.read.innerHTML=playing?"<span>Spinning up.</span>":"<span>Cutting the power.</span>"; }
+  playBtn.addEventListener("click",togglePlay);
+  plat.addEventListener("keydown",function(e){
+    if(e.key===" "){ e.preventDefault(); togglePlay(); return; }
+    if(e.key==="ArrowLeft"){ e.preventDefault(); keyDir=-1; } else if(e.key==="ArrowRight"){ e.preventDefault(); keyDir=1; } else return;
+  });
+  plat.addEventListener("keyup",function(e){ if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ keyDir=0; keyHeldT=0; } });
+  /* sound: synthesized noise + tone, off by default, only ever starts from the switch's own click */
+  var actx=null,gainN=null,filt=null,oscGain=null,osc=null;
+  function ensureAudio(){
+    if(actx) return; var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    actx=new AC(); var buf=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate), data=buf.getChannelData(0);
+    for(var i=0;i<data.length;i++) data[i]=Math.random()*2-1;
+    var noise=actx.createBufferSource(); noise.buffer=buf; noise.loop=true;
+    filt=actx.createBiquadFilter(); filt.type="bandpass"; filt.frequency.value=500; filt.Q.value=0.8;
+    gainN=actx.createGain(); gainN.gain.value=0;
+    noise.connect(filt); filt.connect(gainN); gainN.connect(actx.destination); noise.start();
+    osc=actx.createOscillator(); osc.type="sine"; osc.frequency.value=80;
+    oscGain=actx.createGain(); oscGain.gain.value=0;
+    osc.connect(oscGain); oscGain.connect(actx.destination); osc.start();
+  }
+  function silence(){ if(!actx) return; var t=actx.currentTime; gainN.gain.setTargetAtTime(0,t,0.03); oscGain.gain.setTargetAtTime(0,t,0.05); }
+  soundBtn.addEventListener("click",function(){
+    soundOn=!soundOn; soundBtn.setAttribute("aria-checked",String(soundOn));
+    if(soundOn){ ensureAudio(); if(actx&&actx.state==="suspended") actx.resume(); c.read.innerHTML="<span>Sound on.</span>"; } else { silence(); c.read.innerHTML="<span>Muted.</span>"; }
+  });
+  function step(now){
+    if(!inView){ raf=null; return; }
+    var dt=Math.min(0.05,frameT?((now-frameT)/1000):0.016); frameT=now;
+    if(!dragging){
+      if(keyDir && !reduced){ keyHeldT=Math.min(1,keyHeldT+dt*0.8); vel+=keyDir*(80+keyHeldT*260)*dt; }
+      else if(keyDir && reduced){ angle+=keyDir*2.4; }
+      if(!reduced && !keyDir){ var idle=(!playing&&mount.classList.contains("wb-attract"))?IDLE:0, target=playing?TARGET:idle; vel+=(target-vel)*Math.min(1,dt*3.2); }
+      else if(reduced && !keyDir){ vel=0; }
+      angle+=vel*dt; setAngle();
+    }
+    var mag=Math.min(1.4,Math.abs(vel)/TARGET); vuPhase+=dt*6;
+    for(var i=0;i<vu.length;i++){ var m=Math.max(.08,mag*(0.55+0.45*Math.sin(vuPhase+i*1.3))); vu[i].style.transform="scaleY("+m.toFixed(2)+")"; }
+    if(soundOn && actx){ var t=actx.currentTime; filt.frequency.setTargetAtTime(260+mag*2400,t,0.03); gainN.gain.setTargetAtTime(dragging?Math.min(0.15,mag*0.18):0,t,0.05); osc.frequency.setTargetAtTime(65+mag*130,t,0.05); oscGain.gain.setTargetAtTime(playing?0.03:0,t,0.08); }
+    raf=requestAnimationFrame(step);
+  }
+  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(inView){ if(!raf) raf=requestAnimationFrame(step); } else { silence(); } },{threshold:.1}).observe(mount);
+  c.reset.addEventListener("click",function(){
+    gen++; angle=0; vel=0; dragging=false; keyDir=0; keyHeldT=0; playing=false; soundOn=false;
+    playBtn.setAttribute("aria-pressed","false"); playBtn.textContent="Play"; soundBtn.setAttribute("aria-checked","false"); silence(); setAngle();
+    for(var i=0;i<vu.length;i++) vu[i].style.transform="scaleY(.08)"; c.read.innerHTML=""; c.untouch();
+  });
+}
+
+/* ======================= 5. Loose Type (K13) ======================= */
+/* The studio's own lockup as physical pieces: fling them, they bounce and settle, Tidy snaps them home. */
+function letters(mount){
+  var c=card(mount,{title:"Loose Type",from:"K13",instr:"Grab a piece and fling it. Tidy brings the lockup home.",stageClass:"wb-tray-wrap"});
+  var iid=mount.querySelector(".wb-instr").id;
+  c.stage.insertAdjacentHTML("beforeend",
+    '<div class="wb-tray" role="group" aria-label="Loose type, four pieces">'+
+      '<button type="button" class="wb-tile wt-k" aria-describedby="'+iid+'">K</button>'+
+      '<button type="button" class="wb-tile wt-13" aria-describedby="'+iid+'">13</button>'+
+      '<button type="button" class="wb-tile wt-tag wt-sw" aria-describedby="'+iid+'">SOFTWARE</button>'+
+      '<button type="button" class="wb-tile wt-tag wt-st" aria-describedby="'+iid+'">STUDIO</button>'+
+    '</div><button type="button" class="wb-tidy">Tidy</button>');
+  var tray=c.stage.querySelector(".wb-tray"), tidyBtn=c.stage.querySelector(".wb-tidy");
+  var els=[].slice.call(tray.querySelectorAll(".wb-tile")), names=["K","13","SOFTWARE","STUDIO"];
+  els.forEach(function(e,i){ e.setAttribute("aria-label",names[i]+", drag it or use the arrow keys, Enter to fling it."); });
+  var tiles=els.map(function(e){ return {el:e,x:0,y:0,angle:0,vx:0,vy:0,av:0,r:26,w:60,h:60,homeX:0,homeY:0,homeAngle:0,dragging:false,homing:false,tidyDelay:0,tidyT:0,fromX:0,fromY:0,fromA:0}; });
+  var K=tiles[0], N=tiles[1], SW=tiles[2], ST=tiles[3];
+  var trayW=0, trayH=0, inited=false, inView=false, raf=null, frameT=0, gen=0, aligned=false, alignDX=0, earned=false;
+  var FRICTION=.9, BOUNCE=.6, TIDYDUR=.62;
+  function setT(t){ t.el.style.transform="translate("+(t.x-t.w/2)+"px,"+(t.y-t.h/2)+"px) rotate("+t.angle+"deg)"; }
+  function measure(){ tiles.forEach(function(t){ var r=t.el.getBoundingClientRect(); t.w=r.width; t.h=r.height; t.r=Math.max(t.w,t.h)*.62/2; }); }
+  function layout(){
+    var r=tray.getBoundingClientRect(); if(!r.width) return; trayW=r.width; trayH=r.height; measure();
+    var cx=trayW/2, cy=trayH/2, groupW=K.w+N.w+4, leftX=cx-groupW/2;
+    K.homeX=leftX+K.w/2; K.homeY=cy; K.homeAngle=0;
+    N.homeX=leftX+K.w+4+N.w/2; N.homeY=cy; N.homeAngle=0;
+    SW.homeX=Math.min(N.homeX+N.w/2+28+SW.w/2,trayW-SW.w/2-8); SW.homeY=cy-SW.h/2-3; SW.homeAngle=0;
+    ST.homeX=Math.min(SW.homeX,trayW-ST.w/2-8); ST.homeY=cy+ST.h/2+3; ST.homeAngle=0;
+    alignDX=N.homeX-K.homeX;
+    if(!inited){ inited=true; tiles.forEach(function(t){ t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; setT(t); }); }
+  }
+  function nudge(t,dx,dy){ t.homing=false; earned=true; t.x=clamp(t.x+dx,t.r,trayW-t.r); t.y=clamp(t.y+dy,t.r,trayH-t.r); t.vx=t.vy=0; setT(t); c.touch(); }
+  function fling(t){
+    t.homing=false; earned=true; c.touch();
+    if(reduced){ var a0=Math.random()*Math.PI*2; t.x=clamp(t.x+Math.cos(a0)*70,t.r,trayW-t.r); t.y=clamp(t.y+Math.sin(a0)*70,t.r,trayH-t.r); setT(t); c.read.innerHTML="<span>Flung.</span>"; return; }
+    var a=Math.random()*Math.PI*2, sp=340+Math.random()*160;
+    t.vx=Math.cos(a)*sp; t.vy=Math.sin(a)*sp; t.av=(Math.random()-.5)*420; c.read.innerHTML="<span>Flung.</span>";
+  }
+  tiles.forEach(function(t){
+    t.el.addEventListener("pointerdown",function(e){ e.preventDefault(); t.el.setPointerCapture(e.pointerId); t.dragging=true; t.homing=false; earned=true; t.vx=t.vy=t.av=0; var r=tray.getBoundingClientRect(); t._lx=e.clientX-r.left; t._ly=e.clientY-r.top; t._lt=performance.now(); t.el.classList.add("grabbed"); c.touch(); });
+    t.el.addEventListener("pointermove",function(e){ if(!t.dragging) return; var r=tray.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top, now=performance.now(), dt=Math.max(1,now-t._lt)/1000; t.vx=(x-t._lx)/dt; t.vy=(y-t._ly)/dt; t.x=clamp(x,t.r,trayW-t.r); t.y=clamp(y,t.r,trayH-t.r); t._lx=x; t._ly=y; t._lt=now; setT(t); });
+    function endDrag(){ if(!t.dragging) return; t.dragging=false; t.el.classList.remove("grabbed"); if(reduced){ t.vx=t.vy=t.av=0; } else { t.av=clamp(t.vx*.12,-260,260); } }
+    t.el.addEventListener("pointerup",endDrag); t.el.addEventListener("pointercancel",endDrag);
+    t.el.addEventListener("keydown",function(e){
+      var s=16;
+      if(e.key==="ArrowLeft"){ e.preventDefault(); nudge(t,-s,0); } else if(e.key==="ArrowRight"){ e.preventDefault(); nudge(t,s,0); }
+      else if(e.key==="ArrowUp"){ e.preventDefault(); nudge(t,0,-s); } else if(e.key==="ArrowDown"){ e.preventDefault(); nudge(t,0,s); }
+      else if(e.key==="Enter"){ e.preventDefault(); fling(t); }
+    });
+  });
+  function ang0(a){ a=((a%360)+360)%360; return Math.min(a,360-a); }
+  function checkAlign(){
+    if(!earned) return; /* only a discovery the visitor earns by playing, never the resting state after load, Reset or Tidy */
+    var dx=N.x-K.x, dy=N.y-K.y;
+    var close=Math.abs(dx-alignDX)<20 && Math.abs(dy)<16 && ang0(K.angle)<12 && ang0(N.angle)<12;
+    var rest=Math.hypot(K.vx,K.vy)<6 && Math.hypot(N.vx,N.vy)<6 && !K.dragging && !N.dragging && !K.homing && !N.homing;
+    if(close&&rest){ if(!aligned){ aligned=true; c.read.innerHTML="<span>That reads K13. Nicely done.</span>"; } } else aligned=false;
+  }
+  function stepAll(dt,now){
+    tiles.forEach(function(t,i){
+      if(t.dragging) return;
+      if(t.homing){
+        t.tidyDelay-=dt;
+        if(t.tidyDelay<=0){ t.tidyT=Math.min(1,t.tidyT+dt/TIDYDUR); var e=POP(t.tidyT); t.x=lerp(t.fromX,t.homeX,e); t.y=lerp(t.fromY,t.homeY,e); t.angle=lerp(t.fromA,t.homeAngle,e); if(t.tidyT>=1){ t.homing=false; t.vx=t.vy=t.av=0; t.angle=t.homeAngle; } }
+        setT(t); return;
+      }
+      if(!reduced){
+        var f=Math.pow(FRICTION,dt*60); t.vx*=f; t.vy*=f; t.av*=f; t.x+=t.vx*dt; t.y+=t.vy*dt; t.angle+=t.av*dt;
+        if(t.x<t.r){ t.x=t.r; t.vx=Math.abs(t.vx)*BOUNCE; } else if(t.x>trayW-t.r){ t.x=trayW-t.r; t.vx=-Math.abs(t.vx)*BOUNCE; }
+        if(t.y<t.r){ t.y=t.r; t.vy=Math.abs(t.vy)*BOUNCE; } else if(t.y>trayH-t.r){ t.y=trayH-t.r; t.vy=-Math.abs(t.vy)*BOUNCE; }
+        if(Math.abs(t.vx)<.5) t.vx=0; if(Math.abs(t.vy)<.5) t.vy=0; if(Math.abs(t.av)<.5) t.av=0;
+      }
+      if(!reduced && mount.classList.contains("wb-attract")){ var ph=now/1000, bob=Math.sin(ph*1.6+i*1.1)*3, rot=Math.sin(ph*1.1+i*.7)*2.2; t.el.style.transform="translate("+(t.x-t.w/2)+"px,"+(t.y-t.h/2+bob)+"px) rotate("+(t.angle+rot)+"deg)"; }
+      else setT(t);
+    });
+    if(!reduced){
+      for(var i=0;i<tiles.length;i++) for(var j=i+1;j<tiles.length;j++){
+        var a=tiles[i], b=tiles[j]; if(a.dragging||b.dragging||a.homing||b.homing) continue;
+        var dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy)||.01, min=a.r+b.r;
+        if(dist<min){ var nx=dx/dist, ny=dy/dist, overlap=(min-dist)/2; a.x-=nx*overlap; a.y-=ny*overlap; b.x+=nx*overlap; b.y+=ny*overlap;
+          var avn=a.vx*nx+a.vy*ny, bvn=b.vx*nx+b.vy*ny, diff=(bvn-avn)*.9; a.vx+=nx*diff; a.vy+=ny*diff; b.vx-=nx*diff; b.vy-=ny*diff; setT(a); setT(b); }
+      }
+    }
+    checkAlign();
+  }
+  function step(now){ if(!inView){ raf=null; return; } var dt=Math.min(0.05,frameT?((now-frameT)/1000):0.016); frameT=now; stepAll(dt,now); raf=requestAnimationFrame(step); }
+  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(inView){ layout(); if(!raf) raf=requestAnimationFrame(step); } },{threshold:.1}).observe(mount);
+  tidyBtn.addEventListener("click",function(){
+    c.touch(); earned=false; aligned=false;
+    if(reduced){ tiles.forEach(function(t){ t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; t.vx=t.vy=t.av=0; t.homing=false; setT(t); }); c.read.innerHTML="<span>Tidied.</span>"; return; }
+    tiles.forEach(function(t,i){ t.dragging=false; t.homing=true; t.tidyDelay=i*.08; t.tidyT=0; t.fromX=t.x; t.fromY=t.y; t.fromA=t.angle; t.vx=t.vy=t.av=0; });
+    c.read.innerHTML="<span>Tidying up.</span>";
+  });
+  c.reset.addEventListener("click",function(){
+    gen++; aligned=false; earned=false; tiles.forEach(function(t){ t.dragging=false; t.homing=false; t.vx=t.vy=t.av=0; t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; setT(t); });
+    c.read.innerHTML=""; c.untouch();
+  });
+  window.addEventListener("resize",layout); setTimeout(layout,0);
+}
+
 /* ======================= The hunt: find the 13 ======================= */
 var hunt=(function(){
   var TOTAL=13, marks=[], found={}, counter=null, live=null, announced=false;
@@ -227,7 +466,7 @@ var hunt=(function(){
 
 /* ======================= boot ======================= */
 window.K13=window.K13||{}; window.K13.hunt=hunt;
-var games={carlos:carlos,miramar:miramar};
+var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,letters:letters};
 document.querySelectorAll("[data-game]").forEach(function(m){ var g=games[m.getAttribute("data-game")]; if(g) g(m); });
 document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
 })();
