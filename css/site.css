@@ -442,8 +442,11 @@ body.k13-held>*:not(#k13intro){opacity:0;transform:translateY(10px)}
 /* ---------- who it's for: the doors ---------- */
 .doors{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
 .door-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:clamp(36px,4.5vw,56px)}
-.door{display:flex;flex-direction:column;gap:12px}
-.door-btn{flex:1;text-align:left;border-radius:16px;padding:24px 22px;background:var(--paper-2);border:1.5px solid var(--line);
+/* every door card is the same height, and the proof chips sit in their own shared row */
+.door-grid{grid-auto-rows:auto}
+.door{display:grid;grid-row:span 2;grid-template-rows:subgrid;gap:12px;align-items:start}
+@supports not (grid-template-rows:subgrid){.door{display:flex;flex-direction:column}}
+.door-btn{width:100%;height:100%;text-align:left;border-radius:16px;padding:24px 22px;background:var(--paper-2);border:1.5px solid var(--line);
   display:flex;flex-direction:column;gap:10px;min-height:44px;transition:border-color .3s var(--work),transform .3s var(--work),box-shadow .3s var(--work)}
 .door-btn:hover{transform:translateY(-4px);box-shadow:0 24px 50px -34px rgba(20,29,53,.5);border-color:var(--line-2)}
 .door-btn[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(185,70,18,.14)}
