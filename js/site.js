@@ -35,7 +35,10 @@ window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
 
 /* reveal */
 var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }); },{threshold:0.16,rootMargin:"0px 0px -8% 0px"});
-document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+document.querySelectorAll(".rv").forEach(function(el){
+  var i=0,n=el; while((n=n.previousElementSibling)){ if(n.classList.contains("rv")) i++; }
+  el.style.setProperty("--i",Math.min(i,8)); io.observe(el); });
+document.addEventListener("focusin",function(e){ var r=e.target.closest&&e.target.closest(".rv"); if(r) r.classList.add("in"); });
 setTimeout(function(){ document.querySelectorAll(".hero .rv").forEach(function(el){ el.classList.add("in"); }); },160);
 
 /* count-up */
@@ -73,7 +76,7 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     "Wiring up a 20,000 square foot public market at UC San Diego",
     "Making twenty thousand square feet of food hall load like a single snack",
     "Building a campus market that every student can use, from day one",
-    "Handing a food hall a CMS its team can run without ever calling me",
+    "Handing a food hall a CMS its team can run without ever calling us",
     "Giving a Little Italy food hall the scroll it deserves",
     "Building a food hall to the exact standard of the designer who shaped the room",
     "Making a menu worth scrolling slowly, the way Sunday dinner is eaten",
@@ -125,7 +128,7 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     if(row.querySelector(".rthumb")) return;
     var im=document.createElement("img");
     im.className="rthumb"; im.loading="lazy"; im.decoding="async"; im.alt="";
-    im.src=row.getAttribute("data-peek");
+    im.src="assets/shots/webp/"+row.getAttribute("data-peek")+"-750.webp";
     row.insertBefore(im,row.firstChild);
   });
 })();
@@ -141,7 +144,7 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     raf = (active||moving) ? requestAnimationFrame(loop) : null; }
   function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
   document.querySelectorAll(".row[data-peek]").forEach(function(row){
-    row.addEventListener("mouseenter",function(){ var src=row.getAttribute("data-peek"); if(img.getAttribute("src")!==src) img.setAttribute("src",src); active=true; peek.classList.add("on"); kick(); });
+    row.addEventListener("mouseenter",function(){ var src="assets/shots/webp/"+row.getAttribute("data-peek")+"-1500.webp"; if(img.getAttribute("src")!==src) img.setAttribute("src",src); active=true; peek.classList.add("on"); kick(); });
     row.addEventListener("mouseleave",function(){ active=false; peek.classList.remove("on"); kick(); });
   });
   document.addEventListener("mousemove",function(e){ tx=e.clientX+150; ty=e.clientY; if(active) kick(); },{passive:true});
@@ -202,15 +205,41 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
   document.getElementById("emailNext").addEventListener("click",function(){ data.email=emailI.value.trim(); go(3); });
   document.getElementById("emailSkip").addEventListener("click",function(){ data.email=""; go(3); });
   emailI.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); data.email=emailI.value.trim(); go(3); } });
-  document.getElementById("sendIt").addEventListener("click",function(){
+  function compose(){
     data.why=document.getElementById("sWhy").value.trim();
-    /* guard: never send/claim success on empty data (e.g. reached here without completing steps 1-2) */
-    if(!data.type || !data.name){ go(!data.type?0:1); return; }
-    var subject="Project inquiry"+(data.type?": "+data.type:"")+(data.name?" ("+data.name+")":"");
+    var huntSubject=""; try{ huntSubject=sessionStorage.getItem("k13Subject")||""; }catch(e){}   /* set by the hunt when all 13 are found */
+    var subject=(huntSubject||"Project inquiry")+(data.type?": "+data.type:"")+(data.name?" ("+data.name+")":"");
     var body="Hi Kazim,\r\n\r\n"
       +(data.type?"We're building: "+data.type+"\r\n":"")
       +(data.why?"\r\nWhy it matters: "+data.why+"\r\n":"")
       +"\r\n--\r\n"+(data.name||"")+(data.email?"\r\n"+data.email:"");
+    return {subject:subject,body:body};
+  }
+  /* guard shared by all three ways out: never send or claim success on empty data */
+  function ready(){ if(!data.type || !data.name){ go(!data.type?0:1); return false; } return true; }
+  var copyNote=document.getElementById("copyNote");
+  document.getElementById("gmailIt").addEventListener("click",function(){
+    if(!ready()) return; var m=compose();
+    var url="https://mail.google.com/mail/?view=cm&fs=1&to=projects.k13@gmail.com&su="+encodeURIComponent(m.subject)+"&body="+encodeURIComponent(m.body);
+    var w=window.open(url,"_blank","noopener");
+    if(!w){ copyNote.textContent="The browser blocked the new tab. Allow pop-ups for this page, or use Copy the message."; return; }
+    document.getElementById("stepBody").inert=true; sent.inert=false;
+    document.getElementById("sentTitle").textContent="Gmail opened in a new tab.";
+    document.getElementById("sentMsg").textContent="Review it there, then hit send.";
+    sent.classList.add("on");
+  });
+  var copyBtn=document.getElementById("copyIt");
+  copyBtn.addEventListener("click",function(){
+    if(!ready()) return; var m=compose(), text=m.subject+"\r\n\r\n"+m.body;
+    if(!navigator.clipboard||!navigator.clipboard.writeText){ copyNote.textContent="This browser can't copy for us. Email us at projects.k13@gmail.com instead."; return; }
+    navigator.clipboard.writeText(text).then(function(){
+      copyBtn.textContent="Copied. Paste it anywhere you send email from."; copyNote.textContent="";
+    },function(){
+      copyNote.textContent="The copy didn't go through. Email us at projects.k13@gmail.com instead.";
+    });
+  });
+  document.getElementById("sendIt").addEventListener("click",function(){
+    if(!ready()) return; var m=compose(), subject=m.subject, body=m.body;
     var mailHref="mailto:projects.k13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
     var title=document.getElementById("sentTitle"), msg=document.getElementById("sentMsg"), fallback=document.getElementById("sentFallback");
     var handedOff=false;
@@ -235,4 +264,64 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
   });
   render();
 })();
+
+/* who it's for: a door highlights the tickets that prove it (rows dim, never disappear) */
+(function(){
+  var btns=document.querySelectorAll(".door-btn"); if(!btns.length) return;
+  var rows=document.querySelectorAll(".row[data-door]");
+  var reset=document.getElementById("doorReset"), resetBtn=document.getElementById("doorResetBtn"), label=document.getElementById("doorResetLabel");
+  var names={hospitality:"restaurant and hospitality groups",founders:"founders with a product",brands:"brands and makers",institutions:"institutions"};
+  function apply(k){
+    btns.forEach(function(b){ b.setAttribute("aria-pressed",String(b.getAttribute("data-door")===k)); });
+    rows.forEach(function(r){ r.classList.toggle("dim",!!k && r.getAttribute("data-door")!==k); });
+    reset.hidden=!k; if(k) label.textContent="Showing the work for "+names[k]+".";
+  }
+  btns.forEach(function(b){ b.addEventListener("click",function(){
+    var k=b.getAttribute("data-door"), on=b.getAttribute("aria-pressed")==="true";
+    apply(on?null:k); if(!on) scrollTo(document.getElementById("work"));
+  }); });
+  resetBtn.addEventListener("click",function(){ apply(null); });
+})();
+
+/* craft showroom: one switch tags every section of this page with its own level and why */
+(function(){
+  var sw=document.getElementById("showroom"), help=document.getElementById("showroomHelp"); if(!sw) return;
+  var html=document.documentElement;
+  var ON="Now showing. Every section, tagged with its own level and why.", OFF="Flip it. See what level of craft went into this exact page.";
+  document.querySelectorAll("[data-craft]").forEach(function(sec){
+    var wrap=sec.querySelector(".wrap")||sec, tag=document.createElement("div"); tag.className="craft-tag"; tag.setAttribute("aria-hidden","true");
+    var lvl=sec.getAttribute("data-craft"), why=sec.getAttribute("data-craft-why"), out="";
+    if(sec.hasAttribute("data-craft-opening")){
+      var ol=sec.getAttribute("data-craft-opening");
+      out+='<b class="lvl-'+ol.toLowerCase()+'">Opening · '+ol+'</b><span>'+sec.getAttribute("data-craft-opening-why")+' <a class="replay" href="?intro#top">Replay the opening</a></span>';
+    }
+    out+='<b class="lvl-'+lvl.toLowerCase()+'">'+lvl+'</b><span>'+why+'</span>';
+    tag.innerHTML=out; tag.inert=true; wrap.insertBefore(tag,wrap.firstChild);
+  });
+  function set(on){
+    sw.setAttribute("aria-checked",String(on)); help.textContent=on?ON:OFF;
+    if(on) html.setAttribute("data-showroom",""); else html.removeAttribute("data-showroom");
+    document.querySelectorAll(".craft-tag").forEach(function(t){ t.setAttribute("aria-hidden",String(!on)); t.inert=!on; });
+    try{ localStorage.setItem("k13-showroom",on?"1":"0"); }catch(e){}
+  }
+  var saved=false; try{ saved=localStorage.getItem("k13-showroom")==="1"; }catch(e){}
+  if(saved) set(true);
+  sw.addEventListener("click",function(){ set(sw.getAttribute("aria-checked")!=="true"); });
+})();
+
+/* the lockup gets one sheen the moment the opening hands the page over */
+(function(){
+  var brand=document.querySelector(".brand"); if(!brand||reduced) return;
+  var html=document.documentElement;
+  function fire(){ brand.classList.add("sheen","sheen-once"); setTimeout(function(){ brand.classList.remove("sheen-once"); },1200); }
+  if(!html.classList.contains("k13-held")){ setTimeout(fire,700); return; }
+  new MutationObserver(function(m,o){ if(!html.classList.contains("k13-held")){ o.disconnect(); setTimeout(fire,500); } }).observe(html,{attributes:true,attributeFilter:["class"]});
+})();
+
+/* the hunt: six of the thirteen hidden marks live in this page's own markup; the workbench places them */
+document.addEventListener("DOMContentLoaded",function(){
+  if(!(window.K13&&window.K13.hunt&&window.K13.hunt.place)) return;
+  document.querySelectorAll("[data-hunt]").forEach(function(el){ window.K13.hunt.place(el); });
+});
+
 })();

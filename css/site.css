@@ -417,3 +417,155 @@ body.k13-held>*:not(#k13intro){opacity:0;transform:translateY(10px)}
 /* classes that replaced the last inline style attributes (style-src has no unsafe-inline) */
 .k13intro-w82{width:82%}.k13intro-w54{width:54%}
 .contact .big-gap{margin-top:18px}
+
+/* =========================================================
+   beta_v8 "THE WORKBENCH" additions (2026-09-25)
+   ========================================================= */
+/* ---------- motion vocabulary (genome section 6) ---------- */
+:root{--work:cubic-bezier(.4,0,.2,1)}
+.rv{transition-delay:calc(var(--i,0)*80ms)}
+/* a keyboard user can land on a control before the reveal observer fires: focus reveals */
+.rv:focus-within{opacity:1;transform:none}
+.card{transition:transform .3s var(--work),box-shadow .3s var(--work)}
+.row{transition:padding-left .3s var(--work),opacity .3s var(--work)}
+.row::after{bottom:0}
+.peek{transition:opacity .3s var(--work),transform .3s var(--work)}
+.sent .ring{animation:pop .5s var(--pop)}
+/* the house sheen: one light sweep across a surface, on hover or once on demand */
+.sheen{position:relative;overflow:hidden;isolation:isolate}
+.sheen::before{content:"";position:absolute;top:-30%;bottom:-30%;left:-40%;width:35%;transform:skewX(-18deg) translateX(-160%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);pointer-events:none;z-index:1;transition:transform .9s var(--ease)}
+.sheen:hover::before,.sheen.sheen-once::before{transform:skewX(-18deg) translateX(560%)}
+.card.sheen::before,.row.sheen::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent)}
+.brand.sheen{padding:4px 6px;margin:-4px -6px;border-radius:8px}
+
+/* ---------- who it's for: the doors ---------- */
+.doors{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
+.door-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:clamp(36px,4.5vw,56px)}
+.door{display:flex;flex-direction:column;gap:12px}
+.door-btn{flex:1;text-align:left;border-radius:16px;padding:24px 22px;background:var(--paper-2);border:1.5px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;min-height:44px;transition:border-color .3s var(--work),transform .3s var(--work),box-shadow .3s var(--work)}
+.door-btn:hover{transform:translateY(-4px);box-shadow:0 24px 50px -34px rgba(20,29,53,.5);border-color:var(--line-2)}
+.door-btn[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 3px rgba(185,70,18,.14)}
+.door-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.door-num{font-family:var(--mono);font-size:12px;color:var(--blue);letter-spacing:.1em}
+.door-title{font-family:var(--disp);font-weight:600;font-size:22px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.door-line{color:var(--muted);font-size:15px;line-height:1.55}
+.door-proof{display:flex;flex-wrap:wrap;gap:6px;padding:0 4px}
+.door-proof a{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 10px;min-height:24px;
+  display:inline-flex;align-items:center;transition:color .3s var(--work),border-color .3s var(--work)}
+.door-proof a:hover{color:var(--blue);border-color:var(--blue)}
+.door-reset{margin-top:clamp(20px,3vw,34px);font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.reset-link{font-family:var(--mono);font-size:12px;color:var(--blue);border:1px solid var(--line-2);border-radius:100px;padding:8px 14px;min-height:32px;transition:border-color .3s var(--work)}
+.reset-link:hover{border-color:var(--blue)}
+.row.dim{opacity:.32}
+.row.dim:hover{opacity:1}
+
+/* ---------- work tickets ---------- */
+.row{grid-template-columns:56px 1.1fr 1.5fr 300px}
+.row .rnum{display:flex;align-items:center;justify-content:center;align-self:stretch;min-height:44px;border-right:1px dashed var(--line-2);margin-right:4px;transition:color .3s var(--work),border-color .3s var(--work)}
+.row:hover .rnum{color:var(--blue);border-right-color:var(--blue)}
+.rlive{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#1E8A66}
+.rlive i{width:7px;height:7px;border-radius:50%;background:#27B584}
+.index-checked{margin-top:18px;color:var(--ink-2)}
+.index-checked time{color:var(--ink);font-weight:500}
+
+/* ---------- the workbench ---------- */
+.workbench{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
+.bench{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:clamp(36px,4.5vw,56px)}
+.bench-card{border-radius:18px;background:var(--paper-2);border:1px solid var(--line);padding:22px;min-height:300px;display:flex;flex-direction:column;gap:12px;position:relative}
+.bench-wide{grid-column:1/-1}
+@media(min-width:1100px){.bench{grid-template-columns:repeat(3,1fr)}.bench-wide{grid-column:span 2}}
+
+/* ---------- craft showroom ---------- */
+.showroom{display:flex;flex-direction:column;gap:14px}
+.switch{display:inline-flex;align-items:center;gap:14px;min-height:44px;padding:6px 0;font-family:var(--body);font-weight:600;font-size:15px;color:var(--ink);text-align:left}
+.switch .knob{width:46px;height:26px;border-radius:100px;background:var(--line-3);position:relative;flex:none;transition:background .3s var(--work)}
+.switch .knob::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .35s var(--pop)}
+.switch[aria-checked="true"] .knob{background:var(--blue)}
+.switch[aria-checked="true"] .knob::after{transform:translateX(20px)}
+.switch:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:8px}
+.sw-help{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.ladder{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 18px;margin-top:6px;font-size:14px;color:var(--muted);line-height:1.5}
+.ladder b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+/* the tags the switch reveals: in flow, above each section head, so they never cover text */
+.craft-tag{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 12px;align-items:center;justify-items:start;
+  max-height:0;overflow:hidden;opacity:0;margin:0;transition:max-height .35s var(--work),opacity .3s var(--work),margin .3s var(--work)}
+html[data-showroom] .craft-tag{max-height:160px;opacity:1;margin-bottom:18px}
+.craft-tag b{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--ink);border-radius:100px;padding:6px 11px;white-space:nowrap}
+.craft-tag b.lvl-immersive{background:var(--blue)}
+.craft-tag span{font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.45}
+.craft-tag .replay{color:var(--blue);text-decoration:underline;white-space:nowrap}
+.hero .craft-tag{margin-top:-40px}
+html[data-showroom] .hero .craft-tag{margin-bottom:30px}
+
+/* ---------- on the record ---------- */
+.record{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line);background:var(--paper-3)}
+.proof{list-style:none;margin-top:clamp(36px,4.5vw,56px);border-top:1px solid var(--line-2);counter-reset:proof}
+.proof li{display:grid;grid-template-columns:44px 1.2fr 1fr 170px;gap:clamp(14px,3vw,36px);padding:20px 0;border-bottom:1px solid var(--line);align-items:baseline;counter-increment:proof}
+.proof li::before{content:counter(proof,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:var(--blue)}
+.proof li b{font-family:var(--disp);font-weight:600;font-size:clamp(18px,1.8vw,22px);color:var(--ink);line-height:1.2;letter-spacing:-.01em}
+.proof li span{color:var(--muted);font-size:15px;line-height:1.55}
+.proof li time{font-family:var(--mono);font-size:12px;color:var(--ink);text-align:right}
+
+/* ---------- the studio: two people ---------- */
+.about .sec-head{margin-bottom:clamp(36px,4.5vw,56px)}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.person{border-radius:16px;background:var(--paper-2);border:1px solid var(--line);padding:22px 20px;display:flex;flex-direction:column;gap:6px}
+.person .p-init{width:52px;height:52px;border-radius:14px;background:var(--wash-peach);color:var(--ink);font-family:var(--disp);font-weight:600;font-size:20px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.person b{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+.person .p-role{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.about .person p{font-family:var(--body);font-style:normal;font-weight:400;font-size:15px;line-height:1.55;color:var(--muted);margin-top:6px;letter-spacing:0}
+
+/* ---------- contact: three honest ways out ---------- */
+.s-row-wrap{flex-wrap:wrap;gap:10px}
+.s-alt{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink);border:1.5px solid var(--line-3);border-radius:100px;padding:11px 16px;min-height:44px;
+  display:inline-flex;align-items:center;transition:border-color .3s var(--work),color .3s var(--work)}
+.s-alt:hover{border-color:var(--blue);color:var(--blue)}
+.s-note{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);min-height:1em;line-height:1.5}
+/* tap targets: the shared small mono link pattern gets a real hit area (WCAG 2.5.8) */
+.contact .mail,.contact .lines a,.step-back,.s-skip,.foot a{min-height:24px;display:inline-flex;align-items:center}
+.contact .lines a{gap:5px}
+.step-back,.s-skip{padding:6px 4px}
+.foot a{padding:4px 0}
+.foot-tools{display:inline-flex;gap:14px;align-items:center}
+.foot-tools:empty{display:none}
+[hidden]{display:none!important}
+
+/* ---------- night shift (dark theme; discovered, then a real switch) ---------- */
+:root[data-theme="dark"]{--paper:#0F1629;--paper-2:#172038;--paper-3:#121A2F;--ink:#F3F5FA;--ink-2:#D9DEEB;--muted:#A9B2C8;--faint:#8F99B3;
+  --blue:#F0762F;--blue-2:#EA5E14;--wash-blue:#3A2416;--wash-mint:#163A2E;--wash-peach:#3B2418;
+  --line:rgba(243,245,250,.12);--line-2:rgba(243,245,250,.22);--line-3:rgba(243,245,250,.5);--glass:rgba(23,32,56,.72)}
+:root[data-theme="dark"] body{color-scheme:dark}
+:root[data-theme="dark"] header .bg{background:rgba(15,22,41,.82)}
+:root[data-theme="dark"] .btn,:root[data-theme="dark"] .s-next{color:#0F1629}
+:root[data-theme="dark"] .btn:hover,:root[data-theme="dark"] .s-next:hover{color:#0F1629;background:var(--blue-2)}
+:root[data-theme="dark"] .btn.ghost{color:var(--ink)}
+:root[data-theme="dark"] .status,:root[data-theme="dark"] .stepper{border-color:rgba(243,245,250,.12)}
+:root[data-theme="dark"] .skip-link{color:var(--paper)}
+:root[data-theme="dark"] ::selection{color:#0F1629}
+:root[data-theme="dark"] .rlive{color:#3ED39F}
+:root[data-theme="dark"] .step-sum .sc,:root[data-theme="dark"] .opt{background:rgba(23,32,56,.6)}
+:root[data-theme="dark"] .draft-grid{opacity:.35}
+:root[data-theme="dark"] .wash{opacity:.35}
+:root[data-blueprint] .draft-grid{opacity:1}
+
+/* ---------- responsive additions ---------- */
+@media(max-width:1100px){.proof li{grid-template-columns:40px 1fr 1fr 150px}}
+@media(max-width:920px){
+  .door-grid{grid-template-columns:1fr 1fr}
+  .people{grid-template-columns:1fr 1fr}
+  .ladder{grid-template-columns:1fr}
+  .row{grid-template-columns:44px 1fr}
+  .proof li{grid-template-columns:34px 1fr}
+  .proof li span,.proof li time{grid-column:2;text-align:left}
+}
+@media(max-width:600px){
+  .door-grid{grid-template-columns:1fr}
+  .people{grid-template-columns:1fr}
+  .bench{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .rv{transition-delay:0s}
+  .sheen::before{display:none}
+}
