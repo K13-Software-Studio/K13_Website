@@ -425,7 +425,7 @@ body.k13-held>*:not(#k13intro){opacity:0;transform:translateY(10px)}
 :root{--work:cubic-bezier(.4,0,.2,1)}
 .rv{transition-delay:calc(var(--i,0)*80ms)}
 /* a keyboard user can land on a control before the reveal observer fires: focus reveals */
-.rv:focus-within{opacity:1;transform:none}
+.rv:focus-within,.rv.in:focus-within{opacity:1;transform:none;transition-duration:.15s;transition-delay:0s}
 .card{transition:transform .3s var(--work),box-shadow .3s var(--work)}
 .row{transition:padding-left .3s var(--work),opacity .3s var(--work)}
 .row::after{bottom:0}

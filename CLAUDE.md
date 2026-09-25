@@ -28,20 +28,30 @@
 - Open: **http://localhost:9130/** · macOS: never use 5000/7000 (AirPlay squats them).
 
 ## Stack
-Static HTML/CSS/JS — **no build step, no `package.json`**. One `index.html` carries its own inline
-CSS and JS. Lenis for smooth scroll (jsDelivr, SRI-pinned). Google Fonts. Contact is a client-side
-`mailto:` composer, not a backend form.
+Static HTML/CSS/JS — **no build step, no `package.json`**. Since 2026-09-25 (beta_v8 "The
+Workbench") the files are: `index.html` (markup only), `css/site.css`, `css/workbench.css`,
+`css/404.css`, `js/intro.js` (the opening film), `js/site.js` (nav, reveals, feed, doors, showroom,
+stepper), `js/workbench.js` (the five games and the hidden layer). Lenis for smooth scroll
+(jsDelivr, SRI-pinned). Google Fonts. Contact is a client-side `mailto:` composer with "Open in
+Gmail" and "Copy the message" beside it, not a backend form. The opening film lives at
+`assets/intro/`; design prototypes live in the gitignored `docs/prototypes/` and in
+`generatedAssets/K13_Website_sculpt-intro/`.
 
-Because there is no bundler, **`index.html` is the whole application** — treat edits to it with the
-care you'd give a source tree, and expect concurrent agents to collide there. Partition by file.
+**No inline `style=""` attributes and no inline `<script>` blocks**: the CSP no longer allows
+either (see below). Set styles from JS through the CSSOM (`el.style.x = ...`), never through
+`setAttribute("style")`. The games mount into `<div data-game="...">` and inject their own markup,
+so page work and game work never touch the same file. The build spec and the final copy are in
+`docs/BUILD_SPEC_2026-09-25.md` and `docs/copy_2026-09-25.md`.
 
 ## Security & deploy
 - `vercel.json` carries the CSP and 5 security headers. **The CSP allowlist is derived from captured
   network requests** (`fonts.googleapis.com`, `fonts.gstatic.com`, `cdn.jsdelivr.net`) — if you add
   an external resource you MUST update it, and prove it by serving locally with those exact headers
   and confirming zero CSP violations. A wrong CSP takes production down on the next deploy.
-- `script-src` currently needs `'unsafe-inline'` because the JS is inline. Externalising that script
-  would let it go — no build step required. Known follow-up.
+- `script-src` and `style-src` dropped `'unsafe-inline'` on 2026-09-25. Any inline style attribute or
+  inline script you add will be blocked in production and pass silently on a plain local server:
+  always prove a change with the header-serving local server (`docs/handoffs/build_2026-09-25.md`
+  has the snippet) before shipping.
 
 ## Accessibility — this one is not optional here
 The site **markets "WCAG · 508" as a paid capability**, so shipping a11y failures is a credibility
@@ -75,8 +85,12 @@ await page.evaluate(() => { window.__mailto = []
 })
 ```
 
-This is also the *better* test: it lets you assert on the encoded subject and body, which no pass
-has actually verified yet.
+**Correction (2026-09-25):** neither stub catches "Send it", because it navigates with
+`window.location.href = mailto…`, which Chromium neither routes through the network layer nor lets
+a page override, so a scripted click on "Send it" still opens Mail on Kazim's Mac. Never click
+"Send it" in an automated test. Verify the message through **"Open in Gmail"** instead: stub
+`window.open`, click it, and assert on the URL it builds; both buttons use the same `compose()`,
+so the subject and body encoding is proven for the mailto path too.
 
 ## How Claude/Cursor should work here
 - Plan mode for non-trivial tasks; use subagents liberally, one task each.
@@ -115,8 +129,8 @@ has actually verified yet.
 2. **Branch protection on `main`** is not enabled, so the never-commit-to-main rule is honour-only.
 
 ## Known follow-ups
-- ~2.5MB of oversized `assets/shots/*.jpg` with no WebP or `srcset`; plus an orphaned 1.9MB
-  `Kazim Image.png` and an unused `assets/kazim 2.jpg`.
+- The 13 work shots now ship as WebP (`assets/shots/webp/*-750.webp` and `*-1500.webp`); the
+  original JPEGs stay in `assets/shots/` as the source of truth. Add both sizes when adding a row.
 - `scripts/` has never been committed — `hm.sh`/`ship.sh` exist only on Kazim's Mac.
 - Self-XSS `innerHTML` sink in the stepper summary chips (confirmed non-exploitable: no backend,
   no URL-param feed).
