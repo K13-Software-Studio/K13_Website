@@ -704,3 +704,9 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 /* the hero is above the fold: it rises but never fades, so the headline counts as painted the moment it appears */
 .hero .rv{opacity:1;transform:translateY(18px);transition:transform .7s var(--ease)}
 .hero .rv.in{transform:none}
+
+/* the three lanes share rows: titles, paragraphs and lists line up however long the copy runs */
+.cap-col{display:grid;grid-row:span 3;grid-template-rows:subgrid;align-content:start;row-gap:10px}
+.cap-col h3,.cap-col p{margin-bottom:0}
+.cap-col .stk{align-self:start;margin-top:10px}
+@supports not (grid-template-rows:subgrid){.cap-col{display:block}.cap-col p{margin-bottom:18px}}

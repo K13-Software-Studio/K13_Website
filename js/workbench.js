@@ -17,6 +17,15 @@ function el(tag,cls,html){ var e=document.createElement(tag); if(cls) e.classNam
 function txt(tag,cls,text){ var e=document.createElement(tag); if(cls) e.className=cls; e.textContent=text; return e; }
 function store(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function lerp(a,b,t){ return a+(b-a)*t; }
+/* cubic-bezier progress solver, so a JS-driven tween can use the same signature easings as CSS */
+function bezier(x1,y1,x2,y2){
+  function A(a1,a2){ return 1-3*a2+3*a1; } function B(a1,a2){ return 3*a2-6*a1; } function C(a1){ return 3*a1; }
+  function calcX(t){ return ((A(x1,x2)*t+B(x1,x2))*t+C(x1))*t; } function calcY(t){ return ((A(y1,y2)*t+B(y1,y2))*t+C(y1))*t; }
+  function slope(t){ return 3*A(x1,x2)*t*t+2*B(x1,x2)*t+C(x1); }
+  return function(x){ var t=x; for(var i=0;i<6;i++){ var dx=calcX(t)-x; if(Math.abs(dx)<1e-4) break; var d=slope(t); if(Math.abs(d)<1e-6) break; t-=dx/d; } return calcY(t); };
+}
+var POP=bezier(.34,1.56,.64,1); /* the playful overshoot, run in JS for toys that can't use a CSS transition */
 var uid=0;
 
 /* card chrome shared by the five games */
