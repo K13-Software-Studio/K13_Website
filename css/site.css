@@ -663,3 +663,7 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 #k13intro.up{pointer-events:none}
 #k13intro.up *{pointer-events:none!important}
 .craft-tag .replay{display:inline-flex;align-items:center;min-height:24px;padding:0 4px;margin:0 -4px}
+
+/* the logo wall now lives inside the wall of work */
+.wall .logo-wall{margin:0 0 clamp(26px,3.5vw,40px)}
+.wall{padding-top:clamp(40px,5vw,70px);border-top:1px solid var(--line)}
