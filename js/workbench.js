@@ -65,7 +65,7 @@ function barfix(mount){
       var btn=el("button","wb-bottle",svg(i)); btn.type="button"; btn.setAttribute("aria-label","Bottle "+(i+1)+": weigh it");
       btn.querySelector(".wb-fill").setAttribute("y",String(120-look*100));
       var tag=txt("span","wb-btag","Bottle "+(i+1));
-      var accuse=txt("button","wb-accuse","That one"); accuse.type="button"; accuse.setAttribute("aria-label","Accuse bottle "+(i+1));
+      var accuse=txt("button","wb-accuse","Accuse"); accuse.type="button"; accuse.setAttribute("aria-label","Accuse bottle "+(i+1));
       b.appendChild(btn); b.appendChild(tag); b.appendChild(accuse); shelf.appendChild(b);
       (function(i,ml,btn,b){ round.bottles.push({ml:ml,el:b});
         btn.addEventListener("click",function(){ weigh(i); });
@@ -243,7 +243,7 @@ function carlos(mount){
 /* Simon, on a marquee: the sign plays a pattern, you repeat it. Each round is one bulb longer. */
 function miramar(mount){
   var c=card(mount,{title:"Opening Night",from:"Miramar Food Hall",instr:"Watch the marquee, then repeat the pattern. Reach 13 to open the doors.",stageClass:"wb-sign"});
-  var sign=el("div","wb-marquee",'<div class="wb-board"><span class="wb-board-t">MIRAMAR</span><span class="wb-board-s">Food hall · est. 1938 · <span class="wb-hunt" data-hunt>13</span> bulbs</span></div><div class="wb-bulbs" role="group" aria-label="Marquee bulbs"></div><div class="wb-mctl"><button type="button" class="wb-start">Start the show</button><span class="wb-hunt wb-row13">Row <span data-hunt>13</span></span></div>');
+  var sign=el("div","wb-marquee",'<div class="wb-board"><span class="wb-board-t">MIRAMAR</span><span class="wb-board-s">Food hall · est. 1938 · reach <span class="wb-hunt" data-hunt>13</span></span></div><div class="wb-bulbs" role="group" aria-label="Marquee bulbs"></div><div class="wb-mctl"><button type="button" class="wb-start">Start the show</button><span class="wb-hunt wb-row13">Row <span data-hunt>13</span></span></div>');
   c.stage.appendChild(sign);
   var row=sign.querySelector(".wb-bulbs"), start=sign.querySelector(".wb-start"), bulbs=[], N=7;
   var seq=[], at=0, playing=false, accepting=false, best=0; try{ best=+(localStorage.getItem("k13-marquee")||0); }catch(e){}

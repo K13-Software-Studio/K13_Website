@@ -361,4 +361,14 @@ document.addEventListener("DOMContentLoaded",function(){
   window.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true}); update();
 })();
 
+
+/* phones: Menu button opens the nav as a panel; Esc or picking a link closes it */
+(function(){
+  var btn=document.getElementById("menuBtn"), hdr=document.getElementById("hdr"); if(!btn||!hdr) return;
+  function set(on){ hdr.classList.toggle("menu-open",on); btn.setAttribute("aria-expanded",String(on)); btn.textContent=on?"Close":"Menu"; }
+  btn.addEventListener("click",function(){ set(btn.getAttribute("aria-expanded")!=="true"); });
+  document.querySelectorAll("#siteNav a").forEach(function(a){ a.addEventListener("click",function(){ set(false); }); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&hdr.classList.contains("menu-open")){ set(false); btn.focus(); } });
+})();
+
 })();

@@ -204,7 +204,7 @@
 .pencil.gone{opacity:0}
 .pencil path{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;transition:stroke-dashoffset .9s var(--ease)}
 
-@media(max-width:600px){.wb-shelf{right:128px}.wb-scale{width:100px}.wb-bet-l{font-size:22px}.wb-bulb{width:36px;height:36px}}
+@media(max-width:600px){.wb-shelf{right:128px}.wb-scale{width:100px}.wb-bet-l{font-size:22px}}
 @media(prefers-reduced-motion:reduce){
   .wb-attract *{animation:none!important}
   .wb-pin,.wb-miss,.wb-pin.real{animation:none}
@@ -215,3 +215,7 @@
 .eyebrow .hunt-mark{color:var(--blue)}
 :root[data-theme="dark"] .wb-sign{background:#0A0F1E;border-color:#0A0F1E}
 :root[data-theme="dark"] .wb-sign .wb-reset{color:#F6EEDC}
+
+.wb-accuse{white-space:nowrap}
+.wb-bulbs{flex-wrap:nowrap;gap:clamp(6px,2vw,12px)}
+.wb-bulb{width:clamp(30px,9vw,40px);height:clamp(30px,9vw,40px);flex:none}
