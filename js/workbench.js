@@ -380,6 +380,126 @@ function letters(mount){
   window.addEventListener("resize",layout); setTimeout(layout,0);
 }
 
+/* ======================= Runny Egg (Egg & Out) ======================= */
+/* Their site's cursor, kept in a pan: the yolk leads on a stiff spring, the white trails on a
+   soft one and can never let the yolk escape, grease streaks smear out behind. Click jiggles,
+   double click flips it with a spatula. */
+function eggcursor(mount){
+  var c=card(mount,{title:"Runny Egg",from:"Egg & Out",instr:"Move around the pan. Click for a jiggle, double click for the flip.",stageClass:"wb-pan"});
+  var stage=c.stage, layer=el("div","eg-layer"); layer.setAttribute("aria-hidden","true"); stage.appendChild(layer);
+  var streaks=[];
+  [[15,3.5,0],[10,3,-10],[10,3,10]].forEach(function(s){ var d=el("div","eg-streak"); d.style.width=s[0]+"px"; d.style.height=s[1]+"px"; layer.appendChild(d); streaks.push({el:d,x:0,y:0,vx:0,vy:0,lat:s[2],w:s[0]}); });
+  var white=el("div","eg-white"), yolkWrap=el("div","eg-flip"), yolk=el("div","eg-yolk",'<div class="eg-face eg-front"></div><div class="eg-face eg-back"></div>');
+  yolkWrap.appendChild(yolk); layer.appendChild(white); layer.appendChild(yolkWrap);
+  var whiteWrap=el("div","eg-flip eg-flip-w"); layer.insertBefore(whiteWrap,white); whiteWrap.appendChild(white);
+  layer.removeAttribute("aria-hidden"); layer.tabIndex=0; layer.setAttribute("role","img"); layer.setAttribute("aria-label","A sunny side up egg that follows your pointer. Arrow keys move it, Space jiggles it, Enter flips it.");
+  var W=0,H=0,tx=0,ty=0, y={x:0,y:0,vx:0,vy:0}, w={x:0,y:0,vx:0,vy:0}, gen=0, raf=null, live=false, last=0, touched=false, t0=performance.now(), hot=false;
+  function size(){ var r=stage.getBoundingClientRect(); W=r.width; H=r.height; if(!touched){ tx=W/2; ty=H/2; } }
+  function spring(p,tX,tY,k,d,m,dt){ var ax=(tX-p.x)*k/m - p.vx*d/m, ay=(tY-p.y)*k/m - p.vy*d/m; p.vx+=ax*dt; p.vy+=ay*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; }
+  function step(t){
+    if(!live) { raf=null; return; }
+    var dt=Math.min(.032,(t-last)/1000||.016); last=t;
+    if(!touched&&!reduced){ var a=(t-t0)/1000*.9; tx=W/2+Math.sin(a)*W*.32; ty=H/2+Math.sin(a*2)*H*.22; }
+    if(reduced){ y.x=tx; y.y=ty; w.x=tx; w.y=ty; }
+    else { spring(y,tx,ty,600,22,.7,dt); spring(w,y.x,y.y,230,30,1.1,dt); var lx=w.x-y.x, ly=w.y-y.y, mag=Math.hypot(lx,ly), k=mag>15?15/mag:1; }
+    var wx=reduced?tx:y.x+(w.x-y.x)*(k||1), wy=reduced?ty:y.y+(w.y-y.y)*(k||1);
+    var ax=Math.abs(y.vx), ay=Math.abs(y.vy), sqx=clamp(1+(ax-ay)/3600,.86,1.14), sqy=clamp(1+(ay-ax)/3600,.86,1.14), sqxw=clamp(1+(ax-ay)/2600,.82,1.2), sqyw=clamp(1+(ay-ax)/2600,.82,1.2);
+    yolkWrap.style.transform="translate("+y.x+"px,"+y.y+"px)"; yolk.style.transform="scale("+(sqx*(hot?1.25:1))+","+(sqy*(hot?1.25:1))+")";
+    whiteWrap.style.transform="translate("+wx+"px,"+wy+"px)"; white.style.transform="scale("+sqxw+","+sqyw+")";
+    streaks.forEach(function(s){ if(reduced){ s.el.style.opacity=0; return; } spring(s,tx,ty,110,24,1.1,dt); var sp=Math.hypot(s.vx,s.vy)||1, op=clamp((sp-60)/950,0,1)*(s.w>12?.2:.15), ang=Math.atan2(s.vy,s.vx)*180/Math.PI;
+      s.el.style.opacity=op; s.el.style.transform="translate("+(s.x+(-s.vy/sp)*s.lat)+"px,"+(s.y+(s.vx/sp)*s.lat)+"px) rotate("+ang+"deg)"; });
+    raf=requestAnimationFrame(step);
+  }
+  function go(){ if(!raf){ last=performance.now(); raf=requestAnimationFrame(step); } }
+  new IntersectionObserver(function(es){ live=es[0].isIntersecting; if(live){ size(); go(); } },{threshold:.2}).observe(mount);
+  function at(e){ var r=stage.getBoundingClientRect(); tx=clamp(e.clientX-r.left,0,W); ty=clamp(e.clientY-r.top,0,H); touched=true; }
+  stage.addEventListener("pointermove",at,{passive:true});
+  stage.addEventListener("pointerdown",function(e){ at(e); hot=true; shake(); }); stage.addEventListener("pointerup",function(){ hot=false; }); stage.addEventListener("pointerleave",function(){ hot=false; });
+  stage.addEventListener("dblclick",flip);
+  var shaking=false,flipping=false;
+  function shake(){ if(shaking||reduced) return; shaking=true; yolk.classList.add("shake"); setTimeout(function(){ yolk.classList.remove("shake"); shaking=false; },520); c.read.innerHTML='<span>Wobble.</span>'; }
+  function flip(){ if(flipping||reduced) return; flipping=true; [yolkWrap,whiteWrap].forEach(function(f){ f.classList.add("flipping"); }); setTimeout(function(){ [yolkWrap,whiteWrap].forEach(function(f){ f.classList.remove("flipping"); }); flipping=false; },800); c.read.innerHTML='<span>Spatula. Browned underneath.</span>'; }
+  layer.addEventListener("keydown",function(e){ var st=14; if(e.key==="ArrowLeft") tx-=st; else if(e.key==="ArrowRight") tx+=st; else if(e.key==="ArrowUp") ty-=st; else if(e.key==="ArrowDown") ty+=st; else if(e.key===" "){ e.preventDefault(); shake(); return; } else if(e.key==="Enter"){ flip(); return; } else return; e.preventDefault(); touched=true; tx=clamp(tx,0,W); ty=clamp(ty,0,H); });
+  c.reset.addEventListener("click",function(){ gen++; touched=false; size(); y.x=w.x=tx; y.y=w.y=ty; y.vx=y.vy=w.vx=w.vy=0; streaks.forEach(function(s){ s.x=tx; s.y=ty; s.vx=s.vy=0; }); t0=performance.now(); c.read.innerHTML=""; c.untouch(); });
+  window.addEventListener("resize",size); size(); y.x=w.x=tx; y.y=w.y=ty;
+}
+
+/* ======================= Bacon Rush, built to order (Egg & Out) ======================= */
+/* Their scroll-built sandwich, kept in a pan: scroll inside the stage and the layers drop in
+   one by one, back to front, then the real photo bursts through a yolk splash. Every value comes
+   from the site's own SandwichAssembly component (boxes, windows, easings). */
+function sandwich(mount){
+  var c=card(mount,{title:"Bacon Rush, built to order",from:"Egg & Out",instr:"Scroll inside the pan. Every layer drops in order. The last one is the real thing.",stageClass:"wb-build",
+    foot:"The falling layers are renders in the product's own style; the sandwich you land on is the real photo."});
+  function bez(x1,y1,x2,y2){ var cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;
+    function sx(t){ return ((ax*t+bx)*t+cx)*t; } function sy(t){ return ((ay*t+by)*t+cy)*t; } function dx(t){ return (3*ax*t+2*bx)*t+cx; }
+    return function(x){ if(x<=0) return 0; if(x>=1) return 1; var t=x,i; for(i=0;i<8;i++){ var e=sx(t)-x; if(Math.abs(e)<1e-6) return sy(t); var d=dx(t); if(Math.abs(d)<1e-6) break; t-=e/d; } var lo=0,hi=1; t=x; for(i=0;i<20;i++){ var v=sx(t); if(Math.abs(v-x)<1e-6) break; if(v<x) lo=t; else hi=t; t=(lo+hi)/2; } return sy(t); }; }
+  var PREM=bez(.22,1,.36,1), PLAY=bez(.34,1.56,.64,1), WORK=bez(.4,0,.2,1);
+  var B="assets/workbench/eggout/";
+  var LOAF={src:"loaf",label:"Toasted brioche bun",box:[.7375,.13125,.3],win:[.04,.13]};
+  var ING=[{k:"cheddar",label:"Cheddar cheese",box:[.44,.12,.36],copies:[[.46,.46,.42]],sh:[.5,.2,.5],win:[.15,.24],rz:1,z:2},
+           {k:"eggs",label:"Scrambled eggs",box:[.6125,.20625,.2136],sh:[.46,.27,.34],win:[.26,.35],rz:-1,z:5},
+           {k:"bacon",label:"Smoked bacon",box:[.6125,.2375,.109],sh:[.46,.3,.21],win:[.37,.46],rz:1,z:3},
+           {k:"avocado",label:"Avocado",box:[.6,.15,.3],sh:[.44,.22,.46],win:[.48,.57],rz:-1,z:6},
+           {k:"chives",label:"Chives",box:[.46,.27,.25],sh:[.34,.31,.33],win:[.59,.68],rz:1,z:7}];
+  var TRIG=.72;
+  var stage=c.stage;
+  var wrap=el("div","sb-wrap"); stage.appendChild(wrap);
+  var steps=el("ol","sb-steps"); wrap.appendChild(steps);
+  var scroller=el("div","sb-scroller"); scroller.tabIndex=0; scroller.setAttribute("role","region"); scroller.setAttribute("aria-label","The build. Scroll or use the arrow keys to drop each layer in."); wrap.appendChild(scroller);
+  var track=el("div","sb-track"); scroller.appendChild(track);
+  var sticky=el("div","sb-sticky"); track.appendChild(sticky);
+  var box=el("div","sb-box"); sticky.appendChild(box);
+  var build=el("div","sb-build"); box.appendChild(build);
+  function img(src,b,cls){ var i=el("img",cls||""); i.src=B+src+".webp"; i.alt=""; i.decoding="async"; i.loading="lazy"; i.style.left=(b[1]*100)+"%"; i.style.top=(b[2]*100)+"%"; i.style.width=(b[0]*100)+"%"; return i; }
+  var loafL=el("div","sb-layer"); loafL.appendChild(img(LOAF.src,LOAF.box)); loafL.style.zIndex=1; build.appendChild(loafL);
+  var layers=[];
+  ING.forEach(function(g){
+    var sh=el("div","sb-shadow"); sh.style.left=(g.sh[1]*100)+"%"; sh.style.top=(g.sh[2]*100)+"%"; sh.style.width=(g.sh[0]*100)+"%"; build.appendChild(sh);
+    var L=el("div","sb-layer"); L.appendChild(img(g.k,g.box)); (g.copies||[]).forEach(function(b){ L.appendChild(img(g.k,b)); }); build.appendChild(L);
+    layers.push({g:g,el:L,sh:sh,imgs:L.querySelectorAll("img")});
+  });
+  var splash=el("div","sb-splash"); for(var i=0;i<7;i++){ var bl=el("i"); bl.style.setProperty("--i",i); splash.appendChild(bl); } box.appendChild(splash);
+  var hero=el("div","sb-hero"); hero.appendChild(img("hero-bacon-rush",[.9,.05,.03])); box.appendChild(hero);
+  var labels=[LOAF.label].concat(ING.map(function(g){ return g.label; })).concat(["Bacon Rush"]);
+  var lis=labels.map(function(l,i){ var li=el("li",null,'<span>0'+(i+1)+'</span>'+l); steps.appendChild(li); return li; });
+  var wins=[LOAF.win].concat(ING.map(function(g){ return g.win; })).concat([[TRIG,.93]]);
+  var phase="idle", peak=0, prev=0, gen=0;
+  function progress(){ var m=scroller.scrollHeight-scroller.clientHeight; return m>0?scroller.scrollTop/m:0; }
+  function seg(p,a,b){ return clamp((p-a)/(b-a),0,1); }
+  function render(){
+    var p=progress();
+    var lp=PREM(seg(p,LOAF.win[0],LOAF.win[1])); loafL.style.opacity=lp; loafL.style.transform="translateY("+(40*(1-lp))+"%) scale("+(.92+.08*lp)+")";
+    var drift=0, press=1;
+    layers.forEach(function(L){ var g=L.g, s=g.win[0], e=g.win[1], land=s+(e-s)*.8, settle=s+(e-s)*.9;
+      var f=PREM(seg(p,s,land)); var ty=-115*(1-f);
+      var sc=p<land?1.22+(1.03-1.22)*f : p<settle?1.03+(1-1.03)*PLAY(seg(p,land,settle)) : 1;
+      var rx=-26*(1-f), rz=g.rz*5*(1-f);
+      L.el.style.zIndex=p<land?20:g.z; L.el.style.transform="translateY("+ty+"%)";
+      L.imgs.forEach(function(im){ im.style.transform="scale("+sc+") rotateX("+rx+"deg) rotateZ("+rz+"deg)"; });
+      var so=p<land?.05+.27*f:.32-.06*seg(p,land,e), ss=p<land?1.7-.75*f:.95+.05*seg(p,land,e); L.sh.style.opacity=so; L.sh.style.transform="scale("+ss+")";
+      if(p>=land) drift+=1; if(Math.abs(p-land)<.006) press=.985; });
+    build.style.transform="translateY("+drift+"%) scaleY("+press+")";
+    lis.forEach(function(li,i){ var on=i<7?p>=wins[i][0]+.02:(phase==="burst"||phase==="revealed"); li.classList.toggle("on",on); });
+    /* the reveal fires once on the way down, and leaves to the right on the way up */
+    if(p>prev){ if(phase==="gone"){ peak=p; phase="idle"; box.className="sb-box"; } if(p>peak) peak=p; if(p>=TRIG&&phase==="idle") burst(); }
+    else if(p<prev){ if((phase==="burst"||phase==="revealed")&&p<peak-.008) exit(); }
+    prev=p;
+  }
+  function burst(){ if(reduced){ phase="revealed"; box.className="sb-box revealed"; return; } phase="burst"; box.className="sb-box burst"; var g=gen; setTimeout(function(){ if(g===gen&&phase==="burst"){ phase="revealed"; box.className="sb-box revealed"; } },1500); c.read.innerHTML='<span><b>Bacon Rush.</b> The real one.</span>'; }
+  function exit(){ phase="exit"; box.className="sb-box exit"; var g=gen; setTimeout(function(){ if(g!==gen) return; phase="gone"; box.className="sb-box gone"; scroller.scrollTop=0; prev=0; peak=0; render(); },reduced?0:500); c.read.innerHTML=""; }
+  var ticking=false; scroller.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ ticking=false; render(); }); } },{passive:true});
+  scroller.addEventListener("keydown",function(e){ var st=scroller.clientHeight*.18; if(e.key==="ArrowDown"||e.key==="PageDown"){ e.preventDefault(); scroller.scrollTop+=st; } else if(e.key==="ArrowUp"||e.key==="PageUp"){ e.preventDefault(); scroller.scrollTop-=st; } else if(e.key==="Home"){ scroller.scrollTop=0; } else if(e.key==="End"){ scroller.scrollTop=scroller.scrollHeight; } });
+  /* attract: the first layers drop on their own until a hand arrives */
+  var auto=null;
+  new IntersectionObserver(function(es){ if(es[0].isIntersecting&&!mount.classList.contains("touched")&&!reduced&&!auto){ var t0=performance.now(); auto=requestAnimationFrame(function tick(t){ if(mount.classList.contains("touched")||!auto) return; var m=scroller.scrollHeight-scroller.clientHeight; var q=Math.min(.34,((t-t0)/6000)); scroller.scrollTop=m*q; if(q<.34) auto=requestAnimationFrame(tick); else auto=null; }); } else if(!es[0].isIntersecting&&auto){ cancelAnimationFrame(auto); auto=null; } },{threshold:.5}).observe(mount);
+  mount.addEventListener("pointerdown",function(){ mount.classList.add("touched"); if(auto){ cancelAnimationFrame(auto); auto=null; } },true); mount.addEventListener("keydown",function(){ mount.classList.add("touched"); if(auto){ cancelAnimationFrame(auto); auto=null; } },true);
+  mount.addEventListener("wheel",function(){ mount.classList.add("touched"); if(auto){ cancelAnimationFrame(auto); auto=null; } },{passive:true});
+  c.reset.addEventListener("click",function(){ gen++; phase="idle"; peak=0; prev=0; box.className="sb-box"; scroller.scrollTop=0; render(); c.read.innerHTML=""; mount.classList.remove("touched"); c.untouch(); });
+  if(reduced){ phase="revealed"; box.className="sb-box revealed"; lis.forEach(function(li){ li.classList.add("on"); }); }
+  render();
+}
+
 /* ======================= The hunt: find the 13 ======================= */
 var hunt=(function(){
   var TOTAL=13, marks=[], found={}, counter=null, live=null, announced=false;
@@ -466,7 +586,7 @@ var hunt=(function(){
 
 /* ======================= boot ======================= */
 window.K13=window.K13||{}; window.K13.hunt=hunt;
-var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,letters:letters};
+var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,letters:letters};
 document.querySelectorAll("[data-game]").forEach(function(m){ var g=games[m.getAttribute("data-game")]; if(g) g(m); });
 document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
 })();
