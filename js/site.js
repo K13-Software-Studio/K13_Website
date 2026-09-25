@@ -204,7 +204,7 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
     if(data.type) parts.push(["Building",data.type,0]);
     if(data.name) parts.push(["Name",data.name,1]);
     if(data.email) parts.push(["Email",data.email,2]);
-    parts.forEach(function(p){ var c=document.createElement("button"); c.type="button"; c.className="sc"; c.innerHTML="<b>"+p[0]+"</b>"+p[1];
+    parts.forEach(function(p){ var c=document.createElement("button"); c.type="button"; c.className="sc"; var lb=document.createElement("b"); lb.textContent=p[0]; c.appendChild(lb); c.appendChild(document.createTextNode(p[1]));
       c.addEventListener("click",function(){ idx=p[2]; render(); }); sum.appendChild(c); });
     sum.classList.toggle("on",parts.length>0 && idx>0);
     var inp=screens[idx].querySelector("input,textarea"); if(inp) setTimeout(function(){ inp.focus(); },360);
@@ -235,7 +235,7 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
   document.getElementById("gmailIt").addEventListener("click",function(){
     if(!ready()) return; var m=compose();
     var url="https://mail.google.com/mail/?view=cm&fs=1&to=projects.k13@gmail.com&su="+encodeURIComponent(m.subject)+"&body="+encodeURIComponent(m.body);
-    var w=window.open(url,"_blank","noopener");
+    var w=window.open(url,"_blank","noopener,noreferrer");
     if(!w){ copyNote.textContent="The browser blocked the new tab. Allow pop-ups for this page, or use Copy the message."; return; }
     document.getElementById("stepBody").inert=true; sent.inert=false;
     document.getElementById("sentTitle").textContent="Gmail opened in a new tab.";
