@@ -141,16 +141,16 @@ function miramar(mount){
   status(best?'Best so far: <b>'+best+'</b>.':'');
 }
 
-/* ======================= 3. Endless Spiral (Egg & Out) ======================= */
+/* ======================= 3. Endless Spiral (Egg&Out) ======================= */
 /* Their wordmark spirals on without end. Grab it and spin it; flick it and it keeps turning. */
 var FONT_DISP=null;
 function egg(mount){
-  var c=card(mount,{title:"Endless Spiral",from:"Egg & Out",instr:"Grab the spiral and spin it. Flick it hard and it keeps going.",stageClass:"wb-egg"});
+  var c=card(mount,{title:"Endless Spiral",from:"Egg&Out",instr:"Grab the spiral and spin it. Flick it hard and it keeps going.",stageClass:"wb-egg"});
   var cv=el("canvas","wb-eggcv"); cv.setAttribute("role","img"); cv.setAttribute("aria-label","A spiral made of the words EGG AND OUT, repeating outward. Drag in a circle to spin it, or use the left and right arrow keys."); cv.tabIndex=0; c.stage.appendChild(cv);
   var ctx=cv.getContext("2d"), W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
   if(!FONT_DISP) FONT_DISP=(getComputedStyle(document.documentElement).getPropertyValue("--disp")||"serif").trim();
   var YOLK="#8A5206", ORANGE="#B94612", CREAM="#F6EEDC";
-  var STR="EGG & OUT   ", widths=null, fontPx=16;
+  var STR="EGG&OUT   ", widths=null, fontPx=16;
   function buildWidths(){ ctx.font="600 "+fontPx+"px "+FONT_DISP; widths={}; for(var i=0;i<STR.length;i++){ var ch=STR[i]; if(widths[ch]==null) widths[ch]=Math.max(2,ctx.measureText(ch).width); } }
   var angle=0, vel=0, settle=null, dragging=false, lastAng=0, lastT=0, keyDir=0, keyHeldT=0, frameT=0, inView=false, raf=null, gen=0;
   function size(){ var r=cv.getBoundingClientRect(); if(!r.width) return; W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); fontPx=Math.max(10,Math.min(W,H)*0.052); buildWidths(); draw(); }
@@ -380,12 +380,12 @@ function letters(mount){
   window.addEventListener("resize",layout); setTimeout(layout,0);
 }
 
-/* ======================= Runny Egg (Egg & Out) ======================= */
+/* ======================= Runny Egg (Egg&Out) ======================= */
 /* Their site's cursor, kept in a pan: the yolk leads on a stiff spring, the white trails on a
    soft one and can never let the yolk escape, grease streaks smear out behind. Click jiggles,
    double click flips it with a spatula. */
 function eggcursor(mount){
-  var c=card(mount,{title:"Runny Egg",from:"Egg & Out",instr:"Move around the pan. Left click jiggles the yolk, right click flips the egg.",stageClass:"wb-pan"});
+  var c=card(mount,{title:"Runny Egg",from:"Egg&Out",instr:"Move around the pan. Left click jiggles the yolk, right click flips the egg.",stageClass:"wb-pan"});
   var stage=c.stage, layer=el("div","eg-layer"); layer.setAttribute("aria-hidden","true"); stage.appendChild(layer);
   var streaks=[];
   [[15,3.5,0],[10,3,-10],[10,3,10]].forEach(function(s){ var d=el("div","eg-streak"); d.style.width=s[0]+"px"; d.style.height=s[1]+"px"; layer.appendChild(d); streaks.push({el:d,x:0,y:0,vx:0,vy:0,lat:s[2],w:s[0]}); });
@@ -426,12 +426,12 @@ function eggcursor(mount){
   window.addEventListener("resize",size); size(); y.x=w.x=tx; y.y=w.y=ty;
 }
 
-/* ======================= Bacon Rush, built to order (Egg & Out) ======================= */
+/* ======================= Bacon Rush, built to order (Egg&Out) ======================= */
 /* Their scroll-built sandwich, kept in a pan: scroll inside the stage and the layers drop in
    one by one, back to front, then the real photo bursts through a yolk splash. Every value comes
    from the site's own SandwichAssembly component (boxes, windows, easings). */
 function sandwich(mount){
-  var c=card(mount,{title:"Bacon Rush, built to order",from:"Egg & Out",instr:"Scroll inside the pan. Every layer drops in order. The last one is the real thing.",stageClass:"wb-build",
+  var c=card(mount,{title:"Bacon Rush, built to order",from:"Egg&Out",instr:"Scroll inside the pan. Every layer drops in order. The last one is the real thing.",stageClass:"wb-build",
     foot:"The falling layers are renders in the product's own style; the sandwich you land on is the real photo."});
   function bez(x1,y1,x2,y2){ var cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;
     function sx(t){ return ((ax*t+bx)*t+cx)*t; } function sy(t){ return ((ay*t+by)*t+cy)*t; } function dx(t){ return (3*ax*t+2*bx)*t+cx; }

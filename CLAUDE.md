@@ -122,6 +122,10 @@ so the subject and body encoding is proven for the mailto path too.
   Space Grotesk (old README canon), and the entire quarantined mark family (purged, no restore).
   The `brand/` folder is gone; `README.md` was rewritten the same day to match this canon.
 
+- **2026-09-26 · The client's name is written `Egg&Out`, no spaces.** Kazim: "call Egg&Out
+  without the spaces from now on, everywhere." In HTML that is `Egg&amp;Out`; in capitals
+  `EGG&OUT`. Never "Egg & Out" in copy, alt text, labels, captions or commit messages.
+
 ## Open decisions (do not decide these yourself)
 1. **`pricing/tiger/`** — a named client's confidential pricing, untracked with no git backup.
    Verified not leaked (404 on production, never pushed). Whether it belongs in this repo is
@@ -235,7 +239,7 @@ writing it into the project's scope or todo is the first step, before the captur
 **A site that opens with an intro overlay** needs a longer settle than the 2.5s default, or every
 shot is a picture of the intro: prefix the command with `BEFOREAFTER_SETTLE=9`.
 
-**Why:** Kazim asked on 2026-09-22 why Before & After had nothing from that day's Egg & Out work.
+**Why:** Kazim asked on 2026-09-22 why Before & After had nothing from that day's Egg&Out work.
 It had nothing because nobody ran it: seven `hm++` merges went out and not one was captured. The
 rule existed only in the War Room's own `CLAUDE.md`, so a session onboarded from the genome dropped
 a journal note on every one of those merges, because the journal ritual is in the genome, and

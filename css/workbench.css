@@ -160,7 +160,7 @@
 
 
 
-/* ---------- Runny Egg (Egg & Out): their cursor, kept in a pan ---------- */
+/* ---------- Runny Egg (Egg&Out): their cursor, kept in a pan ---------- */
 .wb-pan{background:#F0EBD7;border-color:#E4DCC3;min-height:260px;cursor:none;touch-action:none;overflow:hidden}
 .eg-layer:focus-visible{outline:2px solid #f26a22;outline-offset:-2px}
 .wb-pan .wb-reset{cursor:pointer}
@@ -186,7 +186,7 @@
 @keyframes eg-wobble{0%,100%{border-radius:47% 53% 56% 44%/55% 46% 54% 45%}50%{border-radius:54% 46% 44% 56%/45% 55% 46% 54%}}
 @keyframes eg-blob{0%,100%{border-radius:38% 62% 63% 37%/58% 41% 59% 42%}20%{border-radius:66% 34% 40% 60%/45% 63% 37% 55%}40%{border-radius:45% 55% 30% 70%/65% 35% 65% 35%}60%{border-radius:60% 40% 58% 42%/38% 62% 38% 62%}80%{border-radius:35% 65% 55% 45%/52% 48% 60% 40%}}
 
-/* ---------- Bacon Rush, built to order (Egg & Out): the scroll build, kept in a pan ---------- */
+/* ---------- Bacon Rush, built to order (Egg&Out): the scroll build, kept in a pan ---------- */
 .wb-build{background:#F0EBD7;border-color:#E4DCC3;min-height:0;padding:0}
 .sb-wrap{display:grid;grid-template-columns:minmax(150px,.7fr) 1.6fr;gap:14px;height:100%;min-height:420px}
 .sb-steps{list-style:none;margin:0;padding:52px 0 18px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px}
