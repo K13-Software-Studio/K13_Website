@@ -389,9 +389,10 @@ function eggcursor(mount){
   var stage=c.stage, layer=el("div","eg-layer"); layer.setAttribute("aria-hidden","true"); stage.appendChild(layer);
   var streaks=[];
   [[15,3.5,0],[10,3,-10],[10,3,10]].forEach(function(s){ var d=el("div","eg-streak"); d.style.width=s[0]+"px"; d.style.height=s[1]+"px"; layer.appendChild(d); streaks.push({el:d,x:0,y:0,vx:0,vy:0,lat:s[2],w:s[0]}); });
-  var white=el("div","eg-white"), yolkWrap=el("div","eg-flip"), yolk=el("div","eg-yolk",'<div class="eg-face eg-front"></div><div class="eg-face eg-back"></div>');
-  yolkWrap.appendChild(yolk); layer.appendChild(white); layer.appendChild(yolkWrap);
-  var whiteWrap=el("div","eg-flip eg-flip-w"); layer.insertBefore(whiteWrap,white); whiteWrap.appendChild(white);
+  function follow(){ var f=el("div","eg-follow"), ce=el("div","eg-center"), fl=el("div","eg-flipper"); ce.appendChild(fl); f.appendChild(ce); layer.appendChild(f); return {f:f,fl:fl}; }
+  var wF=follow(), white=el("div","eg-white"); wF.fl.appendChild(white);
+  var yF=follow(), yolk=el("div","eg-yolk",'<div class="eg-face eg-front"></div><div class="eg-face eg-back"></div>'); yF.fl.appendChild(yolk);
+  var yolkWrap=yF.f, whiteWrap=wF.f, flippers=[yF.fl,wF.fl];
   layer.removeAttribute("aria-hidden"); layer.tabIndex=0; layer.setAttribute("role","img"); layer.setAttribute("aria-label","A sunny side up egg that follows your pointer. Arrow keys move it, Space jiggles it, Enter flips it.");
   var W=0,H=0,tx=0,ty=0, y={x:0,y:0,vx:0,vy:0}, w={x:0,y:0,vx:0,vy:0}, gen=0, raf=null, live=false, last=0, touched=false, t0=performance.now(), hot=false;
   function size(){ var r=stage.getBoundingClientRect(); W=r.width; H=r.height; if(!touched){ tx=W/2; ty=H/2; } }
@@ -419,7 +420,7 @@ function eggcursor(mount){
   stage.addEventListener("dblclick",flip);                                            /* touch has no right button: double tap flips */
   var shaking=false,flipping=false;
   function shake(){ if(shaking||reduced) return; shaking=true; yolk.classList.add("shake"); setTimeout(function(){ yolk.classList.remove("shake"); shaking=false; },520); c.read.innerHTML='<span>Wobble.</span>'; }
-  function flip(){ if(flipping||reduced) return; flipping=true; [yolkWrap,whiteWrap].forEach(function(f){ f.classList.add("flipping"); }); setTimeout(function(){ [yolkWrap,whiteWrap].forEach(function(f){ f.classList.remove("flipping"); }); flipping=false; },800); c.read.innerHTML='<span>Spatula. Browned underneath.</span>'; }
+  function flip(){ if(flipping||reduced) return; flipping=true; flippers.forEach(function(f){ f.classList.add("flipping"); }); setTimeout(function(){ flippers.forEach(function(f){ f.classList.remove("flipping"); }); flipping=false; },800); c.read.innerHTML='<span>Spatula. Browned underneath.</span>'; }
   layer.addEventListener("keydown",function(e){ var st=14; if(e.key==="ArrowLeft") tx-=st; else if(e.key==="ArrowRight") tx+=st; else if(e.key==="ArrowUp") ty-=st; else if(e.key==="ArrowDown") ty+=st; else if(e.key===" "){ e.preventDefault(); shake(); return; } else if(e.key==="Enter"){ flip(); return; } else return; e.preventDefault(); touched=true; tx=clamp(tx,0,W); ty=clamp(ty,0,H); });
   c.reset.addEventListener("click",function(){ gen++; touched=false; size(); y.x=w.x=tx; y.y=w.y=ty; y.vx=y.vy=w.vx=w.vy=0; streaks.forEach(function(s){ s.x=tx; s.y=ty; s.vx=s.vy=0; }); t0=performance.now(); c.read.innerHTML=""; c.untouch(); });
   window.addEventListener("resize",size); size(); y.x=w.x=tx; y.y=w.y=ty;

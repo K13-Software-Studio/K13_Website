@@ -166,9 +166,9 @@
 .wb-pan .wb-reset{cursor:pointer}
 .eg-layer{position:absolute;inset:0;pointer-events:none}
 .eg-layer>*{position:absolute;left:0;top:0;will-change:transform}
-.eg-flip{perspective:520px;transform-style:preserve-3d}
-.eg-flip>*{margin-left:-17px;margin-top:-17px}
-.eg-flip.eg-flip-w>*{margin-left:-50px;margin-top:-50px}
+.eg-follow{position:absolute;left:0;top:0;will-change:transform}
+.eg-center{position:absolute;left:0;top:0;transform:translate(-50%,-50%);perspective:520px;line-height:0}
+.eg-flipper{display:inline-block;transform-style:preserve-3d}
 .eg-yolk{width:34px;height:34px;position:relative;transform-style:preserve-3d}
 .eg-face{position:absolute;inset:0;border-radius:50%;backface-visibility:hidden;animation:eg-wobble 2.8s ease-in-out infinite}
 .eg-front{background:radial-gradient(circle at 35% 30%,#fff6d8 0%,#ffcd00 16%,#f2aa00 44%,#f26a22 80%,#d2521a 100%);
@@ -179,9 +179,10 @@
   box-shadow:0 3px 9px -2px rgba(150,120,70,.35);animation:eg-blob 3.6s ease-in-out infinite}
 .eg-streak{border-radius:50%;scale:1.5;background:radial-gradient(ellipse at center,rgba(74,56,38,.9) 0%,rgba(74,56,38,.5) 60%,rgba(74,56,38,0) 100%);filter:blur(1px);opacity:0;margin-left:-7px;margin-top:-2px}
 .eg-yolk.shake{animation:eg-shake .5s ease-out}
-.eg-flip.flipping{animation:eg-flipk .78s ease-in-out}
+.eg-flipper.flipping{animation:eg-flipk .78s ease-in-out}
 @keyframes eg-shake{0%{transform:rotate(0) scale(1)}20%{transform:rotate(-15deg) scale(1.2)}40%{transform:rotate(12deg) scale(.92)}60%{transform:rotate(-7deg) scale(1.08)}80%{transform:rotate(4deg) scale(1)}100%{transform:rotate(0) scale(1)}}
-@keyframes eg-flipk{0%{rotate:x 0deg;translate:0 0}26%{translate:0 -13px}36%{rotate:x 165deg}42%{translate:0 -13px}60%{rotate:x 195deg}100%{rotate:x 360deg;translate:0 0}}
+/* the site's spatula flip, value for value: a small hop, a slow tumble that lingers on the browned side, then it lands */
+@keyframes eg-flipk{0%{transform:translateY(0) rotateX(0) scale(1)}26%{transform:translateY(-13px) rotateX(119deg) scale(1.06)}36%{transform:translateY(-13px) rotateX(165deg) scale(1.06)}42%{transform:translateY(-13px) rotateX(173deg) scale(1.06)}60%{transform:translateY(-6px) rotateX(195deg) scale(1.03)}100%{transform:translateY(0) rotateX(360deg) scale(1)}}
 @keyframes eg-wobble{0%,100%{border-radius:47% 53% 56% 44%/55% 46% 54% 45%}50%{border-radius:54% 46% 44% 56%/45% 55% 46% 54%}}
 @keyframes eg-blob{0%,100%{border-radius:38% 62% 63% 37%/58% 41% 59% 42%}20%{border-radius:66% 34% 40% 60%/45% 63% 37% 55%}40%{border-radius:45% 55% 30% 70%/65% 35% 65% 35%}60%{border-radius:60% 40% 58% 42%/38% 62% 38% 62%}80%{border-radius:35% 65% 55% 45%/52% 48% 60% 40%}}
 
