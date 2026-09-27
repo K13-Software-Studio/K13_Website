@@ -221,7 +221,7 @@ writing it into the project's scope or todo is the first step, before the captur
 **A site that opens with an intro overlay** needs a longer settle than the 2.5s default, or every
 shot is a picture of the intro: prefix the command with `BEFOREAFTER_SETTLE=9`.
 
-**Why:** Kazim asked on 2026-09-22 why Before & After had nothing from that day's Egg & Out work.
+**Why:** Kazim asked on 2026-09-22 why Before & After had nothing from that day's Egg&Out work.
 It had nothing because nobody ran it: seven `hm++` merges went out and not one was captured. The
 rule existed only in the War Room's own `CLAUDE.md`, so a session onboarded from the genome dropped
 a journal note on every one of those merges, because the journal ritual is in the genome, and
