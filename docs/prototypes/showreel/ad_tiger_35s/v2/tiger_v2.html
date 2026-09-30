@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>K13 x Tiger Hospitality Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+:root{--blk:#0a0a0a;--gold:#b8954d;--gold2:#e3c68a;--cream:#f4efe4;--paper:#F3F5FA;--ink:#141D35;--ink2:#2A3554;--muted:#515C78;--or:#B94612;--or2:#EA5E14;
+  --bebas:"Bebas Neue",Impact,sans-serif;--play:"Playfair Display",Georgia,serif;--disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace;--body:"Inter",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--blk);font-family:var(--body);color:var(--cream);font-variant-numeric:lining-nums}
+.layer{position:absolute;inset:0;overflow:hidden}
+.abs{position:absolute}.nw{white-space:nowrap}
+.ch{display:inline-block}
+.mask{overflow:hidden;display:inline-block;vertical-align:top;padding:0 .04em .08em}
+#grain{position:absolute;inset:0;pointer-events:none;z-index:95;opacity:.07;mix-blend-mode:overlay}
+#vig{position:absolute;inset:0;pointer-events:none;z-index:94;background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+
+/* S1 open */
+#gl{left:560px;top:540px;width:800px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform-origin:50% 50%}
+#mono{left:810px;top:250px;width:300px;height:240px;background:url(/Users/k13/Desktop/PROJECTS/THG-Website/assets/logo.png) center/contain no-repeat;filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+#monoG{left:810px;top:250px;width:300px;height:240px;-webkit-mask:url(/Users/k13/Desktop/PROJECTS/THG-Website/assets/logo.png) center/contain no-repeat;mask:url(/Users/k13/Desktop/PROJECTS/THG-Website/assets/logo.png) center/contain no-repeat;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,236,190,.95) 50%,transparent 60%);background-size:300% 100%}
+#tname{left:0;width:1920px;top:560px;text-align:center;font-family:var(--bebas);font-size:120px;letter-spacing:.14em;color:var(--cream);line-height:1}
+#tsub{left:0;width:1920px;top:700px;text-align:center;font-family:var(--play);font-style:italic;font-size:54px;color:var(--gold2)}
+#tsub .ch{margin:0 .12em}
+
+/* S2 map */
+#maptxt{left:140px;top:300px}
+#maptxt .e{font-family:var(--mono);font-size:20px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+#maptxt .t{margin-top:18px;font-family:var(--play);font-size:96px;line-height:1.02;color:var(--cream)}
+#maptxt .t em{color:var(--gold2)}
+#maptxt .n{margin-top:40px;display:flex;align-items:baseline;gap:18px}
+#maptxt .n b{font-family:var(--bebas);font-size:190px;line-height:.8;color:var(--gold2);font-weight:400}
+#maptxt .n span{font-family:var(--bebas);font-size:48px;letter-spacing:.12em;color:var(--cream)}
+#map{position:absolute;left:760px;top:70px;width:960px;height:960px;overflow:visible}
+.pl{font-family:var(--bebas);letter-spacing:.08em}
+
+/* S3 intro line */
+#s3a{left:0;width:1920px;top:370px;text-align:center;font-family:var(--play);font-size:104px;color:var(--cream);line-height:1.1}
+#s3a em{color:var(--gold2)}
+
+/* S4 parade */
+#pbg{position:absolute;inset:0;z-index:0;isolation:isolate}
+.pw{position:absolute;inset:0}
+#pidx{left:120px;top:150px;font-family:var(--mono);font-size:22px;letter-spacing:.2em}
+#pname{left:110px;top:200px;width:820px;font-family:var(--bebas);font-size:156px;line-height:.9;letter-spacing:.02em}
+#pfact{left:120px;top:640px;width:700px;font-family:var(--play);font-style:italic;font-size:46px;line-height:1.2}
+#pkind{left:120px;top:880px;font-family:var(--mono);font-size:20px;letter-spacing:.16em;text-transform:uppercase}
+#persp{position:absolute;inset:0;perspective:2200px}
+#card{position:absolute;left:960px;top:200px;width:860px;height:560px;border-radius:16px;overflow:hidden;background:#111;box-shadow:0 70px 120px -50px rgba(0,0,0,.7);transform-origin:50% 50%}
+#card .bar{height:36px;display:flex;align-items:center;gap:7px;padding:0 14px;background:rgba(255,255,255,.92)}
+#card .bar i{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,.2)}
+#card .bar span{margin-left:14px;font-family:var(--mono);font-size:14px;color:#333}
+#card img{width:100%;height:524px;object-fit:cover;object-position:top;display:block}
+#award{left:1560px;top:120px;width:250px;height:250px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:var(--gold);color:var(--blk);box-shadow:0 30px 60px -30px rgba(0,0,0,.6);z-index:20}
+#award b{font-family:var(--bebas);font-size:76px;line-height:.9;font-weight:400}
+#award span{font-family:var(--bebas);font-size:26px;letter-spacing:.08em;line-height:1.05;margin-top:4px}
+#award small{font-family:var(--mono);font-size:13px;letter-spacing:.1em;margin-top:6px}
+
+/* S5 grid */
+#s5{background:var(--blk)}
+.gt{position:absolute;width:400px;height:250px;border-radius:10px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.8);border:1px solid rgba(184,149,77,.35)}
+.gt img{width:100%;height:100%;object-fit:cover;object-position:top}
+.gt.txt{display:flex;flex-direction:column;justify-content:center;padding:0 30px;background:#171310}
+#gtitle{left:0;width:1920px;top:860px;text-align:center;font-family:var(--play);font-size:74px;color:var(--cream)}
+#gtitle em{color:var(--gold2)}
+
+/* S6 K13 end card */
+#s6{background:var(--paper);color:var(--ink)}
+#s6 .dots{position:absolute;inset:-60px;background-image:radial-gradient(rgba(203,77,20,.2) 1.4px,transparent 1.8px);background-size:32px 32px;opacity:.5}
+.wash{position:absolute;border-radius:50%;filter:blur(90px)}
+#e0{left:0;width:1920px;top:210px;text-align:center;font-family:var(--mono);font-size:22px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#e0 b{color:var(--gold);font-weight:500}
+#e1{left:0;width:1920px;top:260px;text-align:center;font-family:var(--disp);font-weight:600;font-size:170px;letter-spacing:-.03em;line-height:1.05;color:var(--ink)}
+#e1 em{font-style:italic;font-weight:500;color:var(--or)}
+#endcard{left:0;width:1920px;top:560px;text-align:center}
+#brand{display:inline-flex;align-items:center;gap:16px}
+#brand .k{font-family:var(--disp);font-weight:700;font-size:84px;line-height:1}
+#brand .k b{color:var(--ink)}#brand .k i{font-style:normal;color:var(--or)}
+#brand .tg{font-family:var(--mono);font-size:19px;line-height:1.35;letter-spacing:.16em;text-transform:uppercase;color:#646B7E;text-align:left}
+#for{margin-top:20px;font-size:32px;color:var(--ink2)}
+#cta{margin-top:34px;display:flex;justify-content:center;align-items:center;gap:28px}
+#cta .b{position:relative;overflow:hidden;padding:24px 44px;border-radius:16px;background:var(--or);color:#fff;font-weight:600;font-size:36px;box-shadow:0 10px 24px -12px rgba(203,77,20,.7)}
+#cta .b i{position:absolute;top:-20%;bottom:-20%;width:80px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg)}
+#cta .u{font-family:var(--mono);font-size:28px;letter-spacing:.04em;color:var(--ink2);text-align:left;line-height:1.5}
+#cta .u b{color:var(--or);font-weight:500}
+#bug{position:absolute;right:56px;bottom:44px;display:flex;align-items:center;gap:10px;z-index:90;font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+#bug b{font-family:var(--disp);font-weight:700;font-size:30px;letter-spacing:0}
+</style></head>
+<body>
+<div id="stage">
+ <!-- S1 -->
+ <div class="layer" id="s1">
+  <div class="abs" id="gl"></div>
+  <div class="abs" id="mono"></div><div class="abs" id="monoG"></div>
+  <div class="abs nw" id="tname"><span class="mask"><span class="split">Tiger Hospitality Group</span></span></div>
+  <div class="abs nw" id="tsub"><span class="mask"><span class="ch">Five concepts.</span></span> <span class="mask"><span class="ch">Three food halls.</span></span></div>
+ </div>
+ <!-- S2 map -->
+ <div class="layer" id="s2">
+  <div class="abs" id="maptxt"><div class="e">Southern California</div><div class="t nw"><span class="mask"><span class="ch" id="mt1">From San Clemente</span></span><br><span class="mask"><em class="ch" id="mt2">to Little Italy.</em></span></div>
+   <div class="n"><b id="mcount">0</b><span>locations</span></div></div>
+  <svg id="map" viewBox="0 0 960 960"><path id="coast" fill="none" stroke="#b8954d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/>
+   <path id="coast2" fill="none" stroke="rgba(184,149,77,.25)" stroke-width="1.5" pathLength="1" stroke-dasharray="1 1"/><g id="pins"></g></svg>
+ </div>
+ <!-- S3 -->
+ <div class="layer" id="s3"><div class="abs nw" id="s3a"><span class="mask"><span class="ch" id="a1">Eight of their brands</span></span><br><span class="mask"><em class="ch" id="a2">needed a home online.</em></span></div></div>
+ <!-- S4 parade -->
+ <div class="layer" id="s4">
+  <div id="pbg"></div>
+  <div class="abs nw" id="pidx"></div>
+  <div class="abs" id="pname"></div>
+  <div class="abs" id="pfact"></div>
+  <div class="abs nw" id="pkind"></div>
+  <div id="persp"><div id="card"><div class="bar"><i></i><i></i><i></i><span id="purl"></span></div><div id="pimgs"></div></div></div>
+  <div class="abs" id="award"><b id="aw1"></b><span id="aw2"></span><small id="aw3"></small></div>
+ </div>
+ <!-- S5 grid -->
+ <div class="layer" id="s5"><div id="gtiles"></div><div class="abs nw" id="gtitle"><span class="mask"><span class="ch" id="g1">One group. Eight voices.</span></span> <span class="mask"><em class="ch" id="g2">One studio.</em></span></div></div>
+ <!-- S6 -->
+ <div class="layer" id="s6"><div class="dots"></div><div class="wash" id="w1" style="width:760px;height:760px;background:#FCE0CC"></div><div class="wash" id="w2" style="width:620px;height:620px;background:#D6F0E6"></div>
+  <div class="abs nw" id="e0">Built for <b>Tiger Hospitality Group</b></div>
+  <div class="abs nw" id="e1"><span class="mask"><span class="ch" id="r1">Ready for</span></span> <span class="mask"><em class="ch" id="r2">yours.</em></span></div>
+  <div class="abs" id="endcard"><div id="brand"><span class="k"><b>K</b><i>13</i></span><span class="tg">Software<br>Studio</span></div>
+   <div id="for">Websites for restaurants, food halls and hospitality groups.</div>
+   <div id="cta"><span class="b">Start a project →<i></i></span><span class="u"><b>k13projects.com</b><br>Reply in under 24 hours</span></div></div>
+ </div>
+ <canvas id="grain" width="480" height="270"></canvas><div id="vig"></div>
+ <div id="bug"><b><span style="color:inherit">K</span><span style="color:#EA5E14">13</span></b><span>Software Studio</span></div>
+</div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eBack=bez(.34,1.56,.64,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1),eIn=bez(.55,0,1,.45),eOut2=bez(.16,1,.3,1);
+const $=s=>document.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const show=(el,on)=>{el.style.display=on?'':'none'};
+const hash=n=>{let x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+const TOTAL=35,SH='../../../../../assets/shots/';
+$$('.split').forEach(el=>{el.innerHTML=[...el.textContent].map(c=>c===' '?'<span class="ch">&nbsp;</span>':`<span class="ch">${c}</span>`).join('')});
+const TN=$$('#tname .ch'),TS=$$('#tsub .ch');
+
+/* map: lat/lng -> svg */
+const X=lng=>(lng+117.78)*1350, Y=lat=>(33.52-lat)*1080;
+const COAST=[[33.52,-117.76],[33.46,-117.69],[33.42,-117.62],[33.35,-117.55],[33.26,-117.45],[33.2,-117.39],[33.13,-117.34],[33.05,-117.3],[32.96,-117.27],[32.9,-117.255],[32.85,-117.275],[32.8,-117.26],[32.76,-117.25],[32.73,-117.23],[32.7,-117.2],[32.68,-117.17],[32.62,-117.13]];
+const cd='M'+COAST.map(([a,b])=>`${X(b).toFixed(1)} ${Y(a).toFixed(1)}`).join(' L');$('#coast').setAttribute('d',cd);
+$('#coast2').setAttribute('d','M'+COAST.map(([a,b])=>`${(X(b)-26).toFixed(1)} ${(Y(a)+8).toFixed(1)}`).join(' L'));
+const VEN=[["Miramar Food Hall","San Clemente",33.448,-117.612],["Cosmos Burger","Oceanside",33.197,-117.378],["The Windmill","Carlsbad",33.126,-117.313],["Sky Deck","Del Mar",32.95,-117.22],
+  ["Station 8","La Jolla",32.88,-117.228],["Global Fork","Little Italy",32.724,-117.168],["Good Enough","Little Italy",32.7235,-117.1645]];
+$('#pins').innerHTML=VEN.map(([n,c,la,ln],i)=>{const x=X(ln),y=Y(la);const right=i!==6;const dy=i===6?62:i===5?-22:0;
+  return `<g class="pin" data-i="${i}"><circle class="pr" cx="${x}" cy="${y}" r="10" fill="none" stroke="#e3c68a" stroke-width="2"/><circle class="pd" cx="${x}" cy="${y}" r="9" fill="#e3c68a"/>
+  <g class="plab"><line x1="${x+14}" y1="${y+dy}" x2="${x+60}" y2="${y+dy}" stroke="rgba(227,198,138,.6)" stroke-width="1.5"/><text class="pl" x="${x+70}" y="${y+dy+2}" fill="#f4efe4" font-size="34">${n.toUpperCase()}</text><text x="${x+70}" y="${y+dy+30}" fill="#b8954d" font-size="17" font-family="JetBrains Mono" letter-spacing="2">${c.toUpperCase()}</text></g></g>`}).join('');
+const pinsEl=$$('.pin');
+
+/* parade */
+const BR=[
+ {n:"Tiger Hospitality",k:"The group · locations map",f:"Community dining across Southern California, and a map that holds it all.",s:"thg-hero",u:"tigerhospitalitygroup.com",bg:"#0a0a0a",fg:"#f4efe4",ac:"#e3c68a"},
+ {n:"Lobster Lab",k:"Seafood · off the rented platform",f:"Moved onto a site it finally owns, lobster rolls first.",s:"lobsterlab-live",u:"lobsterlab.us",bg:"#0f2a4a",fg:"#ffffff",ac:"#ff7a3d",aw:["#1","Lobster roll","San Diego · Yelp 2024"]},
+ {n:"La Vida",k:"Healthy eats · all day",f:"Salads, toasts and smoothies that feel like sunshine before you read a word.",s:"lavida-live",u:"lavida.fit",bg:"#FDBCBA",fg:"#2c3208",ac:"#6d7318"},
+ {n:"Egg&Out",k:"Breakfast club · any hour",f:"Egg forward, inside a wordmark that spirals on without end.",s:"eggout-live",u:"Egg&Out",bg:"#E0662A",fg:"#1a0e06",ac:"#fff3e6"},
+ {n:"Cosmos Burger",k:"Smash burgers · Oceanside",f:"Spicy Jam Burger, Monkey Fries, and a site served loud.",s:"cosmos",u:"Cosmos Burger",bg:"#141414",fg:"#FFD35C",ac:"#FFD35C",aw:["#1","Burger","Oceanside · 2025"]},
+ {n:"Miramar Food Hall",k:"Food hall · San Clemente",f:"A 1938 theatre, back online, opening night drumroll included.",s:"miramar-live",u:"miramarfoodhall.com",bg:"#046054",fg:"#f6f4ed",ac:"#f0a35c"},
+ {n:"Station 8",k:"Public market · La Jolla",f:"Twenty thousand square feet, accessible and stable from day one.",s:"station8-live",u:"Station 8",bg:"#5e6738",fg:"#f3ead6",ac:"#ddcba4"},
+ {n:"Global Fork",k:"Food hall · Little Italy",f:"Global kitchens and a full cocktail bar, built to the standard of the room.",s:"globalfork-live",u:"Global Fork",bg:"#1d1712",fg:"#f4e9d8",ac:"#d9a55c"},
+];
+const PT0=9.9,PD=1.95;const VK=['tiger','lobster','lavida','eggout','cosmos','miramar','station8','globalfork'];
+$('#pimgs').innerHTML=VK.map(k=>`<video src="rec/seg_${k}.webm" muted preload="auto" playsinline style="display:none;width:100%;height:524px;object-fit:cover"></video>`).join('');const pimgs=$$('#pimgs video');
+$('#pbg').innerHTML=BR.map(b=>`<div class="pw" style="background:${b.bg}"></div>`).join('');const pws=$$('#pbg .pw');
+
+/* grid */
+const GS=VK.map(k=>'rec/still_'+k+'.jpg');
+$('#gtiles').innerHTML=GS.map((s,i)=>{const r=Math.floor(i/4),c=i%4;const x=100+c*(400+30)+20,y=230+r*(250+30);
+  return s?`<div class="gt" style="left:${x}px;top:${y}px"><img src="${s}" alt=""></div>`:`<div class="gt txt" style="left:${x}px;top:${y}px"><div style="font-family:Bebas Neue;font-size:64px;color:#FFD35C;line-height:1">COSMOS BURGER</div><div style="font-family:JetBrains Mono;font-size:15px;letter-spacing:.14em;color:#e3c68a;margin-top:8px">#1 BURGER · OCEANSIDE 2025</div></div>`}).join('');
+const gts=$$('.gt');
+
+/* grain */
+const gc=$('#grain').getContext('2d');const gimg=gc.createImageData(480,270);
+function grain(seed){const d=gimg.data;let s=seed*9301+49297;for(let i=0;i<d.length;i+=4){s=(s*9301+49297)%233280;const v=s/233280*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}gc.putImageData(gimg,0,0)}
+
+let lastB=-1;
+function render(t){
+  grain(Math.floor(t*24));
+  /* S1 0-4.6 */
+  const s1=$('#s1');show(s1,t<4.7);
+  if(t<4.7){
+    const g=eX(P(t,0.1,0.9));$('#gl').style.transform=`scaleX(${g})`;$('#gl').style.opacity=1-P(t,1.6,2.2);
+    const m=eOut2(P(t,0.5,1.5));$('#mono').style.opacity=m;$('#mono').style.transform=`translateY(${(1-m)*30}px) scale(${0.92+0.08*m})`;
+    const sh=eIO(P(t,1.3,2.1));$('#monoG').style.backgroundPosition=`${100-sh*100}% 0`;$('#monoG').style.opacity=t>1.3&&t<2.15?1:0;
+    TN.forEach((c,i)=>{const st=1.0+i*0.03;c.style.transform=`translateY(${(1-eOut(P(t,st,st+0.6)))*110}%)`});
+    TS.forEach((c,i)=>{const st=2.0+i*0.45;c.style.transform=`translateY(${(1-eOut(P(t,st,st+0.6)))*110}%)`});
+    const o=eIn(P(t,4.1,4.6));s1.style.opacity=1-o;s1.style.transform=`scale(${1+o*0.08})`;
+  }
+  /* S2 map 4.4-9.6 */
+  const s2=$('#s2');show(s2,t>=4.4&&t<9.7);
+  if(t>=4.4&&t<9.7){
+    const inn=eOut(P(t,4.4,4.9)),out=eIn(P(t,9.2,9.65));s2.style.opacity=inn*(1-out);
+    $('#coast').style.strokeDashoffset=1-eIO(P(t,4.5,6.0));$('#coast2').style.strokeDashoffset=1-eIO(P(t,4.7,6.2));
+    $('#maptxt .e').style.opacity=eOut(P(t,4.6,5.0));
+    [['#mt1',4.7],['#mt2',4.95]].forEach(([id,st])=>$(id).style.transform=`translateY(${(1-eOut(P(t,st,st+0.6)))*110}%)`);
+    let cnt=0;pinsEl.forEach((p,i)=>{const st=5.4+i*0.42;const e=eBack(P(t,st,st+0.45));if(t>=st+0.1)cnt++;
+      p.querySelector('.pd').setAttribute('r',9*e);const rk=P(t,st,st+0.9);const pr=p.querySelector('.pr');pr.setAttribute('r',10+rk*40);pr.style.opacity=t>=st?(1-rk):0;
+      const l=eOut(P(t,st+0.1,st+0.5));const lb=p.querySelector('.plab');lb.style.opacity=l;lb.style.transform=`translateX(${(1-l)*-16}px)`;});
+    $('#mcount').textContent=cnt;
+    $('#map').style.transform=`scale(${1.04-0.04*eOut2(P(t,4.4,9.6))})`;
+  }
+  /* S3 9.4-10.4 -> short bridge */
+  const s3=$('#s3');show(s3,t>=9.5&&t<11.1);
+  if(t>=9.5&&t<11.1){[['#a1',9.55],['#a2',9.8]].forEach(([id,st])=>$(id).style.transform=`translateY(${(1-eOut(P(t,st,st+0.5)))*110-eIn(P(t,10.7,11.0))*110}%)`);}
+  /* S4 parade */
+  const P0=11.0,s4=$('#s4');show(s4,t>=P0-0.05&&t<P0+8*PD+0.1);
+  if(t>=P0-0.05&&t<P0+8*PD+0.1){
+    const bi=clamp(Math.floor((t-P0)/PD),0,7);const lt=t-(P0+bi*PD);const b=BR[bi];
+    pws.forEach((w,i)=>{const st=P0+i*PD;const k=eX(P(t,st-0.05,st+0.3));const dir=i%2;show(w,t>=st-0.05&&i<=bi+0);
+      w.style.clipPath=dir?`inset(0 0 0 ${100-k*100}%)`:`inset(0 ${100-k*100}% 0 0)`;w.style.zIndex=i;});
+    ['#pidx','#pkind'].forEach(id=>$(id).style.color=b.ac);$('#pname').style.color=b.fg;$('#pfact').style.color=b.fg;
+    $('#pidx').textContent=`${String(bi+1).padStart(2,'0')} / 08`;
+    if(bi!==lastB){$('#pname').innerHTML=`<span class="mask"><span class="ch">${b.n.replace(' ','</span></span><br><span class="mask"><span class="ch">')}</span></span>`;
+      $('#pfact').innerHTML=b.f.split(' ').map(w=>`<span class="mask"><span class="ch">${w}&nbsp;</span></span>`).join('');$('#pkind').textContent=b.k;$('#purl').textContent=b.u;
+      pimgs.forEach((im,j)=>im.style.display=(j===bi)?'block':'none');lastB=bi;}
+    $$('#pname .ch').forEach((c,i)=>{const e=eOut(P(lt,0.12+i*0.08,0.62+i*0.08));const o=eIn(P(lt,PD-0.16,PD));c.style.transform=`translateY(${(1-e)*110-o*110}%)`;});
+    $$('#pfact .ch').forEach((c,i)=>{const e=eOut(P(lt,0.35+i*0.025,0.8+i*0.025));const o=eIn(P(lt,PD-0.16,PD));c.style.transform=`translateY(${(1-e)*110-o*110}%)`;});
+    const kk=eOut(P(lt,0.5,0.8))*(1-P(lt,PD-0.15,PD));$('#pkind').style.opacity=kk;$('#pidx').style.opacity=eOut(P(lt,0.1,0.3));
+    // card flip
+    const fin=eOut2(P(lt,0.05,0.55)),fout=eIn(P(lt,PD-0.2,PD));const ang=(1-fin)*-90+fout*90;
+    const card=$('#card');card.style.transform=`rotateY(${ang}deg) rotateX(${4*Math.sin(t*1.3)}deg) translateY(${Math.sin(t*1.7)*6}px)`;
+    card.style.background=b.s?'#111':b.bg;card.style.opacity=b.s?1:0;
+    if(!b.s){card.style.opacity=0;}
+    // cosmos: no screenshot, big type instead of card
+    const aw=$('#award');if(b.aw){const a=eBack(P(lt,0.55,1.0))*(1-eIn(P(lt,PD-0.2,PD)));aw.style.transform=`scale(${a}) rotate(${(1-a)*-40}deg)`;aw.style.opacity=a>0.01?1:0;
+      $('#aw1').textContent=b.aw[0];$('#aw2').textContent=b.aw[1];$('#aw3').textContent=b.aw[2];aw.style.background=b.ac;aw.style.color=b.bg;
+      aw.style.left=b.s?'1560px':'1150px';aw.style.top=b.s?'110px':'300px';if(!b.s){aw.style.width=aw.style.height='420px';$('#aw1').style.fontSize='150px';$('#aw2').style.fontSize='46px';$('#aw3').style.fontSize='18px';}
+      else{aw.style.width=aw.style.height='250px';$('#aw1').style.fontSize='76px';$('#aw2').style.fontSize='26px';$('#aw3').style.fontSize='13px';}}
+    else aw.style.opacity=0;
+  }
+  /* S5 grid */
+  const G0=P0+8*PD;const s5=$('#s5');show(s5,t>=G0-0.05&&t<30.3);
+  if(t>=G0-0.05&&t<30.3){
+    s5.style.clipPath=`circle(${eX(P(t,G0-0.05,G0+0.35))*1400}px at 1340px 480px)`;
+    gts.forEach((g,i)=>{const st=G0+0.15+i*0.07;const e=eBack(P(t,st,st+0.5));g.style.transform=`scale(${e}) rotate(${(1-e)*(i%2?6:-6)}deg)`;g.style.opacity=e>0.01?1:0;});
+    [['#g1',G0+0.6],['#g2',G0+0.95]].forEach(([id,st])=>$(id).style.transform=`translateY(${(1-eOut(P(t,st,st+0.6)))*110}%)`);
+    $('#gtiles').style.transform=`scale(${1+0.03*eOut2(P(t,G0,30.3))})`;$('#gtiles').style.transformOrigin='960px 480px';
+  }
+  /* S6 end */
+  const s6=$('#s6');show(s6,t>=29.9);
+  if(t>=29.9){
+    s6.style.clipPath=`inset(${100-eX(P(t,29.9,30.35))*100}% 0 0 0)`;
+    $('#w1').style.transform=`translate(${1180+Math.sin(t*.5)*120}px,${-240+Math.cos(t*.4)*80}px)`;$('#w2').style.transform=`translate(${-180+Math.cos(t*.45)*100}px,${640+Math.sin(t*.35)*60}px)`;
+    const e0=eOut(P(t,30.3,30.7));$('#e0').style.opacity=e0;
+    [['#r1',30.45],['#r2',30.7]].forEach(([id,st])=>$(id).style.transform=`translateY(${(1-eOut(P(t,st,st+0.6)))*110}%)`);
+    const e1=eOut(P(t,31.3,31.8)),e2=eOut(P(t,31.55,32.05));
+    $('#brand').style.opacity=e1;$('#brand').style.transform=`translateY(${(1-e1)*30}px)`;$('#for').style.opacity=e2;$('#for').style.transform=`translateY(${(1-e2)*20}px)`;
+    const cb=eBack(P(t,32.0,32.5));$('#cta .b').style.transform=`scale(${cb})`;$('#cta .b').style.opacity=cb>0.01?1:0;
+    const cu=eOut(P(t,32.2,32.7));$('#cta .u').style.opacity=cu;$('#cta .u').style.transform=`translateX(${(1-cu)*-20}px)`;
+    const sh=((t-32.8)%1.6)/1.6;$('#cta .b i').style.left=(t>32.8?-100+eIO(P(sh,0,0.55))*480:-200)+'px';
+    $('#endcard').style.transform=`scale(${1+0.02*eOut2(P(t,31.3,35))})`;
+  }
+  const bug=$('#bug');bug.style.color=t>=29.9?'#141D35':'#f4efe4';bug.style.opacity=(t<0.8?0:0.7)*(1-P(t,31.1,31.4))*((t>4.3&&t<9.7)?0:1);
+  $('#grain').style.opacity=t>=30?0.03:0.07;$('#vig').style.opacity=t>=30?0:1;
+}
+window.render=render;
+window.renderAsync=async t=>{render(t);const P0=11.0;
+  if(t>=P0-0.05&&t<P0+8*PD+0.1){const bi=clamp(Math.floor((t-P0)/PD),0,7);const v=pimgs[bi];const tgt=clamp(t-(P0+bi*PD),0,2.2);
+    if(Math.abs(v.currentTime-tgt)>0.0005){await new Promise(r=>{v.addEventListener('seeked',r,{once:true});v.currentTime=tgt;});}
+    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}};
+window.ready=(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));
+  await Promise.all(pimgs.map(v=>v.readyState>=2?1:new Promise(r=>{v.addEventListener('loadeddata',r,{once:true});v.addEventListener('error',r,{once:true})})));
+  render(0);return true})();
+if(location.hash==='#play'){const t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%TOTAL);requestAnimationFrame(loop)})()}
+</script>
+</body></html>

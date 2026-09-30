@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Okto Marine Premiere, live cut</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+:root{--bg:#0b1120;--bg2:#0f172a;--card:#131c33;--line:rgba(226,232,240,.12);--txt:#F3F5FA;--mute:rgba(226,232,240,.62);--or:#ef8c37;--or2:#f6a95e;
+  --disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace;--body:"Inter",sans-serif;--k13or:#EA5E14}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(1400px 900px at 50% 40%,#111a30 0%,#0b1120 60%,#070b16 100%);font-family:var(--body);color:var(--txt);font-variant-numeric:lining-nums}
+.abs{position:absolute}.nw{white-space:nowrap}
+#grid{position:absolute;inset:0;background-image:linear-gradient(rgba(226,232,240,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(226,232,240,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(900px 600px at 50% 45%,#000,transparent)}
+/* intro */
+#intro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#intro .lock{display:flex;align-items:center;gap:40px}
+#intro .wm{width:300px;height:113px;background:url(hist/wordmark.png) center/contain no-repeat}
+#intro .x{font-family:var(--mono);font-size:28px;color:var(--mute)}
+#intro .k{font-family:var(--disp);font-weight:700;font-size:92px;line-height:1}
+#intro .k b{color:var(--txt);font-weight:700}#intro .k i{font-style:normal;color:var(--k13or)}
+#intro .kt{font-family:var(--mono);font-size:15px;line-height:1.35;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);text-align:left}
+#intro h1{margin-top:64px;font-family:var(--disp);font-weight:500;font-size:84px;letter-spacing:-.02em}
+#intro h1 em{font-style:italic;color:var(--or)}
+#intro p{margin-top:22px;font-family:var(--disp);font-style:italic;font-size:32px;color:var(--mute);max-width:1100px;line-height:1.4}
+/* frame */
+#frame{position:absolute;left:480px;top:130px;width:960px;height:636px;border-radius:14px;overflow:hidden;background:#0d1426;box-shadow:0 60px 120px -40px rgba(0,0,0,.8),0 0 0 1px rgba(226,232,240,.14)}
+#frame .bar{position:absolute;left:0;right:0;top:0;height:36px;background:#1a2440;display:flex;align-items:center;gap:8px;padding:0 16px;z-index:5}
+#frame .bar i{width:11px;height:11px;border-radius:50%;background:rgba(226,232,240,.25)}
+#frame .bar span{margin-left:auto;margin-right:auto;font-family:var(--mono);font-size:14px;color:var(--mute);padding:4px 60px;border-radius:8px;background:rgba(0,0,0,.25)}
+#fview{position:absolute;left:0;top:36px;width:960px;height:600px;overflow:hidden;perspective:1600px}
+.fl{position:absolute;inset:0;background-size:960px auto;background-position:top center;background-repeat:no-repeat;backface-visibility:hidden}
+.fl video{width:960px;height:600px;display:block;object-fit:cover}
+#skel{position:absolute;inset:0;background:#10182d;overflow:hidden}
+#skel .b{position:absolute;border-radius:8px;background:#1a2440}
+#skel .sh{position:absolute;top:0;bottom:0;width:300px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+/* stations */
+.st{position:absolute;width:400px;border-radius:14px;background:var(--card);box-shadow:0 30px 60px -30px rgba(0,0,0,.7),0 0 0 1px var(--line);clip-path:inset(0 round 14px);transform-origin:50% 50%}
+.st .hd{height:44px;display:flex;align-items:center;gap:10px;padding:0 16px;font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.st .hd b{color:var(--or);font-weight:500}
+.st .hd .dt{margin-left:auto}
+.st .im{position:relative;perspective:900px;background:#0d1426}
+.st .im div{position:absolute;inset:0;background-size:contain;background-position:center;background-repeat:no-repeat}
+.st.live{box-shadow:0 30px 60px -20px rgba(0,0,0,.7),0 0 0 2px var(--or),0 0 40px -6px rgba(239,140,55,.55)}
+.fly{position:absolute;background-size:100% 100%;border-radius:8px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);z-index:30}
+/* captions */
+#caps{position:absolute;left:160px;width:1600px;top:880px;height:170px}
+.cap{position:absolute;left:0;right:0;top:0;text-align:center;transform-origin:50% 100%}
+.cap .l{font-family:var(--mono);font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--or)}
+.cap .s{margin-top:8px;font-family:var(--disp);font-size:34px;line-height:1.25;color:var(--txt)}
+/* ending */
+#end{position:absolute;inset:0;z-index:60}
+#shut{position:absolute;inset:0;background:url(seg/full_shut.jpg) center/cover}
+#openv{position:absolute;inset:0;width:1920px;height:1080px}
+#credit{position:absolute;left:0;right:0;top:600px;text-align:center}
+#credit .r{font-family:var(--mono);font-size:18px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,232,240,.7)}
+#credit .wm2{width:420px;height:158px;margin:18px auto 0;background:url(hist/wordmark.png) center/contain no-repeat}
+#credit .k{display:inline-flex;align-items:center;gap:14px;margin-top:14px}
+#credit .k .kk{font-family:var(--disp);font-weight:700;font-size:64px;line-height:1}
+#credit .k .kk b{color:#F3F5FA}#credit .k .kk i{font-style:normal;color:#EA5E14}
+#credit .k .kt{font-family:var(--mono);font-size:13px;line-height:1.35;letter-spacing:.18em;color:rgba(226,232,240,.7);text-align:left}
+#credit .u{margin-top:26px;font-family:var(--mono);font-size:24px;letter-spacing:.08em;background:linear-gradient(90deg,#d9a55c,#f6c985,#d9a55c);-webkit-background-clip:text;color:transparent;background-size:200% 100%}
+</style></head>
+<body>
+<div id="stage">
+ <div id="grid"></div>
+ <div id="intro"><div class="lock"><div class="wm" id="iwm"></div><div class="x" id="ix">×</div><div style="display:flex;align-items:center;gap:14px" id="ik"><span class="k"><b>K</b><i>13</i></span><span class="kt">Software<br>Studio</span></div></div>
+  <h1 id="ih">How a website <em>takes shape.</em></h1>
+  <p id="ip">Seven days in September. Nothing came in one go; every element earned its final form.</p></div>
+ <div id="frame"><div class="bar"><i></i><i></i><i></i><span>okto.k13projects.com</span></div>
+  <div id="fview"><div id="skel"></div><div id="flayers"></div></div></div>
+ <div id="stations"></div>
+ <div id="fliers"></div>
+ <div id="caps"><div class="cap" id="c0"><div class="l"></div><div class="s"></div></div><div class="cap" id="c1"><div class="l"></div><div class="s"></div></div></div>
+ <div id="end"><div id="shut"></div><video id="openv" src="seg/full_open.webm" muted preload="auto"></video>
+  <div id="credit"><div class="r" id="cr1">Built for</div><div class="wm2" id="cr2"></div><div class="r" id="cr3" style="margin-top:22px">by</div>
+   <div class="k" id="cr4"><span class="kk"><b>K</b><i>13</i></span><span class="kt">SOFTWARE<br>STUDIO</span></div>
+   <div class="u" id="cr5">okto.k13projects.com · September 2026</div></div></div>
+</div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eBack=bez(.34,1.56,.64,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1),eIn=bez(.55,0,1,.45);
+const $=s=>document.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const H='hist/';
+
+/* ---------- stations ---------- */
+const ST={
+ head:{n:'01',name:'The masthead',states:4,dates:['16 Sep','16 Sep','21 Sep','21 Sep'],x:40,y:150,w:400,ih:83,act:1},
+ world:{n:'02',name:'The world',states:6,dates:['16 Sep','16 Sep','16 Sep','17 Sep','21 Sep','21 Sep'],x:1480,y:150,w:400,ih:427,act:1},
+ words:{n:'03',name:'The words',states:6,dates:['16 Sep','16 Sep','16 Sep','16 Sep','21 Sep','22 Sep'],x:40,y:310,w:400,ih:274,act:1},
+ ships:{n:'07',name:'The ships',states:3,dates:['16 Sep','21 Sep','22 Sep'],x:40,y:150,w:400,ih:172,act:2},
+ case:{n:'08',name:'The case',states:3,dates:['16 Sep','16 Sep','21 Sep'],x:1480,y:150,w:400,ih:247,act:2},
+ crew:{n:'09',name:'The crew',states:4,dates:['16 Sep','21 Sep','22 Sep','22 Sep'],x:40,y:500,w:400,ih:250,act:2},
+};
+$('#stations').innerHTML=Object.entries(ST).map(([k,s])=>`<div class="st" id="st_${k}" style="left:${s.x}px;top:${s.y}px"><div class="hd"><b>${s.n}</b>${s.name}<span class="dt"></span></div><div class="im" style="height:${s.ih}px"><div></div></div></div>`).join('');
+for(const k in ST){ST[k].el=$('#st_'+k);ST[k].img=ST[k].el.querySelector('.im div');ST[k].dt=ST[k].el.querySelector('.dt');}
+
+/* ---------- script (captions from the approved cut, plus the live beats) ---------- */
+const DUR=s=>0.42+0.3+0.0055*s.length+0.12;
+const TL=[];let T=5.4;const CAPS=[],FLIPS=[],EVTS=[];
+function line(st,state,text,label){const t=T;FLIPS.push({t,st,state});const lab=label||`${ST[st].n} ${ST[st].name} · ${ST[st].dates[state]}${state===ST[st].states-1?' · final':''}`;CAPS.push({t:t+0.3,l:lab,s:text});EVTS.push({t,k:'flip'});T+=DUR(text);}
+function cap(text,label,d){CAPS.push({t:T+0.1,l:label,s:text});T+=d||DUR(text);}
+// act one
+const A1=T;
+line('head',0,"Six city clocks, crowded at one end, and the middle of the bar empty.");
+line('world',0,"Day one. A photograph, with a ship running under the words.");
+line('words',0,"The first headline, with a slant their own typeface does not have.");
+line('head',1,"The clocks take the whole width, so every desk has its own place.");
+line('world',1,"The picture takes its own half, so nothing crosses the headline.");
+line('words',1,"Okto's own faces take over, counted from their own pages.");
+line('head',2,"The mark had gone grey. Its orange comes back.");
+line('world',2,"Their own footage, graded towards the navy the panel beside it is painted in.");
+line('words',2,"The headline was losing its tails. It is given room to finish.");
+line('head',3,"Their own logo, on a cream bar that can carry it. Navy cannot sit on navy.");
+line('world',3,"A world arrives, drawn in code, and it is cropped on every edge.");
+line('words',3,"The slant goes. Their own orange carries the emphasis instead.");
+line('world',4,"A real earth, and a sea with a swell you can watch move across it.");
+line('words',4,"The words park in a column of their own and stay readable all the way down.");
+line('world',5,"A chart is drawn behind the planet, so the water is no longer flat blue.");
+line('words',5,"And a line corrected, because the chart below says twenty hours at a desk, not twenty four.");
+// landings
+const LAND=[];
+function land(st,to,text){LAND.push({t:T,st,to});EVTS.push({t:T,k:'land'});cap(text,`${ST[st].n} ${ST[st].name} lands`,1.15);}
+land('world',[480+0.47*960,130+36+0.12*600,0.5*960,0.62*600],"The world takes the right of the first screen.");
+land('head',[480,130+36,960,56],"Their logo takes the top.");
+land('words',[480+0.035*960,130+36+0.2*600,0.42*960,0.42*600],"The words settle on the left.");
+const COMPOSE=T-0.2;
+// live beats
+const LIVE1=T;EVTS.push({t:T,k:'live'});cap("And then the world starts to turn, the way a visitor will see it.","02 The world · live",3.4);
+const LIVE2=T;EVTS.push({t:T,k:'scroll'});cap("Everything else falls into place, all the way down the page.","The home page · live",3.6);
+// act two
+const A2=T;EVTS.push({t:T,k:'act2'});T+=0.7;
+line('ships',0,"Day one. Every class drawn to true length, and pressed too close to read.");
+line('case',0,"Day one. Eight reasons in small print, and the values too far below to sit with them.");
+line('crew',0,"Day one. The chartering desk, nine people, and a page you scroll and scroll.");
+line('ships',1,"The page is given room, and a hull can be looked at properly.");
+line('case',1,"Okto's own faces take over, and every reason takes the width it needs.");
+line('crew',1,"Cut out and stood on cards, the whole desk fits one screen.");
+line('ships',2,"And the hull you point at answers, in Okto Marine's own orange.");
+const SERV=T;EVTS.push({t:T,k:'page'});LAND.push({t:T+0.55,st:'ships',to:[480+0.06*960,130+36+0.45*600,0.88*960,0.38*600]});
+CAPS.push({t:T+0.1,l:'Services · live',s:'Services. The classes they work, to one scale.'});T+=1.5;
+line('case',2,"The page draws in, and the reasons and the values read as one piece.");
+const ABOUT=T;EVTS.push({t:T,k:'page'});LAND.push({t:T+0.5,st:'case',to:[480+0.06*960,130+36+0.35*600,0.88*960,0.54*600]});
+CAPS.push({t:T+0.1,l:'About',s:'About. Who they are, in their own numbers.'});T+=1.7;
+line('crew',2,"Every face gets its own framing, so nine people read as nine people.");
+line('crew',3,"And the desk closes up, five along the top and four beneath.");
+const TEAM=T;EVTS.push({t:T,k:'page'});LAND.push({t:T+0.5,st:'crew',to:[480+0.06*960,130+36+0.4*600,0.88*960,0.5*600]});
+CAPS.push({t:T+0.1,l:'Team · live',s:'Team. Their own people, desk by desk.'});T+=3.4;
+const PAGES=T;EVTS.push({t:T,k:'pages'});cap("And the rest of the site, page by page.","",2.4);
+const OPEN=T;EVTS.push({t:T,k:'close'});cap("And this is how it opens.","",1.6);
+const SHUT=T;EVTS.push({t:T,k:'shut'});T+=3.4;           // credit on the shut veil
+const PART=T;EVTS.push({t:T,k:'open'});T+=2.9;
+const TOTAL=Math.round(T*100)/100;
+window.TL={TOTAL,EVTS,CAPS:CAPS.map(c=>({t:c.t,n:c.s.length}))};
+
+/* ---------- frame layers ---------- */
+const FL=[ // {t, kind, src, turn}
+ {t:COMPOSE,kind:'img',src:H+'full_0.jpg'},
+ {t:LIVE1,kind:'vid',src:'seg/f_home.webm'},
+ {t:LIVE2,kind:'vid',src:'seg/f_scroll.webm'},
+ {t:A2,kind:'skel'},
+ {t:SERV,kind:'vid',src:'seg/f_ships.webm',turn:1},
+ {t:ABOUT,kind:'img',src:H+'land08.jpg',turn:1},
+ {t:TEAM,kind:'vid',src:'seg/f_team.webm',turn:1},
+ {t:PAGES+0.2,kind:'img',src:H+'pg_news.jpg',turn:1},
+ {t:PAGES+0.95,kind:'img',src:H+'pg_careers.jpg',turn:1},
+ {t:PAGES+1.7,kind:'img',src:H+'pg_contact.jpg',turn:1},
+ {t:OPEN,kind:'vid',src:'seg/f_home.webm',from:3.0},
+];
+$('#flayers').innerHTML=FL.map((f,i)=>f.kind==='img'?`<div class="fl" id="fl${i}" style="background-image:url(${f.src})"></div>`:f.kind==='vid'?`<div class="fl" id="fl${i}"><video src="${f.src}" muted preload="auto"></video></div>`:`<div class="fl" id="fl${i}"></div>`).join('');
+FL.forEach((f,i)=>{f.el=$('#fl'+i);f.v=f.el.querySelector('video');});
+$('#skel').innerHTML=`<div class="b" style="left:0;top:0;right:0;height:44px;border-radius:0"></div><div class="b" style="left:50px;top:110px;width:360px;height:60px"></div><div class="b" style="left:50px;top:190px;width:300px;height:60px"></div><div class="b" style="left:50px;top:290px;width:380px;height:16px"></div><div class="b" style="left:50px;top:318px;width:320px;height:16px"></div><div class="b" style="left:50px;top:370px;width:170px;height:44px;border-radius:22px"></div><div class="b" style="left:500px;top:90px;width:410px;height:400px;border-radius:50%"></div><div class="b" style="left:50px;top:470px;width:380px;height:90px"></div><div class="sh"></div>`;
+
+/* fliers built from station images */
+LAND.forEach((l,i)=>{const d=document.createElement('div');d.className='fly';d.id='fly'+i;$('#fliers').appendChild(d);l.el=d;});
+
+let act2Shown=false;
+function render(t){
+  /* intro 0 - 5.2 */
+  const io=eIn(P(t,4.6,5.2));$('#intro').style.display=t<5.3?'':'none';
+  [['#iwm',0.2],['#ix',0.5],['#ik',0.7],['#ih',1.3],['#ip',2.1]].forEach(([id,st])=>{const e=eOut(P(t,st,st+0.8));const el=$(id);el.style.opacity=e*(1-io);el.style.transform=`translateY(${(1-e)*24-io*20}px)`});
+  $('#grid').style.opacity=0.6+0.4*Math.sin(t*0.3);
+  /* frame */
+  const fr=$('#frame');const fin=eOut(P(t,A1-0.4,A1+0.3)),fout=eIn(P(t,OPEN+1.0,OPEN+1.6));
+  fr.style.display=(t>=A1-0.4&&t<OPEN+1.7)?'':'none';fr.style.opacity=fin*(1-fout);fr.style.transform=`translateY(${(1-fin)*30}px) scale(${0.97+0.03*fin})`;
+  // skeleton
+  const skOn=(t<COMPOSE+0.4)||(t>=A2&&t<SERV+0.3);$('#skel').style.display=skOn?'':'none';
+  $('#skel .sh').style.left=(-300+((t*420)%1560))+'px';
+  // frame layers: the latest started layer shows; turn-in on page opens
+  let cur=-1;FL.forEach((f,i)=>{if(t>=f.t)cur=i});
+  FL.forEach((f,i)=>{const on=i===cur||(i===cur-1&&t<FL[cur].t+0.5);f.el.style.display=on&&!(f.kind==='skel')?'':'none';
+    if(!on)return;const k=i===cur?P(t,f.t,f.t+0.45):1;
+    if(i===cur){if(f.turn){const e=eOut(k);f.el.style.transform=`rotateY(${(1-e)*-70}deg)`;f.el.style.transformOrigin='0 50%';f.el.style.opacity=clamp(k*3);}else{f.el.style.transform='none';f.el.style.opacity=eIO(k);}f.el.style.zIndex=2;}
+    else{f.el.style.zIndex=1;f.el.style.opacity=1;f.el.style.transform='none';}
+    if(f.v)f.want=(t-f.t)+(f.from||0);});
+  if(A2<=t&&t<SERV){FL.forEach(f=>{if(f.kind!=='skel'&&t>=A2+0.35)f.el.style.display='none'})}
+  /* stations */
+  for(const k in ST){const s=ST[k];const inAct=s.act===1?(t>=A1-0.2&&t<COMPOSE+0.2):(t>=A2&&t<TEAM+1.2);
+    const my=FLIPS.filter(f=>f.st===k);const land=LAND.find(l=>l.st===k);
+    const gone=land&&t>=land.t;s.el.style.display=inAct&&!gone?'':'none';if(!inAct||gone)continue;
+    const a0=s.act===1?A1-0.2:A2;const ap=eBack(P(t,a0+ (s.act===1?{head:0,world:0.1,words:0.2}[k]:{ships:0,case:0.1,crew:0.2}[k]),a0+0.6+(s.act===1?{head:0,world:0.1,words:0.2}[k]:{ships:0,case:0.1,crew:0.2}[k])));
+    let state=-1,lastFlip=null;my.forEach(f=>{if(t>=f.t+0.21)state=f.state;if(t>=f.t)lastFlip=f});
+    const skel=state<0;
+    s.img.style.backgroundImage=skel?'none':`url(${H}${k}_${state}.jpg)`;s.img.style.background=skel?'linear-gradient(90deg,#1a2440,#222e52,#1a2440)':'';if(!skel){s.img.style.backgroundImage=`url(${H}${k}_${state}.jpg)`;s.img.style.backgroundSize='contain';s.img.style.backgroundPosition='center';s.img.style.backgroundRepeat='no-repeat';}
+    s.dt.textContent=skel?'':s.dates[state]+(state===s.states-1?' · final':'');
+    let rot=0;if(lastFlip){const lt=t-lastFlip.t;rot=lt<0.21?eIn(lt/0.21)*90:lt<0.42?(1-eOut((lt-0.21)/0.21))*-90:0;}
+    s.img.style.transform=`rotateY(${rot}deg)`;
+    // conductor: the latest flip anywhere owns the stage
+    const last=FLIPS.filter(f=>t>=f.t).pop();const live=last&&last.st===k&&t<last.t+2.2;
+    s.el.classList.toggle('live',!!live);const lift=live?eOut(P(t,last.t,last.t+0.3)):0;
+    s.el.style.transform=`scale(${ap*(1+0.035*lift)}) translateY(${-6*lift}px)`;s.el.style.filter=live?'none':`brightness(${ (last&&!live)?0.62:1})`;
+  }
+  /* fliers */
+  LAND.forEach(l=>{const s=ST[l.st];const on=t>=l.t&&t<l.t+0.95;l.el.style.display=on?'':'none';if(!on)return;
+    const k=eIO(P(t,l.t,l.t+0.7));const r=s.el.getBoundingClientRect();const x0=s.x,y0=s.y+44,w0=s.w,h0=s.ih;
+    const [x1,y1,w1,h1]=l.to;l.el.style.backgroundImage=`url(${H}${l.st}_${s.states-1}.jpg)`;l.el.style.backgroundSize='contain';l.el.style.backgroundRepeat='no-repeat';l.el.style.backgroundPosition='center';
+    l.el.style.left=lerp(x0,x1,k)+'px';l.el.style.top=lerp(y0,y1,k)+'px';l.el.style.width=lerp(w0,w1,k)+'px';l.el.style.height=lerp(h0,h1,k)+'px';
+    l.el.style.opacity=1-P(t,l.t+0.7,l.t+0.95);l.el.style.transform=`rotate(${Math.sin(k*Math.PI)*-3}deg)`;});
+  /* captions: two stacked slots, the previous one lifts and dims */
+  const ci=CAPS.reduce((a,c,i)=>t>=c.t?i:a,-1);
+  [0,1].forEach(slot=>{const el=$('#c'+slot);const idx=ci-((ci-slot)%2+2)%2;const c=CAPS[idx];
+    if(!c||idx<0||t>=OPEN+1.5){el.style.opacity=0;return}
+    const isCur=idx===ci;const k=eOut(P(t,c.t,c.t+0.3));el.querySelector('.l').textContent=c.l;el.querySelector('.s').textContent=c.s;el.querySelector('.l').style.display=c.l?'':'none';
+    if(isCur){el.style.opacity=k;el.style.transform=`translateY(${(1-k)*14}px)`;el.style.color='';}
+    else{const nt=CAPS[ci].t;const m=eOut(P(t,nt,nt+0.35));el.style.opacity=(1-0.62*m)*(1-P(t,nt+0.9,nt+1.5));el.style.transform=`translateY(${-m*122}px) scale(${1-0.22*m})`;}
+  });
+  /* ending: the veil, the credit on the shut veil, then the site's own opening */
+  const end=$('#end');end.style.display=t>=OPEN+1.3?'':'none';
+  if(t>=OPEN+1.3){const vi=eIO(P(t,OPEN+1.3,SHUT));$('#shut').style.opacity=vi;const ov=$('#openv');ov.style.display=t>=PART?'':'none';
+    const cr=[['#cr1',0.2],['#cr2',0.35],['#cr3',0.75],['#cr4',0.9],['#cr5',1.25]];
+    const outPairs={'#cr5':0,'#cr3':0.18,'#cr4':0.18,'#cr1':0.36,'#cr2':0.36};
+    cr.forEach(([id,d])=>{const e=eOut(P(t,SHUT+d,SHUT+d+0.6));const o=eIn(P(t,PART-0.75+outPairs[id],PART-0.35+outPairs[id]));const el=$(id);el.style.opacity=e*(1-o);el.style.transform=`translateY(${(1-e)*18}px)`;});
+    $('#cr5').style.backgroundPosition=`${100-eIO(P(t,SHUT+1.6,SHUT+2.3))*100}% 0`;
+    ov.dataset.want=Math.max(0,t-PART);}
+}
+window.render=render;
+window.renderAsync=async t=>{render(t);const jobs=[];
+  FL.forEach(f=>{if(f.v&&f.el.style.display!=='none'&&f.want!=null)jobs.push([f.v,clamp(f.want,0,f.v.duration-0.04)])});
+  const ov=$('#openv');if(ov.style.display!=='none'&&$('#end').style.display!=='none')jobs.push([ov,clamp(+ov.dataset.want||0,0,ov.duration-0.04)]);
+  await Promise.all(jobs.map(([v,tg])=>Math.abs(v.currentTime-tg)<0.0005?1:new Promise(r=>{v.addEventListener('seeked',r,{once:true});v.currentTime=tg;})));
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+window.ready=(async()=>{await document.fonts.ready;
+  const imgs=new Set();for(const k in ST)for(let i=0;i<ST[k].states;i++)imgs.add(`${H}${k}_${i}.jpg`);['full_0','land08','pg_news','pg_careers','pg_contact'].forEach(x=>imgs.add(H+x+'.jpg'));imgs.add('seg/full_shut.jpg');imgs.add(H+'wordmark.png');
+  await Promise.all([...imgs].map(s=>new Promise(r=>{const i=new Image();i.onload=i.onerror=r;i.src=s})));
+  await Promise.all($$('video').map(v=>v.readyState>=2?1:new Promise(r=>{v.addEventListener('loadeddata',r,{once:true});v.addEventListener('error',r,{once:true})})));
+  render(0);return TOTAL})();
+</script>
+</body></html>
