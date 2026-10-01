@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>K13 Orbit Intro</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F3F5FA;--ink:#141D35;--muted:#515C78;--or:#B94612;--or2:#EA5E14;--clay:#E9DECB;
+  --disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace;--body:"Inter",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#0d0a08;font-family:var(--body);color:var(--ink);font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1;isolation:isolate}
+canvas#gl{position:absolute;inset:0;width:1920px;height:1080px;display:block}
+.abs{position:absolute}.nw{white-space:nowrap}
+#black{position:absolute;inset:0;background:#0d0a08}
+#lens{position:absolute;left:960px;top:540px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#FF7A2E;
+  box-shadow:0 0 30px 10px rgba(234,94,20,.55),0 0 140px 50px rgba(234,94,20,.2)}
+#slit{position:absolute;left:0;top:540px;width:1920px;height:2px;margin-top:-1px;background:#FFB27A;box-shadow:0 0 30px 6px rgba(234,94,20,.6)}
+.bar{position:absolute;left:0;width:1920px;background:#050403;z-index:3}
+#barT{top:0}#barB{bottom:0}
+#hud{position:absolute;inset:0;z-index:4;font-family:var(--mono);font-size:15px;letter-spacing:.14em;color:rgba(243,235,222,.72);text-transform:uppercase}
+#hud .rec{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--or2);margin-right:10px;vertical-align:1px}
+#hud .tick{position:absolute;width:26px;height:26px;border-color:rgba(243,235,222,.5);border-style:solid}
+#vign{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+#paper{position:absolute;inset:0;z-index:5;background:var(--paper)}
+#lock{position:absolute;z-index:6;left:0;top:0;display:flex;align-items:center;gap:22px;transform-origin:0 50%}
+#lock .k{font-family:var(--disp);font-weight:600;font-size:150px;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+#lock .k b{color:var(--or);font-weight:600}
+#lock .tag{font-family:var(--mono);font-size:26px;letter-spacing:.16em;line-height:1.3;color:var(--muted)}
+#hero{position:absolute;z-index:6;left:150px;top:470px;font-family:var(--disp);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.03em;color:var(--ink)}
+#hero i{font-style:italic;font-weight:500;color:var(--or)}
+.mask{overflow:hidden;display:block;padding:0 .06em .08em}
+.mask>span{display:inline-block}
+#eyebrow{position:absolute;z-index:6;left:156px;top:420px;font-family:var(--mono);font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:var(--or)}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script src="model.js"></script>
+<script src="code.js"></script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="1920" height="1080"></canvas>
+  <div id="vign"></div>
+  <div class="bar" id="barT"></div><div class="bar" id="barB"></div>
+  <div id="hud">
+    <div class="abs nw" id="hudTL" style="left:64px;top:0"><span class="rec"></span><span id="hudCam">K13 · CAM 01 · LIVE</span></div>
+    <div class="abs nw" id="hudTR" style="right:64px;top:0;text-align:right">00:00:00</div>
+    <div class="abs nw" id="hudBL" style="left:64px;top:0">ORBIT 000°</div>
+    <div class="abs nw" id="hudBR" style="right:64px;top:0;text-align:right">ALT 0.00 M</div>
+    <div class="tick" id="tk1" style="border-width:2px 0 0 2px"></div><div class="tick" id="tk2" style="border-width:2px 2px 0 0"></div>
+    <div class="tick" id="tk3" style="border-width:0 0 2px 2px"></div><div class="tick" id="tk4" style="border-width:0 2px 2px 0"></div>
+  </div>
+  <div id="black"></div><div id="slit"></div><div id="lens"></div>
+  <div id="paper"></div>
+  <div id="lock"><span class="k">K<b>13</b></span><span class="tag">SOFTWARE<br>STUDIO</span></div>
+  <div id="eyebrow" class="nw">K13 Software Studio · Kazim K.</div>
+  <div id="hero"><span class="mask"><span id="h1a">A studio for software</span></span><span class="mask"><span id="h1b">that feels <i>obvious.</i></span></span></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+
+/* ---------- math ---------- */
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eBack=bez(.34,1.56,.64,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1),eIn=bez(.55,0,1,.45),eOut2=bez(.16,1,.3,1);
+const $=s=>document.querySelector(s);
+const hash=n=>{let x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+const show=(el,on)=>{el.style.display=on?'':'none'};
+const D=Math.PI/180;
+
+/* monotone cubic (Fritsch-Carlson): a drone path that never overshoots its keys */
+function mono(ts,ys){const n=ts.length,d=[],m=new Array(n);
+  for(let i=0;i<n-1;i++)d[i]=(ys[i+1]-ys[i])/(ts[i+1]-ts[i]);
+  m[0]=d[0];m[n-1]=d[n-2];for(let i=1;i<n-1;i++)m[i]=d[i-1]*d[i]<=0?0:(d[i-1]+d[i])/2;
+  for(let i=0;i<n-1;i++){if(d[i]===0){m[i]=m[i+1]=0;continue}const a=m[i]/d[i],b=m[i+1]/d[i],s=a*a+b*b;if(s>9){const k=3/Math.sqrt(s);m[i]=k*a*d[i];m[i+1]=k*b*d[i]}}
+  return t=>{if(t<=ts[0])return ys[0];if(t>=ts[n-1])return ys[n-1];let i=0;while(t>ts[i+1])i++;
+    const h=ts[i+1]-ts[i],u=(t-ts[i])/h,u2=u*u,u3=u2*u;
+    return (2*u3-3*u2+1)*ys[i]+(u3-2*u2+u)*h*m[i]+(-2*u3+3*u2)*ys[i+1]+(u3-u2)*h*m[i+1]}}
+
+/* ---------- timeline (120 BPM, 0.5 s beats) ---------- */
+const TOTAL=13.6;
+//        t     az   el    r     ty    fov
+const KEYS=[
+  [0.9,  -18,   3,  1.1,  .705,  19],
+  [2.4,    8,   1,  .85,  .705,  14],   // macro: the orange glasses
+  [3.0,   34,  -7,  2.45, .47,   54],   // crash zoom out
+  [4.0,  118,   1,  1.15, .56,   42],   // swoop in, side
+  [5.0,  205,  15,  2.15, .46,   46],   // pull out behind
+  [6.0,  292,   6,  .82,  .72,   38],   // close pass at the head
+  [7.0,  385,  24,  2.35, .40,   46],   // full circle, rising
+  [8.0,  468,  86,  4.4,  .05,   40],   // crane: straight down
+  [8.9,  482,  87,  4.7,  .05,   40],   // hang (silence)
+  [9.6,  716,   4,  2.85, .30,   36],   // corkscrew dive to the front
+  [11.4, 720,   2,  2.45, .28,   34],   // hero push
+  [12.2, 720,   0,  .80, -.245,  34]    // into the pedestal lockup
+];
+const CH=[0,1,2,3,4,5].map(c=>c===0?null:mono(KEYS.map(k=>k[0]),KEYS.map(k=>k[c])));
+const EVTS=[
+  {t:0.20,k:'lens'},{t:0.50,k:'flicker'},{t:0.90,k:'open'},{t:1.0,k:'macro'},
+  {t:2.40,k:'crashStart'},{t:3.0,k:'crash'},{t:4.0,k:'swoop'},{t:5.0,k:'swoop'},{t:6.0,k:'swoop'},{t:7.0,k:'swoop'},
+  {t:7.0,k:'craneStart'},{t:8.0,k:'hang'},{t:8.9,k:'dive'},{t:9.6,k:'land'},{t:9.9,k:'scan'},
+  {t:11.5,k:'push'},{t:12.0,k:'lightsUp'},{t:12.3,k:'lockMove'},{t:12.95,k:'lock'},{t:12.85,k:'hero'},{t:13.6,k:'end'}];
+window.TL={TOTAL,EVTS,BPM:120};
+
+/* ---------- three ---------- */
+const canvas=$('#gl');
+const R=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});
+R.setPixelRatio(1);R.setSize(1920,1080,false);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.outputColorSpace=THREE.SRGBColorSpace;
+R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0d0a08);scene.fog=new THREE.FogExp2(0x0d0a08,0.085);
+const cam=new THREE.PerspectiveCamera(40,1920/1080,0.02,80);
+
+// light: warm key, cool-ish fill, orange rim from behind
+scene.add(new THREE.HemisphereLight(0xffe9d0,0x1a1008,0.55));
+const key=new THREE.SpotLight(0xfff0dc,38,20,32*D,.55,1.6);key.position.set(-2.2,3.4,3.0);key.target.position.set(0,.4,0);
+key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.bias=-0.0004;scene.add(key,key.target);
+const rim=new THREE.PointLight(0xff6a1f,9,8,1.6);rim.position.set(1.6,1.7,-2.2);scene.add(rim);
+const rim2=new THREE.PointLight(0xff8a3d,5,8,1.6);rim2.position.set(-1.8,.9,-1.6);scene.add(rim2);
+const fill=new THREE.PointLight(0xd9e2ff,1.6,8,1.8);fill.position.set(2.4,1.0,2.4);scene.add(fill);
+
+// canvas texture helper
+function ctex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t}
+
+// the code room: four walls of the site's own script, amber on dark, with a grid
+const LINES=window.CODE||[];
+function wallTex(seed){return ctex(2048,1024,(g,w,h)=>{g.fillStyle='#0d0a08';g.fillRect(0,0,w,h);
+  g.strokeStyle='rgba(234,120,40,.16)';g.lineWidth=2;for(let x=0;x<w;x+=128){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}
+  for(let y=0;y<h;y+=128){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}
+  g.font='500 19px "JetBrains Mono"';
+  for(let col=0;col<5;col++){let y=40+hash(seed+col)*60;const x=24+col*410;let i=Math.floor(hash(seed*7+col)*LINES.length);
+    while(y<h-20){const s=LINES[i%LINES.length]||'';const a=.25+.55*hash(seed+col*31+y);g.fillStyle=`rgba(255,${150+Math.floor(60*hash(y+col))},70,${a})`;
+      g.fillText(s.slice(0,34),x+(s.startsWith('}')?0:18*(Math.floor(hash(i)*3))),y);y+=27;i++;if(hash(i*3.1+seed)>.86)y+=27}}})}
+const room=new THREE.Group();scene.add(room);
+for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const m=new THREE.Mesh(new THREE.PlaneGeometry(7.2,3.6),new THREE.MeshBasicMaterial({map:wallTex(i+1),toneMapped:false,fog:true}));
+  m.position.set(Math.sin(a)*6.2,1.2,Math.cos(a)*6.2);m.lookAt(0,1.2,0);room.add(m)}
+// floor grid
+const floorTex=ctex(2048,2048,(g,w,h)=>{g.fillStyle='#0f0b09';g.fillRect(0,0,w,h);g.strokeStyle='rgba(234,110,40,.38)';g.lineWidth=3;
+  for(let x=0;x<=w;x+=128){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();g.beginPath();g.moveTo(0,x);g.lineTo(w,x);g.stroke()}});
+floorTex.wrapS=floorTex.wrapT=THREE.RepeatWrapping;floorTex.repeat.set(4,4);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(26,26),new THREE.MeshStandardMaterial({map:floorTex,roughness:.55,metalness:.2,emissive:0xff5a14,emissiveMap:floorTex,emissiveIntensity:.0}));
+floor.rotation.x=-Math.PI/2;floor.position.y=-.45;floor.receiveShadow=true;scene.add(floor);
+
+// pedestal: clay block, the K13 typographic lockup on its face
+const PW=.92,PH=.45,PD=.62;
+const face=ctex(2048,1002,(g,w,h)=>{g.fillStyle='#E7DCC8';g.fillRect(0,0,w,h);
+  for(let i=0;i<9000;i++){const x=hash(i)*w,y=hash(i+.5)*h;g.fillStyle=`rgba(120,90,60,${.04*hash(i+.2)})`;g.fillRect(x,y,3,3)}
+  g.textBaseline='alphabetic';g.font='600 520px Fraunces';const kw=g.measureText('K').width;g.font='600 520px Fraunces';const nw=g.measureText('13').width;
+  const tot=kw+nw,x0=(w-tot)/2,base=640;g.fillStyle='#141D35';g.font='600 520px Fraunces';g.fillText('K',x0,base);g.fillStyle='#B94612';g.fillText('13',x0+kw,base);
+  g.font='500 64px "JetBrains Mono"';g.fillStyle='#515C78';const tag='SOFTWARE STUDIO';const sp=14;let tw=0;for(const c of tag)tw+=g.measureText(c).width+sp;tw-=sp;
+  let x=(w-tw)/2;for(const c of tag){g.fillText(c,x,base+150);x+=g.measureText(c).width+sp}});
+const clay=new THREE.MeshStandardMaterial({color:0xE7DCC8,roughness:.86});
+const faceMat=new THREE.MeshStandardMaterial({map:face,roughness:.84});
+const ped=new THREE.Mesh(new THREE.BoxGeometry(PW,PH,PD),[clay,clay,clay,clay,faceMat,faceMat]);
+ped.position.y=-PH/2;ped.castShadow=ped.receiveShadow=true;scene.add(ped);
+
+// the scan: a bar of light that sweeps the statue
+const scan=new THREE.Mesh(new THREE.PlaneGeometry(1.6,.012),new THREE.MeshBasicMaterial({color:0xffb070,transparent:true,opacity:0,toneMapped:false,blending:THREE.AdditiveBlending,depthWrite:false}));
+scene.add(scan);
+
+// binary digits drifting in the room
+function digitTex(ch){return ctex(128,128,(g)=>{g.font='500 104px "JetBrains Mono"';g.textAlign='center';g.textBaseline='middle';g.fillStyle='#ffb070';g.fillText(ch,64,68)})}
+const dT=[digitTex('0'),digitTex('1')];
+const digits=[];
+for(let i=0;i<150;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:dT[i%2],transparent:true,toneMapped:false,depthWrite:false,blending:THREE.AdditiveBlending}));
+  const a=hash(i*3.3)*Math.PI*2,r=1.1+hash(i*5.1)*3.8;s.userData={a,r,y0:-.4+hash(i*7.7)*2.8,sp:.05+hash(i*9.9)*.12,sz:.05+hash(i*2.2)*.09,ph:hash(i*4.4)*6};
+  scene.add(s);digits.push(s)}
+// sparks: two bursts (crash and landing)
+const SPN=260,spG=new THREE.BufferGeometry(),spP=new Float32Array(SPN*3);spG.setAttribute('position',new THREE.BufferAttribute(spP,3));
+const spM=new THREE.PointsMaterial({color:0xffa060,size:.022,transparent:true,opacity:1,toneMapped:false,blending:THREE.AdditiveBlending,depthWrite:false});
+const sparks=new THREE.Points(spG,spM);scene.add(sparks);
+const BURSTS=[{t:3.0,o:[0,.9,0]},{t:9.6,o:[0,.02,0]}];
+
+// the figure (TRELLIS mesh of the sculpt film's final pose)
+let fig=null;
+async function loadFig(){const b64=window.MODEL_B64;const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)).buffer;
+  const g=await new Promise((res,rej)=>new GLTFLoader().parse(bin,'',res,rej));fig=g.scene;
+  fig.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material.roughness=.78;o.material.metalness=0;}}});
+  fig.rotation.y=(window.MODEL_YAW||0)*D;
+  const box=new THREE.Box3().setFromObject(fig),sz=box.getSize(new THREE.Vector3());const s=1/sz.y;fig.scale.setScalar(s);
+  const b2=new THREE.Box3().setFromObject(fig),c=b2.getCenter(new THREE.Vector3());fig.position.set(-c.x,-b2.min.y-(window.MODEL_SINK||0),-c.z);scene.add(fig)}
+
+// post: bloom for the lens glow and the scan
+const comp=new EffectComposer(R);comp.addPass(new RenderPass(scene,cam));
+const bloom=new UnrealBloomPass(new THREE.Vector2(1920,1080),.55,.6,.82);comp.addPass(bloom);comp.addPass(new OutputPass());
+
+/* ---------- one frame ---------- */
+function render(t){
+  // camera
+  let az=CH[1](t),el=CH[2](t),r=CH[3](t),ty=CH[4](t),fov=CH[5](t);
+  // drone breath: tiny deterministic drift, calmer at the macro and the hero
+  const calm=1-0.8*(P(t,0.9,2.4)*(1-P(t,2.4,2.6)))-0.6*P(t,10,11);
+  const j=(k)=>Math.sin(t*1.7+k)*.6+Math.sin(t*3.1+k*2)*.4;
+  az+=j(1)*.8*calm;el+=j(2)*.5*calm;
+  const x=r*Math.cos(el*D)*Math.sin(az*D),z=r*Math.cos(el*D)*Math.cos(az*D),y=ty+r*Math.sin(el*D);
+  cam.position.set(x,y,z);cam.fov=fov;cam.updateProjectionMatrix();
+  // top-down: keep "up" sane at 86 degrees
+  cam.up.set(0,1,0);if(el>70){const k=P(el,70,87);cam.up.set(-Math.sin(az*D)*k,1-k,-Math.cos(az*D)*k).normalize()}
+  cam.lookAt(0,ty,0);
+  // world
+  room.rotation.y=t*.03;
+  const beat=(t%0.5)/0.5;floor.material.emissiveIntensity=(t>3&&t<9.6?.35*Math.exp(-beat*5):0)+.12*P(t,9.6,10.2)+.9*Math.exp(-Math.max(0,t-9.6)*6)*(t>=9.6);
+  rim.intensity=9+6*Math.exp(-Math.max(0,t-3)*4)*(t>=3);
+  digits.forEach(s=>{const u=s.userData;const yy=u.y0+((t*u.sp+u.ph)%3.2);const a=u.a+t*.08;s.position.set(Math.sin(a)*u.r,yy-.4,Math.cos(a)*u.r);s.scale.setScalar(u.sz);
+    s.material.opacity=P(t,1.2,2.6)*(.35+.4*Math.sin(t*2+u.ph*3)**2)*(1-P(t,11.4,12.1))});
+  // sparks
+  let n=0;for(const b of BURSTS){const dt=t-b.t;for(let i=0;i<SPN/2;i++,n++){const k=n*3;if(dt<0||dt>1.4){spP[k]=spP[k+1]=spP[k+2]=999;continue}
+    const a=hash(i*1.3+b.t)*Math.PI*2,e=hash(i*2.7+b.t)*1.2+.1,v=.8+hash(i*5.9+b.t)*1.8;
+    spP[k]=b.o[0]+Math.cos(a)*Math.cos(e)*v*dt;spP[k+1]=b.o[1]+Math.sin(e)*v*dt-2.2*dt*dt;spP[k+2]=b.o[2]+Math.sin(a)*Math.cos(e)*v*dt}}
+  spG.attributes.position.needsUpdate=true;spM.opacity=1;
+  // the scan: floor to crown, then down across the lockup
+  const sk=P(t,9.9,10.9),sk2=P(t,10.9,11.5);scan.material.opacity=(sk>0&&sk<1?1:0)+(sk2>0&&sk2<1?1:0);
+  scan.position.set(0,sk<1?lerp(-.45,1.08,eIO(sk)):lerp(0,-.45,eIO(sk2)),sk<1?.34:PD/2+.004);
+  scan.lookAt(cam.position.x,scan.position.y,cam.position.z);
+  comp.render();
+
+  // overlay: lights down, lens, slit
+  const bOp=t<0.9?1:1-eOut(P(t,0.9,1.25));$('#black').style.opacity=bOp;show($('#black'),bOp>0.001);
+  const lensK=eBack(P(t,0.2,0.45));const fl=(t>0.5&&t<0.62)?(Math.floor(t*40)%2?0.25:1):1;
+  $('#lens').style.opacity=(t<0.9?1:1-P(t,0.9,1.1))*fl;$('#lens').style.transform=`scale(${lensK*(1+0.15*Math.sin(t*20))})`;show($('#lens'),t<1.1&&lensK>0);
+  const sl=eX(P(t,0.78,1.0));$('#slit').style.transform=`scaleX(${sl})`;$('#slit').style.height=`${2+eOut(P(t,0.95,1.25))*1080}px`;$('#slit').style.marginTop=`${-(1+eOut(P(t,0.95,1.25))*540)}px`;
+  $('#slit').style.opacity=t<0.95?1:1-P(t,0.95,1.25);show($('#slit'),t>0.78&&t<1.25);
+  // letterbox: 2.39 bars ease in on the orbit, out for the hero
+  const lb=eOut(P(t,2.5,3.2))*(1-eIO(P(t,9.6,10.6)));const bh=lb*138;$('#barT').style.height=bh+'px';$('#barB').style.height=bh+'px';
+  // HUD: the drone's own readout
+  const hudOn=P(t,3.05,3.4)*(1-P(t,11.4,11.8));$('#hud').style.opacity=hudOn;show($('#hud'),hudOn>0);
+  const top=bh+26,bot=1080-bh-50;$('#hudTL').style.top=top+'px';$('#hudTR').style.top=top+'px';$('#hudBL').style.top=bot+'px';$('#hudBR').style.top=bot+'px';
+  const fr=Math.floor(t*24);$('#hudTR').textContent=`00:${String(Math.floor(t)).padStart(2,'0')}:${String(fr%24).padStart(2,'0')}`;
+  const orb=((Math.round(az)%360)+360)%360;$('#hudBL').textContent=`ORBIT ${String(orb).padStart(3,'0')}°  ·  LENS ${Math.round(18/Math.tan(fov*D/2))} MM`;
+  $('#hudBR').textContent=`ALT ${(y+.45).toFixed(2)} M  ·  R ${r.toFixed(2)}`;
+  $('#hudCam').textContent=t<8.9&&t>8.0?'K13 · CAM 01 · HOLD':(t>7&&t<8?'K13 · CAM 01 · CRANE':(t>8.9&&t<9.6?'K13 · CAM 01 · DIVE':'K13 · CAM 01 · ORBIT'));
+  const tk=[[760,370],[1134,370],[760,684],[1134,684]];const sq=1+0.25*(1-eOut(P(t,9.6,9.9)));
+  ['#tk1','#tk2','#tk3','#tk4'].forEach((s,i)=>{const e=$(s);e.style.left=(960+(tk[i][0]-960)*sq)+'px';e.style.top=(540+(tk[i][1]-540)*sq)+'px';e.style.opacity=(t>8.0&&t<9.9)?1:.45});
+  // lights up: paper rises from the lockup, the lockup lands where the site's header starts
+  const up=eIO(P(t,11.95,12.3));$('#paper').style.opacity=up;show($('#paper'),up>0);
+  const lk=eX(P(t,12.35,12.95));const L=$('#lock');show(L,t>12.16);
+  L.style.opacity=eOut(P(t,12.16,12.34));const g=eOut(P(t,12.16,12.4));
+  const sc=lerp(lerp(1.45,1.25,g),0.34,lk),w0=L.offsetWidth,h0=L.offsetHeight;L.style.transform=`translate(${lerp(960-w0*sc/2,150,lk)}px,${lerp(540-h0/2,70-h0/2,lk)}px) scale(${sc})`;
+  const hv=P(t,12.85,13.3);$('#h1a').style.transform=`translateY(${(1-eOut(hv))*110}%)`;$('#h1b').style.transform=`translateY(${(1-eOut(P(t,12.95,13.4)))*110}%)`;
+  show($('#hero'),t>12.8);$('#eyebrow').style.opacity=P(t,13.0,13.3);show($('#eyebrow'),t>12.95);
+}
+window.render=render;
+window.renderAsync=async t=>{render(t);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))};
+window.ready=(async()=>{await document.fonts.load('600 100px Fraunces');await document.fonts.load('500 20px "JetBrains Mono"');await document.fonts.ready;
+  await loadFig();render(0);return TOTAL})();
+if(location.hash==='#play'){window.ready.then(()=>{const t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%TOTAL);requestAnimationFrame(loop)})()})}
+</script>
+</body></html>

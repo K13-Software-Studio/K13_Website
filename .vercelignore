@@ -1,0 +1,7 @@
+# Never deployed: internal notes, handoffs, prototypes, reports and sources.
+# docs/ was served publicly until 2026-10-01 (e.g. /docs/handoffs/compliance_2026-08-09.md answered 200).
+docs/
+scripts/
+email/src/
+CLAUDE.md
+README.md

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>K13 Intro C Decode</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0}html,body{height:100%;background:#E6EAF2;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;background:#0f172a;transform-origin:50% 50%;overflow:hidden}
+canvas{position:absolute;inset:0;width:1920px;height:1080px}
+</style></head><body><div id="stage"><canvas id="c" width="1920" height="1080"></canvas></div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1);
+const hash=n=>{let x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+const C=document.getElementById('c'),g=C.getContext('2d');
+const NAVY='#0f172a',PAPER='#F3F5FA',INK='#141D35',OR='#B94612',OR2='#EA5E14',MUTED='#515C78',CREAM='#E9E4D6';
+const CW=16,CH=28,COLS=Math.ceil(1920/CW),ROWS=Math.ceil(1080/CH);
+let SRC='',cells=[],FS=520,BASE=720,KW,NW,X0;
+const GLYPHS='{}[]()<>=+-*/;:.,_$#&|!?0123456789abcdefghijklmnopqrstuvwxyz';
+async function setup(){const lines=await (await fetch('code.json')).json();SRC=lines.join('  ');
+  g.font=`600 ${FS}px Fraunces`;KW=g.measureText('K').width;NW=g.measureText('13').width;X0=(1920-(KW+NW))/2;
+  const o=document.createElement('canvas');o.width=1920;o.height=1080;const og=o.getContext('2d');og.font=`600 ${FS}px Fraunces`;
+  og.fillStyle='#f00';og.fillText('K',X0,BASE);og.fillStyle='#0f0';og.fillText('13',X0+KW,BASE);const d=og.getImageData(0,0,1920,1080).data;
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const x=c*CW+CW/2,y=r*CH+CH/2,i=((y|0)*1920+(x|0))*4;const inK=d[i]>128,in13=d[i+1]>128;
+    // every cell reads the site's own source, row by row, so the wall is real code
+    const ch=SRC[(r*COLS+c+r*7)%SRC.length]||' ';cells.push({c,r,x:c*CW,y:r*CH+CH*.8,ch,inK,in13,ph:hash(r*COLS+c)})}}
+const TOTAL=3.0,HOLD=0.9;
+function render(t){
+  const up=eIO(P(t,2.15,2.7));
+  g.fillStyle=NAVY;g.fillRect(0,0,1920,1080);
+  // 1. the wall of code types itself on (0 to 0.7), scrambling as it lands
+  const shape=eIO(P(t,.75,1.45)),solid=eIO(P(t,1.45,1.9));
+  if(solid<1){g.font='500 22px "JetBrains Mono"';g.textBaseline='alphabetic';
+    for(const k of cells){const on=P(t,k.ph*.55+k.c/COLS*.15,k.ph*.55+k.c/COLS*.15+.12);if(on<=0)continue;
+      const inside=k.inK||k.in13;const scr=t<k.ph*.55+.35+(inside?.6:0);
+      const ch=scr?GLYPHS[Math.floor(hash(k.r*999+k.c+Math.floor(t*24))*GLYPHS.length)]:k.ch;
+      let a,col;if(inside){a=lerp(.38,1,shape);col=k.in13?OR2:CREAM}else{a=lerp(.38,.1,shape);col=CREAM}
+      g.globalAlpha=a*on*(1-solid);g.fillStyle=col;g.fillText(ch,k.x+2,k.y)}
+    g.globalAlpha=1}
+  // 2. the characters resolve into the real lockup (1.45 to 1.9)
+  if(solid>0){g.globalAlpha=solid;g.font=`600 ${FS}px Fraunces`;g.textBaseline='alphabetic';
+    const kc=up>0?mix(CREAM,INK,up):CREAM;g.fillStyle=kc;g.fillText('K',X0,BASE);g.fillStyle=OR;g.fillText('13',X0+KW,BASE);g.globalAlpha=1;
+    const tag='SOFTWARE STUDIO',n=Math.floor(P(t,1.7,2.1)*tag.length);g.font='500 34px "JetBrains Mono"';g.fillStyle=up>0?mix('#9AA3B8',MUTED,up):'#9AA3B8';let x=X0+8;for(let i=0;i<n;i++){g.fillText(tag[i],x,BASE+90);x+=g.measureText(tag[i]).width+12}}
+  // 3. lights up: paper rises from behind the lockup (2.15 to 2.7)
+  if(up>0){g.save();g.globalCompositeOperation='destination-over';g.fillStyle=PAPER;g.beginPath();g.arc(960,BASE-FS*.35,up*1300,0,7);g.fill();g.restore();
+    // redraw the lockup over the paper so it stays crisp through the wipe
+    g.save();g.beginPath();g.arc(960,BASE-FS*.35,up*1300,0,7);g.clip();g.fillStyle=PAPER;g.fillRect(0,0,1920,1080);
+    g.font=`600 ${FS}px Fraunces`;g.fillStyle=INK;g.fillText('K',X0,BASE);g.fillStyle=OR;g.fillText('13',X0+KW,BASE);
+    g.font='500 34px "JetBrains Mono"';g.fillStyle=MUTED;let x=X0+8;for(const ch of 'SOFTWARE STUDIO'){g.fillText(ch,x,BASE+90);x+=g.measureText(ch).width+12}g.restore()}
+}
+function mix(a,b,k){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return `rgb(${A.map((v,i)=>Math.round(lerp(v,B[i],k))).join(',')})`}
+window.render=render;window.TL={TOTAL};
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);document.getElementById('stage').style.transform=`translate(-50%,-50%) scale(${s})`}
+addEventListener('resize',fit);fit();
+document.fonts.load('600 100px Fraunces').then(()=>document.fonts.load('500 20px "JetBrains Mono"')).then(setup).then(()=>{const t0=performance.now();(function loop(){const t=((performance.now()-t0)/1000)%(TOTAL+HOLD);render(Math.min(t,TOTAL));requestAnimationFrame(loop)})()});
+</script></body></html>

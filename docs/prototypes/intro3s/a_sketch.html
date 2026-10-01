@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>K13 Intro A Sketch</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F3F5FA;--ink:#141D35;--muted:#515C78;--or:#B94612;--or2:#EA5E14}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#E6EAF2;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--paper);overflow:hidden;font-variant-numeric:lining-nums}
+svg{position:absolute;inset:0;width:1920px;height:1080px}
+.s{fill:none;stroke:var(--ink);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.s.o{stroke:var(--or2)}
+#win{position:absolute;transform-origin:960px 540px;inset:0}
+.real{position:absolute;opacity:0}
+#lockR{left:300px;top:228px;display:flex;align-items:center;gap:10px}
+#lockR .k{font-family:Fraunces,serif;font-weight:600;font-size:40px;color:var(--ink);letter-spacing:-.02em}#lockR .k b{color:var(--or);font-weight:600}
+#lockR .t{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;line-height:1.3;color:var(--muted)}
+#h1{left:300px;top:380px;font-family:Fraunces,serif;font-weight:600;font-size:84px;line-height:1.02;letter-spacing:-.03em;color:var(--ink);width:820px}
+#h1 i{color:var(--or);font-weight:500}
+.mask{display:block;overflow:hidden;padding-bottom:.08em}.mask>span{display:inline-block}
+#b1{left:300px;top:640px;background:var(--or);color:#fff;font:600 20px Inter;padding:18px 26px;border-radius:12px}
+#b2{left:500px;top:640px;border:1.5px solid #C9D1E2;color:var(--ink);font:600 20px Inter;padding:17px 26px;border-radius:12px}
+#card{left:1200px;top:380px;width:420px;height:300px;background:#fff;border-radius:20px;box-shadow:0 30px 60px -30px rgba(20,29,53,.35);padding:28px}
+#card .row{font:500 15px "JetBrains Mono",monospace;color:var(--ink);display:flex;gap:10px;align-items:center}#card .row i{width:9px;height:9px;border-radius:50%;background:#1aa66b}
+#card .q{margin-top:22px;font:italic 500 24px Fraunces,serif;color:var(--ink);line-height:1.25}
+#card .n{margin-top:30px;display:flex;gap:34px;font:600 40px Fraunces,serif;color:var(--ink)}
+#pencil{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--or2);box-shadow:0 0 0 6px rgba(234,94,20,.18)}
+</style></head><body>
+<div id="stage">
+  <div id="win">
+    <svg viewBox="0 0 1920 1080" id="sk"></svg>
+    <div class="real" id="lockR"><span class="k">K<b>13</b></span><span class="t">SOFTWARE<br>STUDIO</span></div>
+    <div class="real" id="h1"><span class="mask"><span>A studio for software</span></span><span class="mask"><span>that feels <i>obvious.</i></span></span></div>
+    <div class="real" id="b1">Start a project</div><div class="real" id="b2">See the work</div>
+    <div class="real" id="card"><div class="row"><i></i>Open for projects</div><div class="q">Making twenty thousand square feet of food hall load like a single snack</div><div class="n"><span>16</span><span>13</span><span>1</span></div></div>
+  </div>
+  <div id="pencil"></div>
+</div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1),eBack=bez(.34,1.56,.64,1);
+const $=s=>document.querySelector(s);
+// the sketch: a browser, a nav, a headline, two buttons, a card. drawn as a hand would, slightly off
+const NS='http://www.w3.org/2000/svg',sk=$('#sk');
+const wob=(n)=>Math.sin(n*12.9898)*2.2;
+function rect(x,y,w,h,r,cls){const p=document.createElementNS(NS,'path');let i=x+y;
+  const d=`M${x+r} ${y+wob(i++)} L${x+w-r} ${y+wob(i++)} Q${x+w} ${y} ${x+w+wob(i++)} ${y+r} L${x+w+wob(i++)} ${y+h-r} Q${x+w} ${y+h} ${x+w-r} ${y+h+wob(i++)} L${x+r} ${y+h+wob(i++)} Q${x} ${y+h} ${x+wob(i++)} ${y+h-r} L${x+wob(i++)} ${y+r} Q${x} ${y} ${x+r} ${y}`;
+  p.setAttribute('d',d);p.setAttribute('class','s '+(cls||''));sk.appendChild(p);return p}
+function line(x1,y1,x2,y2,cls){const p=document.createElementNS(NS,'path');p.setAttribute('d',`M${x1} ${y1} Q${(x1+x2)/2} ${(y1+y2)/2+wob(x1)} ${x2} ${y2}`);p.setAttribute('class','s '+(cls||''));sk.appendChild(p);return p}
+const parts=[
+  [rect(240,150,1440,780,22),0.00,0.42],        // the browser
+  [line(240,200,1680,200),0.30,0.48],           // its toolbar
+  [rect(300,226,120,44,8),0.42,0.56],           // logo
+  [line(300,400,1040,400),0.48,0.62],[line(300,486,940,486),0.54,0.68],[line(300,572,720,572),0.60,0.72], // headline strokes
+  [rect(300,640,180,60,12,'o'),0.66,0.80],[rect(500,640,170,60,12),0.70,0.84],   // buttons
+  [rect(1200,380,420,300,20),0.62,0.86]          // card
+];
+parts.forEach(([p])=>{const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.dataset.L=L});
+const TOTAL=3.0,HOLD=0.9;
+function render(t){
+  // 1. the hand draws (0 to 0.9)
+  let tip=null;parts.forEach(([p,a,b])=>{const k=eIO(P(t,a,b)),L=+p.dataset.L;p.style.strokeDashoffset=L*(1-k);if(k>0&&k<1)tip=p.getPointAtLength(L*k)});
+  const pen=$('#pencil');pen.style.opacity=t<0.9?1:1-P(t,.9,1.05);if(tip){pen.style.left=tip.x+'px';pen.style.top=tip.y+'px'}
+  // 2. every sketch becomes the real thing (0.9 to 1.6), the lines step aside as it lands
+  const sw=P(t,.95,1.45);sk.style.opacity=1-eIO(P(t,1.0,1.5));
+  const show=(id,a)=>{const e=$(id),k=eOut(P(t,a,a+.45));e.style.opacity=k;e.style.transform=`translateY(${(1-k)*14}px)`};
+  show('#lockR',.92);show('#b1',1.02);show('#b2',1.08);show('#card',1.0);
+  const h=$('#h1');h.style.opacity=t>.95?1:0;h.querySelectorAll('.mask>span').forEach((s,i)=>{const k=eOut(P(t,.95+i*.08,1.5+i*.08));s.style.transform=`translateY(${(1-k)*105}%)`});
+  // 3. the window opens up to become the page (1.6 to 2.5)
+  const z=eX(P(t,1.75,2.55));const sc=lerp(1,1.3,z),tx=0,ty=lerp(0,-10,z);
+  $('#win').style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;
+}
+window.render=render;window.TL={TOTAL};
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);$('#stage').style.transform=`scale(${s}) translate(-50%,-50%)`;$('#stage').style.left='50%';$('#stage').style.top='50%';
+  $('#stage').style.transform=`translate(-50%,-50%) scale(${s})`;$('#stage').style.transformOrigin='50% 50%'}
+addEventListener('resize',fit);fit();
+document.fonts.ready.then(()=>{const t0=performance.now();(function loop(){const t=((performance.now()-t0)/1000)%(TOTAL+HOLD);render(Math.min(t,TOTAL));requestAnimationFrame(loop)})()});
+</script></body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K13 Clay Hero</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F5FA;--ink:#141D35;--ink2:#2A3554;--muted:#515C78;--or:#B94612;--or2:#EA5E14;--line:#DDE3EF;
+  --ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
+header{display:flex;align-items:center;gap:12px;padding:20px clamp(16px,4vw,56px)}
+.lock{font-family:Fraunces,serif;font-weight:600;font-size:28px;letter-spacing:-.02em}.lock b{color:var(--or);font-weight:600}
+.tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;line-height:1.3;color:var(--muted)}
+nav{margin-left:auto;display:flex;gap:26px;align-items:center;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted)}
+nav .cta{font-family:Inter;font-weight:600;font-size:15px;color:#fff;background:var(--or);padding:12px 20px;border-radius:10px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,64px);align-items:center;max-width:1320px;margin:0 auto;padding:clamp(24px,5vh,64px) clamp(16px,4vw,56px) 80px;min-height:calc(100vh - 80px)}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.14em;color:var(--or);text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--or)}
+h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(44px,6.4vw,92px);line-height:1.02;letter-spacing:-.03em;margin-top:18px}
+h1 i{color:var(--or);font-weight:500}
+.sub{margin-top:22px;color:var(--ink2);font-size:18px;line-height:1.6;max-width:50ch}
+.ctas{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-weight:600;font-size:15px;padding:14px 20px;border-radius:10px;text-decoration:none}
+.btn.p{background:var(--or);color:#fff}.btn.g{border:1px solid #C9D1E2;color:var(--ink)}
+.stage{position:relative;aspect-ratio:5/6;border-radius:32px;overflow:hidden;background:#0c0907;
+  box-shadow:0 50px 90px -40px rgba(20,29,53,.55),0 0 0 1px rgba(20,29,53,.08);touch-action:pan-y}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cap{position:absolute;left:20px;bottom:18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,235,222,.75);display:flex;gap:10px;align-items:center}
+.cap i{width:7px;height:7px;border-radius:50%;background:var(--or2);box-shadow:0 0 10px var(--or2)}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.stage{max-width:520px;width:100%;margin:0 auto}nav a:not(.cta){display:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head><body>
+<header><span class="lock">K<b>13</b></span><span class="tag">SOFTWARE<br>STUDIO</span>
+  <nav><a>Approach</a><a>Work</a><a>Studio</a><a class="cta">Start a project</a></nav></header>
+<section class="hero">
+  <div>
+    <span class="eyebrow">K13 Software Studio · Kazim K.</span>
+    <h1>A studio for software that feels <i>obvious.</i></h1>
+    <p class="sub">I'm Kazim. I design and build software end to end, from the first sketch to the deploy, and I give every project my full attention.</p>
+    <div class="ctas"><a class="btn p">Start a project</a><a class="btn g">See the work</a></div>
+  </div>
+  <div class="stage" id="stage" aria-label="Kazim in clay, in orange glasses, on a K13 pedestal in a room of code" role="img">
+    <canvas id="gl"></canvas>
+    <div class="cap"><i></i>Made of clay and code</div>
+  </div>
+</section>
+<script type="module">
+import * as THREE from 'three';
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),lerp=(a,b,k)=>a+(b-a)*k,D2R=Math.PI/180;
+const U=px=>(px-640)/80,V=py=>(360-py)/80;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage=document.getElementById('stage'),canvas=document.getElementById('gl');
+const R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});R.setPixelRatio(Math.min(2,devicePixelRatio));R.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0c0907);
+const FOV=30,DIST=4.5/Math.tan(FOV/2*D2R);const cam=new THREE.PerspectiveCamera(FOV,5/6,.05,200);
+const L=new THREE.TextureLoader();
+const GRADE=`vec3 grade(vec3 c){c=pow(c,vec3(1.06));c=mix(vec3(dot(c,vec3(.299,.587,.114))),c,1.06);return c*vec3(1.02,1.,.97);}`;
+function depthMat(map,dmap,alpha,piv,cl,ext){return new THREE.ShaderMaterial({transparent:alpha,depthWrite:!alpha,depthTest:!alpha,
+  uniforms:{map:{value:map},dmap:{value:dmap},amp:{value:6.5},piv:{value:piv},cl:{value:cl},ext:{value:ext},cam0:{value:new THREE.Vector3(0,0,DIST)}},
+  vertexShader:`uniform sampler2D dmap;uniform float amp,piv,cl,ext;uniform vec3 cam0;varying vec2 vUv;
+    void main(){vec2 uv=clamp((uv-.5)*ext+.5,0.,1.);vUv=uv;float d=min(texture2D(dmap,uv).r,cl);float z=amp*(d-piv);
+    vec3 p=vec3(position.xy*ext,0.);vec3 q=cam0+(p-cam0)*((cam0.z-z)/cam0.z);gl_Position=projectionMatrix*modelViewMatrix*vec4(q,1.);}`,
+  fragmentShader:`uniform sampler2D map;varying vec2 vUv;${GRADE}void main(){vec4 c=texture2D(map,vUv);${alpha?'if(c.a<.02)discard;':''}
+    gl_FragColor=vec4(grade(c.rgb),${alpha?'c.a':'1.'});
+    #include <colorspace_fragment>
+    }`})}
+const img=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=src});
+// the pedestal wears the real lockup (the old film's plain sans is replaced, as in the bullet-time cut)
+async function fgCanvas(){await document.fonts.load('600 100px Fraunces');await document.fonts.load('500 20px "JetBrains Mono"');
+  const [fg,pf]=await Promise.all([img('assets/fg.png'),img('assets/pedface.png')]);const c=document.createElement('canvas');c.width=fg.width;c.height=fg.height;const g=c.getContext('2d');g.drawImage(fg,0,0);
+  const s=fg.width/1280,x0=441*s,y0=516*s,W=399*s,H=168*s;const p=document.createElement('canvas');p.width=pf.width;p.height=pf.height;const pg=p.getContext('2d');pg.drawImage(pf,0,0);
+  const PW=p.width,PH=p.height,FS=Math.round(PH*.80),base=Math.round(PH*.68);pg.font=`600 ${FS}px Fraunces`;const kw=pg.measureText('K').width,nw=pg.measureText('13').width,kx=(PW-(kw+nw))/2;
+  const tag='SOFTWARE STUDIO',TS=Math.round(PH*.095),sp=TS*.34;pg.font=`500 ${TS}px "JetBrains Mono"`;let tw=0;for(const ch of tag)tw+=pg.measureText(ch).width+sp;tw-=sp;
+  const txt=(ctx,dx,dy,f)=>{ctx.fillStyle=f;ctx.font=`600 ${FS}px Fraunces`;ctx.fillText('K',kx+dx,base+dy);ctx.fillText('13',kx+kw+dx,base+dy);ctx.font=`500 ${TS}px "JetBrains Mono"`;let x=(PW-tw)/2+dx;for(const ch of tag){ctx.fillText(ch,x,base+TS*2.45+dy);x+=ctx.measureText(ch).width+sp}};
+  pg.globalAlpha=.55;txt(pg,3,4,'#fff4e2');pg.globalAlpha=1;pg.font=`600 ${FS}px Fraunces`;pg.fillStyle='#16182a';pg.fillText('K',kx,base);pg.fillStyle='#b8470f';pg.fillText('13',kx+kw,base);
+  pg.font=`500 ${TS}px "JetBrains Mono"`;pg.fillStyle='#262a3c';let x=(PW-tw)/2;for(const ch of tag){pg.fillText(ch,x,base+TS*2.45);x+=pg.measureText(ch).width+sp}
+  const sh=document.createElement('canvas');sh.width=PW;sh.height=PH;const sg=sh.getContext('2d');sg.fillStyle='#000';sg.fillRect(0,0,PW,PH);sg.globalCompositeOperation='destination-out';txt(sg,16,18,'#000');sg.globalCompositeOperation='destination-in';txt(sg,0,0,'#000');
+  pg.filter='blur(7px)';pg.globalAlpha=.78;pg.drawImage(sh,0,0);pg.filter='none';pg.globalAlpha=1;
+  g.globalCompositeOperation='source-atop';g.drawImage(p,x0,y0,W,H);return c}
+const [bg,dbg,dfg,fgc]=await Promise.all([L.loadAsync('assets/bg.jpg'),L.loadAsync('assets/dbg.png'),L.loadAsync('assets/dfg.png'),fgCanvas()]);
+bg.colorSpace=THREE.SRGBColorSpace;const fgt=new THREE.CanvasTexture(fgc);fgt.colorSpace=THREE.SRGBColorSpace;fgt.anisotropy=8;
+const PIV=.724;
+const back=new THREE.Mesh(new THREE.PlaneGeometry(16,9,320,180),depthMat(bg,dbg,false,PIV,.74,1.35));scene.add(back);
+const fig=new THREE.Mesh(new THREE.PlaneGeometry(16,9,640,360),depthMat(fgt,dfg,true,PIV,PIV+.06,1));fig.renderOrder=2;scene.add(fig);
+// embers hanging in the room
+const glow=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const r=g.createRadialGradient(32,32,0,32,32,32);
+  r.addColorStop(0,'rgba(255,245,225,1)');r.addColorStop(.25,'rgba(255,190,110,.9)');r.addColorStop(.6,'rgba(234,94,20,.25)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
+const N=70,pg=new THREE.BufferGeometry(),pp=new Float32Array(N*3),seed=[];for(let i=0;i<N;i++){const h=k=>{let x=Math.sin((i+1)*k*12.9898)*43758.5453;return x-Math.floor(x)};
+  seed.push([h(1)*7-3.5,h(2)*8-3.5,h(3)*3-.5,.2+h(4)*.5,h(5)*6])}
+pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+const pts=new THREE.Points(pg,new THREE.PointsMaterial({map:glow,size:.09,transparent:true,opacity:.75,depthWrite:false,blending:THREE.AdditiveBlending}));pts.renderOrder=3;scene.add(pts);
+// the glint on the glasses
+const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:glow,transparent:true,depthTest:false,blending:THREE.AdditiveBlending,opacity:0}));gl.renderOrder=4;scene.add(gl);
+const GX=U(612),GY=V(128),GZ=6.5*(.745-PIV);
+// pointer: where the visitor is looking from
+let tx=0,ty=0,ax=0,ay=0,glintT=-9,lastGlint=0,scrollK=0;
+const onMove=(cx,cy)=>{tx=clamp((cx/innerWidth-.5)*2,-1,1);ty=clamp((cy/innerHeight-.5)*2,-1,1)};
+addEventListener('pointermove',e=>onMove(e.clientX,e.clientY),{passive:true});
+stage.addEventListener('pointerenter',()=>{glintT=performance.now()/1000});
+addEventListener('scroll',()=>{scrollK=clamp(scrollY/innerHeight)},{passive:true});
+function size(){const r=stage.getBoundingClientRect();R.setSize(r.width,r.height,false);cam.aspect=r.width/r.height;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(stage);size();
+function frame(ms){const t=ms/1000;
+  const idle=reduce?0:1;ax=lerp(ax,reduce?0:tx,.06);ay=lerp(ay,reduce?0:ty,.06);
+  const az=(-ax*12+Math.sin(t*.35)*3*idle),el=(ay*6+Math.sin(t*.27)*1.2*idle),z=1+scrollK*.18;
+  const Rr=DIST/z,cx=0,cy=V(330)*0;cam.position.set(cx+Rr*Math.sin(az*D2R)*Math.cos(el*D2R),cy+Rr*Math.sin(el*D2R),Rr*Math.cos(az*D2R)*Math.cos(el*D2R));
+  cam.lookAt(cx,cy+scrollK*.6,0);
+  if(!reduce&&t-lastGlint>6.5){glintT=t;lastGlint=t}
+  const gk=t-glintT,gOn=gk>0&&gk<.9?Math.sin(Math.PI*gk/.9):0;
+  gl.position.set(GX+(-.5+gk/.9)*1.1,GY,GZ);gl.scale.setScalar(.35+gOn*.9);gl.material.opacity=gOn*.95;
+  for(let i=0;i<N;i++){const s=seed[i];pp[i*3]=s[0]+Math.sin(t*.3+s[4])*.15;pp[i*3+1]=((s[1]+3.5+t*s[3]*(reduce?0:.25))%8)-3.5;pp[i*3+2]=s[2]}
+  pg.attributes.position.needsUpdate=true;
+  R.render(scene,cam);requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+</script>
+</body></html>
