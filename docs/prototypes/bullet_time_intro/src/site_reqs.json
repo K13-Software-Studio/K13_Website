@@ -1,0 +1,50 @@
+[
+ {
+  "url": "https://k13projects.com/",
+  "type": "document",
+  "size": 62731,
+  "t": 353.913
+ },
+ {
+  "url": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js",
+  "type": "script",
+  "size": 3761,
+  "t": 41.996
+ },
+ {
+  "url": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+  "type": "stylesheet",
+  "size": 24415,
+  "t": 83.097
+ },
+ {
+  "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2",
+  "type": "font",
+  "size": 48432,
+  "t": 105.07
+ },
+ {
+  "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+  "type": "font",
+  "size": 31340,
+  "t": 111.794
+ },
+ {
+  "url": "https://fonts.gstatic.com/s/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
+  "type": "font",
+  "size": 67388,
+  "t": 126.657
+ },
+ {
+  "url": "https://fonts.gstatic.com/s/fraunces/v38/6NU58FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChjeveQ7ZXk8g.woff2",
+  "type": "font",
+  "size": 81704,
+  "t": 123.775
+ },
+ {
+  "url": "https://k13projects.com/assets/kazim.jpg",
+  "type": "image",
+  "size": 166646,
+  "t": 223.087
+ }
+]

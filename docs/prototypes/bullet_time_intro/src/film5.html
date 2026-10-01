@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>K13 Bullet Time 5s</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F3F5FA;--ink:#141D35;--muted:#515C78;--or:#B94612;--or2:#EA5E14;
+  --disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace;--body:"Inter",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#0c0907;font-family:var(--body);color:var(--ink);font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1;isolation:isolate}
+canvas#gl{position:absolute;inset:0;width:1920px;height:1080px;display:block}
+.abs{position:absolute}.nw{white-space:nowrap}
+#black{position:absolute;inset:0;background:#0c0907;z-index:3}
+.half{position:absolute;left:0;width:1920px;height:540px;background:#0c0907;z-index:3}#hT{top:0}#hB{bottom:0}
+#lens{position:absolute;z-index:4;left:960px;top:540px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#FF7A2E;
+  box-shadow:0 0 30px 10px rgba(234,94,20,.55),0 0 140px 50px rgba(234,94,20,.2)}
+#slit{position:absolute;z-index:4;left:0;top:540px;width:1920px;height:2px;margin-top:-1px;background:#FFB27A;box-shadow:0 0 30px 6px rgba(234,94,20,.6)}
+.bar{position:absolute;left:0;width:1920px;background:#050403;z-index:2}
+#barT{top:0}#barB{bottom:0}
+#speed{position:absolute;z-index:2;left:64px;font-family:var(--mono);font-size:17px;letter-spacing:.16em;color:rgba(243,235,222,.8);text-transform:uppercase}
+#speed b{color:#FF8A45;font-weight:600}
+#tc{position:absolute;z-index:2;right:64px;font-family:var(--mono);font-size:17px;letter-spacing:.16em;color:rgba(243,235,222,.6)}
+#flash{position:absolute;inset:0;z-index:2;background:#FFD2A8;mix-blend-mode:screen;pointer-events:none}
+#flare{position:absolute;z-index:2;left:0;top:0;width:1400px;height:1400px;margin:-700px 0 0 -700px;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(255,255,255,1) 0,rgba(255,214,170,.9) 4%,rgba(255,150,70,.45) 14%,rgba(234,94,20,.12) 34%,transparent 60%)}
+#flareH{position:absolute;z-index:2;left:0;top:0;width:2400px;height:6px;margin:-3px 0 0 -1200px;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(90deg,transparent,rgba(255,190,130,.9) 45%,#fff 50%,rgba(255,190,130,.9) 55%,transparent);filter:blur(1px)}
+#paper{position:absolute;inset:0;z-index:5;background:var(--paper)}
+#load{position:absolute;left:0;right:0;bottom:0;height:110px;z-index:4;font-family:var(--mono);font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,235,222,.82)}
+#load::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent,rgba(8,6,4,.72))}
+#ltrack{position:absolute;left:64px;right:64px;bottom:40px;height:3px;background:rgba(243,235,222,.16);border-radius:2px;overflow:hidden}
+#lfill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#B94612,#EA5E14 70%,#FFB27A);box-shadow:0 0 14px rgba(234,94,20,.8)}
+#lL{position:absolute;left:64px;bottom:58px}#lR{position:absolute;right:64px;bottom:58px;text-align:right}
+#lR b{color:#FF8A45;font-weight:600}
+#site{position:absolute;inset:0;z-index:6}
+.band{position:absolute;background-image:url(site_top.png);background-repeat:no-repeat}
+#lock{position:absolute;z-index:6;left:0;top:0;display:flex;align-items:center;gap:22px;transform-origin:0 50%}
+#lock .k{font-family:var(--disp);font-weight:600;font-size:150px;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+#lock .k b{color:var(--or);font-weight:600}
+#lock .tag{font-family:var(--mono);font-size:26px;letter-spacing:.16em;line-height:1.3;color:var(--muted)}
+#hero{position:absolute;z-index:6;left:150px;top:470px;font-family:var(--disp);font-weight:600;font-size:104px;line-height:1.02;letter-spacing:-.03em;color:var(--ink)}
+#hero i{font-style:italic;font-weight:500;color:var(--or)}
+.mask{overflow:hidden;display:block;padding:0 .06em .08em}
+.mask>span{display:inline-block}
+#eyebrow{position:absolute;z-index:6;left:156px;top:420px;font-family:var(--mono);font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:var(--or)}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="1920" height="1080"></canvas>
+  <div id="flash"></div><div id="flare"></div><div id="flareH"></div>
+  <div class="bar" id="barT"></div><div class="bar" id="barB"></div>
+  <div id="speed" class="nw">SPEED <b>1.0×</b></div><div id="tc" class="nw">00:00:00</div>
+  <div id="black"></div><div class="half" id="hT"></div><div class="half" id="hB"></div><div id="slit"></div><div id="lens"></div>
+  <div id="load"><div id="ltrack"><i id="lfill"></i></div><div id="lL" class="nw">LOADING K13PROJECTS.COM</div><div id="lR" class="nw"></div></div>
+  <div id="paper"></div><div id="site"></div>
+  <div id="lock"><span class="k">K<b>13</b></span><span class="tag">SOFTWARE<br>STUDIO</span></div>
+  <div id="eyebrow" class="nw">K13 Software Studio · Kazim K.</div>
+  <div id="hero"><span class="mask"><span id="h1a">A studio for software</span></span><span class="mask"><span id="h1b">that feels <i>obvious.</i></span></span></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+/* ---------- math ---------- */
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),P=(t,a,b)=>clamp((t-a)/(b-a)),lerp=(a,b,k)=>a+(b-a)*k;
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;const sx=t=>((ax*t+bx)*t+cx)*t,sy=t=>((ay*t+by)*t+cy)*t;
+  return x=>{if(x<=0)return 0;if(x>=1)return 1;let lo=0,hi=1,t=x;for(let i=0;i<40;i++){const v=sx(t);if(Math.abs(v-x)<1e-7)break;if(v<x)lo=t;else hi=t;t=(lo+hi)/2}return sy(t)}}
+const eOut=bez(.22,1,.36,1),eBack=bez(.34,1.56,.64,1),eIO=bez(.65,0,.35,1),eX=bez(.87,0,.13,1),eIn=bez(.55,0,1,.45),eOut2=bez(.16,1,.3,1);
+const $=s=>document.querySelector(s);
+const hash=n=>{let x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+const show=(el,on)=>{el.style.display=on?'':'none'};
+const D2R=Math.PI/180;
+
+/* ---------- the edit: the old film, re-timed ---------- */
+// plane space: the 1280x720 source is a 16x9 plane, 80 px per unit
+const U=px=>(px-640)/80, V=py=>(360-py)/80;
+const TOTAL=5.0;
+// flat shots: [t0,t1, src0,src1]  (source seconds, easing on the source clock)
+const FLAT=[
+  {a:0.25,b:1.00,s0:0.95,s1:3.50,ease:t=>t},                 // slab, cube, K13 at 3.4x
+  {a:1.00,b:1.40,s0:3.50,s1:5.55,ease:eIn},                  // the carve at full tilt
+  {a:1.40,b:1.75,s0:5.55,s1:6.125,ease:t=>1-Math.pow(1-t,1.8)},// brake into slow motion
+  {a:3.00,b:3.50,s0:6.125,s1:8.10,ease:eOut},                // time resumes
+  {a:3.50,b:4.30,s0:8.10,s1:9.99,ease:t=>t}                  // the salute
+];
+// freezes: bullet time on real frames, lifted into depth
+const FRZ=[
+  {a:1.75,b:3.00,n:'148',src:6.125,piv:[U(636),V(170)]}
+];
+function srcAt(t){for(const s of FLAT)if(t>=s.a&&t<s.b)return s.s0+(s.s1-s.s0)*s.ease(P(t,s.a,s.b));
+  for(const f of FRZ)if(t>=f.a&&t<f.b)return f.src;return t<0.25?0.95:9.99}
+function rateAt(t){const h=1/240;return (srcAt(t+h)-srcAt(t-h))/(2*h)}
+const EVTS=[{t:0.05,k:'lens'},{t:0.25,k:'open'},{t:1.0,k:'carve'},{t:1.4,k:'brake'},{t:1.75,k:'freeze'},{t:3.0,k:'release'},{t:3.5,k:'salute'},{t:3.85,k:'glint'},{t:4.05,k:'ready'},{t:4.15,k:'lightsUp'},{t:4.3,k:'build'},{t:5,k:'end'}];
+// recorded from https://k13projects.com on 2026-09-30: every request the first screen makes, with its size
+const FILES=[{name:'index.html',kb:62.7},{name:'lenis.min.js',kb:3.8},{name:'fonts.css',kb:24.4},{name:'inter.woff2',kb:48.4},
+  {name:'jetbrains-mono.woff2',kb:31.3},{name:'fraunces.woff2 (1 of 2)',kb:67.4},{name:'fraunces.woff2 (2 of 2)',kb:81.7},{name:'kazim.jpg',kb:166.6}];
+const TOTKB=FILES.reduce((a,f)=>a+f.kb,0);
+{const ends=[0.6,0.75,0.95,1.45,1.8,2.45,3.1,4.0];let s0=0.4;FILES.forEach((f,i)=>{f.a=s0;f.b=ends[i];s0=ends[i]-0.05})}
+const BANDS=[[0,0,1920,86,4.26],[400,200,420,40,4.34],[400,250,640,270,4.4],[400,528,620,140,4.5],[400,690,330,64,4.58],[400,770,560,34,4.64],[1090,350,440,290,4.54]]
+  .map(([x,y,w,h,t])=>{const el=document.createElement('div');el.className='band';Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',backgroundPosition:`${-x}px ${-y}px`});document.querySelector('#site').appendChild(el);return {el,t}});
+{const f=document.createElement('div');f.id='fullsite';f.className='band';Object.assign(f.style,{left:0,top:0,width:'1920px',height:'1080px'});document.querySelector('#site').appendChild(f)}
+window.TL={TOTAL,EVTS,BPM:120,FLAT,FRZ,FILES};
+
+/* ---------- three ---------- */
+const R=new THREE.WebGLRenderer({canvas:$('#gl'),antialias:true,preserveDrawingBuffer:true});
+R.setPixelRatio(1);R.setSize(1920,1080,false);R.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0c0907);
+const FOV=30,DIST=4.5/Math.tan(FOV/2*D2R);
+const cam=new THREE.PerspectiveCamera(FOV,16/9,0.05,200);
+const loader=new THREE.TextureLoader();
+const tex=async u=>{const t=await loader.loadAsync(u);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.LinearMipmapLinearFilter;t.anisotropy=8;return t};
+
+// grade shared by every layer: gentle contrast, warm lift, the site's orange held
+const GRADE=`vec3 grade(vec3 c){c=pow(c,vec3(1.06));c=mix(vec3(dot(c,vec3(.299,.587,.114))),c,1.06);return c*vec3(1.02,1.0,.97)+vec3(.006,.003,0.);}`;
+
+// flat plate: two source frames, blended (a cheap optical slow motion)
+const flatMat=new THREE.ShaderMaterial({uniforms:{A:{value:null},B:{value:null},k:{value:0},op:{value:1}},transparent:false,
+  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`uniform sampler2D A,B;uniform float k;varying vec2 vUv;${GRADE}
+    void main(){vec2 vUv=clamp((vUv-.5)*1.5+.5,0.,1.);vec3 a=texture2D(A,vUv).rgb,b=texture2D(B,vUv).rgb;vec3 c=mix(a,b,k);gl_FragColor=vec4(grade(c),1.);
+    #include <colorspace_fragment>
+    }`});
+flatMat.uniforms.A.value=new THREE.Texture();flatMat.uniforms.B.value=new THREE.Texture();
+const flat=new THREE.Mesh(new THREE.PlaneGeometry(24,13.5),flatMat);scene.add(flat);
+
+// depth layers: each vertex slides along its own camera ray, so at the start pose the frame is pixel-identical
+function depthMat(map,dmap,amp,alpha){return new THREE.ShaderMaterial({transparent:alpha,depthWrite:!alpha,depthTest:!alpha,
+  uniforms:{map:{value:map},dmap:{value:dmap},amp:{value:0},piv:{value:.55},cl:{value:.72},cam0:{value:new THREE.Vector3(0,0,DIST)},ext:{value:1}},
+  vertexShader:`uniform sampler2D dmap;uniform float amp,piv,ext,cl;uniform vec3 cam0;varying vec2 vUv;
+    void main(){vec2 uv=clamp((uv-.5)*ext+.5,0.,1.);vUv=uv;float d=min(texture2D(dmap,uv).r,cl);float z=amp*(d-piv);
+      vec3 p=vec3(position.xy*ext,0.);vec3 q=cam0+(p-cam0)*((cam0.z-z)/cam0.z);gl_Position=projectionMatrix*modelViewMatrix*vec4(q,1.);}`,
+  fragmentShader:`uniform sampler2D map;varying vec2 vUv;${GRADE}
+    void main(){vec4 c=texture2D(map,vUv);if(${alpha?'c.a<.02':'false'})discard;gl_FragColor=vec4(grade(c.rgb),${alpha?'c.a':'1.'});
+    #include <colorspace_fragment>
+    }`})}
+const frz={};
+async function buildFreeze(n){const [bg,dbg,fg,dfg]=await Promise.all([tex(`layers/bg_${n}.jpg`),loader.loadAsync(`layers/dbg_${n}.png`),tex(`layers/fg_${n}.png`),loader.loadAsync(`layers/dfg_${n}.png`)]);
+  const g=new THREE.Group();
+  const M={'085':.65,'148':.716}[n];const bm=depthMat(bg,dbg,0,false);bm.uniforms.ext.value=1.35;bm.uniforms.piv.value=M;bm.uniforms.cl.value=.74;const b=new THREE.Mesh(new THREE.PlaneGeometry(16,9,320,180),bm);
+  const fm=depthMat(fg,dfg,0,true);fm.uniforms.piv.value=M;fm.uniforms.cl.value=M+.06;const f=new THREE.Mesh(new THREE.PlaneGeometry(16,9,640,360),fm);f.renderOrder=2;
+  g.add(b,f);g.visible=false;scene.add(g);frz[n]={g,bm,fm}}
+
+// frozen sparks: hung in the air around the head for the bullet time
+function glowTex(){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const r=g.createRadialGradient(32,32,0,32,32,32);
+  r.addColorStop(0,'rgba(255,245,225,1)');r.addColorStop(.25,'rgba(255,190,110,.9)');r.addColorStop(.6,'rgba(234,94,20,.25)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.fillRect(0,0,64,64);
+  const t=new THREE.CanvasTexture(c);return t}
+const GT=glowTex();
+function sparkField(N,cx,cy,spread,seed){const g=new THREE.BufferGeometry(),p=new Float32Array(N*3),v=new Float32Array(N*3),s=new Float32Array(N);
+  for(let i=0;i<N;i++){const a=hash(i+seed)*Math.PI*2,e=(hash(i*1.7+seed)-.35)*Math.PI*.9,r=spread*(.25+Math.pow(hash(i*2.3+seed),.7));
+    p[i*3]=cx+Math.cos(a)*Math.cos(e)*r;p[i*3+1]=cy+Math.sin(e)*r*.8+.2;p[i*3+2]=Math.sin(a)*Math.cos(e)*r*1.4+.3;
+    v[i*3]=Math.cos(a)*.6;v[i*3+1]=Math.sin(e)*.6+.3;v[i*3+2]=Math.sin(a)*.6;s[i]=.35+hash(i*5.1+seed)*1.2}
+  g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('p0',new THREE.BufferAttribute(p.slice(),3));g.setAttribute('vel',new THREE.BufferAttribute(v,3));g.setAttribute('sz',new THREE.BufferAttribute(s,1));
+  const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{map:{value:GT},op:{value:0},dt:{value:0},scale:{value:1}},
+    vertexShader:`attribute vec3 p0,vel;attribute float sz;uniform float dt,scale;varying float vA;void main(){vec3 q=p0+vel*dt;vec4 mv=modelViewMatrix*vec4(q,1.);gl_PointSize=sz*scale*140./-mv.z;vA=sz;gl_Position=projectionMatrix*mv;}`,
+    fragmentShader:`uniform sampler2D map;uniform float op;varying float vA;void main(){vec4 c=texture2D(map,gl_PointCoord);gl_FragColor=vec4(c.rgb*1.6,c.a*op);}`});
+  const pts=new THREE.Points(g,m);pts.renderOrder=3;pts.visible=false;scene.add(pts);return {pts,m}}
+const SP_B=sparkField(420,U(636),V(150),2.4,11), SP_A=sparkField(90,U(322),V(240),3.2,77);
+
+// the pedestal face: a clean clay plate with the real lockup chiseled into it
+const PF={x0:441,x1:840,y0:516,y1:684};
+let pedMesh,pedMat;
+async function buildPed(){const img=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src='layers/pedface.png'});
+  const W=img.width,H=img.height,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.drawImage(img,0,0);
+  // lockup geometry: K ink + 13 orange (Fraunces), mono tag, centred as the old lettering was
+  const FS=Math.round(H*.80),base=Math.round(H*.68);g.font=`600 ${FS}px Fraunces`;const kw=g.measureText('K').width,nw=g.measureText('13').width;const x0=(W-(kw+nw))/2;
+  const tag='SOFTWARE STUDIO',TS=Math.round(H*.095),sp=TS*.34;g.font=`500 ${TS}px "JetBrains Mono"`;let tw=0;for(const ch of tag)tw+=g.measureText(ch).width+sp;tw-=sp;
+  const drawText=(ctx,dx,dy,fill)=>{ctx.fillStyle=fill||'#000';ctx.font=`600 ${FS}px Fraunces`;ctx.fillText('K',x0+dx,base+dy);if(fill===undefined){}ctx.fillText('13',x0+kw+dx,base+dy);
+    ctx.font=`500 ${TS}px "JetBrains Mono"`;let x=(W-tw)/2+dx;for(const ch of tag){ctx.fillText(ch,x,base+TS*2.45+dy);x+=ctx.measureText(ch).width+sp}};
+  // lit lower lip of the cut
+  g.globalAlpha=.55;drawText(g,3,4,'#fff4e2');g.globalAlpha=1;
+  // colour fill, as carved and painted
+  g.font=`600 ${FS}px Fraunces`;g.fillStyle='#16182a';g.fillText('K',x0,base);g.fillStyle='#b8470f';g.fillText('13',x0+kw,base);
+  g.font=`500 ${TS}px "JetBrains Mono"`;g.fillStyle='#262a3c';let x=(W-tw)/2;for(const ch of tag){g.fillText(ch,x,base+TS*2.45);x+=g.measureText(ch).width+sp}
+  // inner shadow: the upper-left wall of every cut
+  const s=document.createElement('canvas');s.width=W;s.height=H;const sg=s.getContext('2d');sg.fillStyle='#000';sg.fillRect(0,0,W,H);
+  sg.globalCompositeOperation='destination-out';drawText(sg,16,18);sg.globalCompositeOperation='destination-in';drawText(sg,0,0);
+  g.filter='blur(7px)';g.globalAlpha=.78;g.drawImage(s,0,0);g.filter='none';g.globalAlpha=1;
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;
+  pedMat=new THREE.ShaderMaterial({transparent:true,depthTest:false,uniforms:{map:{value:t},rev:{value:0}},
+    vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`uniform sampler2D map;uniform float rev;varying vec2 vUv;${GRADE}void main(){vec4 c=texture2D(map,vUv);
+      float e=vUv.x-rev;float a=1.-smoothstep(-.012,.004,e);vec3 col=grade(c.rgb);
+      float glow=exp(-pow(e/.012,2.))*step(.001,rev)*step(rev,.999);col+=vec3(1.,.62,.28)*glow*1.4;
+      gl_FragColor=vec4(col,max(a,glow*.9));
+      #include <colorspace_fragment>
+      }`});
+  const w=(PF.x1-PF.x0)/80,h=(PF.y1-PF.y0)/80;pedMesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h),pedMat);
+  pedMesh.position.set(U((PF.x0+PF.x1)/2),V((PF.y0+PF.y1)/2),.002);pedMesh.renderOrder=5;flat.add(pedMesh)}
+// chisel sparks at the cutting edge
+const SP_C=(()=>{const N=160,g=new THREE.BufferGeometry(),p=new Float32Array(N*3);g.setAttribute('position',new THREE.BufferAttribute(p,3));
+  const m=new THREE.PointsMaterial({map:GT,size:.2,transparent:true,depthTest:false,blending:THREE.AdditiveBlending,depthWrite:false});const pts=new THREE.Points(g,m);pts.renderOrder=6;flat.add(pts);return {pts,p,g,N}})();
+
+/* ---------- frames: sharpened source, loaded on demand ---------- */
+const cache=new Map();
+function frameURL(i){i=clamp(i,0,239);return `up/f_${String(i+1).padStart(3,'0')}.jpg`}
+function img(i){i=clamp(i,0,239);if(!cache.has(i))cache.set(i,new Promise(r=>{const m=new Image();m.onload=()=>m.decode().then(()=>r(m),()=>r(m));m.onerror=()=>{const s=new Image();s.onload=()=>r(s);s.src=`src/f_${String(i+1).padStart(3,'0')}.png`};m.src=frameURL(i)}));
+  if(cache.size>24){for(const k of cache.keys()){if(Math.abs(k-i)>10){cache.delete(k)}}}return cache.get(i)}
+let curA=-1,curB=-1;
+async function setFrames(st){const f=st*24-.5,a=Math.floor(clamp(f,0,239)),b=Math.min(239,a+1),k=clamp(f-a,0,1);
+  const mk=im=>{const t=new THREE.Texture(im);t.colorSpace=THREE.SRGBColorSpace;t.generateMipmaps=false;t.minFilter=THREE.LinearFilter;t.needsUpdate=true;return t};
+  if(a!==curA||b!==curB){const [ia,ib]=await Promise.all([img(a),img(b)]);const oa=flatMat.uniforms.A.value,ob=flatMat.uniforms.B.value;
+    flatMat.uniforms.A.value=mk(ia);flatMat.uniforms.B.value=mk(ib);oa.dispose();ob.dispose();curA=a;curB=b}
+  flatMat.uniforms.k.value=k}
+
+/* ---------- camera language ---------- */
+// flat shots: a virtual camera over the plate. zoom, centre (plane units), roll
+function flatCam(t){let z=1,cx=0,cy=0,roll=0;
+  if(t<1.0){const k=eIO(P(t,.25,1.0));z=lerp(1.0,1.2,k);cx=lerp(0,U(322)*.35,k);cy=lerp(0,V(240)*.3,k);roll=lerp(-1.5,0,k)}
+  else if(t<1.4){const k=eIn(P(t,1.0,1.38));z=lerp(1.08,1.6,k);cx=lerp(U(322)*.3,U(640)*.6,k);cy=lerp(V(230)*.3,V(150)*.7,k);roll=lerp(.8,-1.5,k);if(t>=1.25){z=lerp(1.5,1.3,eOut(P(t,1.25,1.4)))}}
+  else if(t<1.75){const k=eOut(P(t,1.4,1.75));z=lerp(1.3,1.0,k);cx=lerp(U(640)*.5,0,k);cy=lerp(V(150)*.6,0,k)}
+  else if(t<3.5){const k=eOut2(P(t,3.0,3.5));z=lerp(2.3,1.0,k);cx=lerp(U(636)*.92,0,k);cy=lerp(V(165)*.92,0,k);roll=lerp(2,0,k)}
+  else{const k=eIn(P(t,3.5,4.2)),c=eIO(P(t,3.5,3.85));z=lerp(1.0,3.4,k);cx=lerp(0,U(626),c);cy=lerp(0,V(128),c);roll=lerp(0,-3,k)}
+  // micro handheld on the real footage, calm at holds
+  const h=(a)=>Math.sin(t*2.3+a)*.5+Math.sin(t*4.1+a*2)*.3;cx+=h(1)*.02;cy+=h(2)*.02;
+  cam.fov=FOV;cam.position.set(cx,cy,DIST/z);cam.up.set(Math.sin(roll*D2R),Math.cos(roll*D2R),0);cam.lookAt(cx,cy,0);cam.updateProjectionMatrix()}
+// freezes: an arc around the pivot, depth rising, a push in and out
+function frzCam(t,f,idx){const u=P(t,f.a,f.b);let az,el,z,lift;
+  if(false){az=-14*eIO(u);el=-4*eIO(u);z=lerp(1.0,1.22,eIO(u));lift=eOut(P(t,f.a,f.a+.3))}
+  else{ // the hero: swing right and in to the face, hang, swing on and out
+    az=lerp(0,-17,eIO(P(u,0,.6)))+lerp(0,30,eIO(P(u,.52,1)));el=lerp(0,3,eIO(P(u,0,.5)))-5*eIO(P(u,.55,1));
+    z=lerp(1.0,2.1,eIO(P(u,0,.5)))*lerp(1,.62,eIO(P(u,.6,1)));lift=eOut(P(t,f.a,f.a+.45))}
+  const [px,py]=f.piv;const Rr=DIST/z;
+  // the pivot glides from the frame centre to the subject as the camera commits
+  const g=eIO(P(u,0,.4));const tx=lerp(0,px,g),ty=lerp(0,py,g);
+  cam.position.set(tx+Rr*Math.sin(az*D2R)*Math.cos(el*D2R),ty+Rr*Math.sin(el*D2R),Rr*Math.cos(az*D2R)*Math.cos(el*D2R));
+  cam.fov=FOV;cam.up.set(0,1,0);cam.lookAt(tx,ty,0);cam.updateProjectionMatrix();return lift}
+
+/* ---------- one frame ---------- */
+let ready=false;
+async function draw(t){
+  const st=srcAt(t);let inF=-1;FRZ.forEach((f,i)=>{if(t>=f.a&&t<f.b)inF=i});
+  flat.visible=inF<0;Object.values(frz).forEach(o=>o.g.visible=false);SP_A.pts.visible=SP_B.pts.visible=false;
+  if(inF<0){await setFrames(st);flatCam(t)}
+  else{const f=FRZ[inF],o=frz[f.n];o.g.visible=true;const lift=frzCam(t,f,inF);
+    const amp=6.5*lift;o.bm.uniforms.amp.value=amp;o.fm.uniforms.amp.value=amp;
+    const SP=SP_B;SP.pts.visible=true;SP.m.uniforms.op.value=P(t,f.a,f.a+.25)*(1-P(t,f.b-.08,f.b));SP.m.uniforms.dt.value=(t-f.a)*.035;}
+  // pedestal: the real lockup is chiseled in during the salute
+  if(pedMat){const rv=eIO(P(t,10.9,11.55));pedMat.uniforms.rev.value=1;pedMesh.visible=t>=3.0;
+    const ex=U(PF.x0)+(U(PF.x1)-U(PF.x0))*rv;const act=false;
+    for(let i=0;i<SP_C.N;i++){const k=i*3,age=((i*.0071+t*1.3)%.35);const on=act&&rv<.999;
+      SP_C.p[k]=on?ex+(hash(i)-.3)*.25+age*(hash(i*3)*2-.6)*2.2:999;SP_C.p[k+1]=on?V(PF.y1)+hash(i*7)*((PF.y1-PF.y0)/80)+age*1.6-age*age*9:999;SP_C.p[k+2]=.01}
+    SP_C.g.attributes.position.needsUpdate=true;SP_C.pts.material.opacity=1-P(t,11.5,11.7)}
+  R.render(scene,cam);
+
+  // overlays: lights down, lens, slit
+  show($('#black'),t<0.25);const op=eOut(P(t,0.25,0.55));$('#hT').style.transform=`translateY(${-op*545}px)`;$('#hB').style.transform=`translateY(${op*545}px)`;show($('#hT'),t<0.55);show($('#hB'),t<0.55);
+  const lensK=eBack(P(t,0.02,0.15));$('#lens').style.opacity=(t<0.25?1:1-P(t,0.25,0.35));
+  $('#lens').style.transform=`scale(${lensK*(1+0.15*Math.sin(t*20))})`;show($('#lens'),t<0.35&&lensK>0);
+  $('#slit').style.transform=`scaleX(${eX(P(t,0.1,0.25))})`;$('#slit').style.opacity=t<0.25?1:1-P(t,0.25,0.35);show($('#slit'),t>0.1&&t<0.35);
+  // letterbox during bullet time
+  const lb=eOut(P(t,1.75,1.95))*(1-eOut(P(t,2.9,3.1)));$('#barT').style.height=lb*120+'px';$('#barB').style.height=lb*120+'px';
+  // flashes on the cuts out of frozen time
+  let fl=0;for(const c of [1.75,3.0])fl=Math.max(fl,Math.exp(-Math.max(0,t-c)*14)*(t>=c?1:0));$('#flash').style.opacity=fl*.55;show($('#flash'),fl>.01);
+  // speed readout: the edit tells you what time is doing
+  const r=inF>=0?0.03*(1+Math.sin(t*3)*.2):rateAt(t);const so2=P(t,1.75,1.85)*(1-P(t,2.9,3.0));$('#speed').style.opacity=so2;$('#tc').style.opacity=so2;show($('#speed'),so2>0);show($('#tc'),so2>0);
+  $('#speed').innerHTML=inF>=0?`TIME <b>${r.toFixed(2)}×</b>  ·  FROZEN`:`SPEED <b>${r.toFixed(1)}×</b>`;
+  const y=Math.max(lb*120,0)+24;$('#speed').style.top=y+'px';$('#tc').style.top=y+'px';
+  const sf=Math.floor(st*24);$('#tc').textContent=`SRC 00:${String(Math.floor(st)).padStart(2,'0')}:${String(sf%24).padStart(2,'0')}`;
+  // the glint in the glasses, then lights up
+  const gk=P(t,3.8,4.2),gx=960+(U(634)-0)*0,gy=0;const fs=eIn(gk);
+  $('#flare').style.left='960px';$('#flare').style.top='540px';$('#flare').style.opacity=clamp(gk*2.2);$('#flare').style.transform=`scale(${.15+Math.pow(gk,1.3)*2.4})`;show($('#flare'),gk>0);
+  $('#flareH').style.left='960px';$('#flareH').style.top='540px';$('#flareH').style.opacity=clamp(Math.sin(Math.PI*P(t,3.75,4.25))*1.2);$('#flareH').style.transform=`scaleX(${.2+eOut(gk)})`;show($('#flareH'),t>3.75&&t<4.25);
+  const up=eIO(P(t,4.05,4.28));$('#paper').style.opacity=up;show($('#paper'),up>0);
+  show($('#lock'),false);show($('#hero'),false);show($('#eyebrow'),false);
+  // the loader: the live site's real requests, counted by their real sizes
+  let got=0,cur=FILES[0],pc=0;for(const f of FILES){const k=P(t,f.a,f.b);got+=f.kb*k;if(k>0&&k<1)cur=f;if(k>=1)cur=f}
+  pc=Math.round(got/TOTKB*100);const lo=P(t,0.35,0.55)*(1-P(t,4.1,4.25));$('#load').style.opacity=lo;show($('#load'),lo>0);
+  $('#lfill').style.width=(got/TOTKB*100)+'%';
+  $('#lR').innerHTML=pc>=100?`${TOTKB.toFixed(0)} KB  ·  <b>READY</b>`:`${cur.name}  ·  ${cur.kb.toFixed(1)} KB  ·  <b>${pc}%</b>`;
+  $('#load').style.transform=`translateY(${lb*0}px)`;
+  // the page itself, piece by piece, in the order its files arrive
+  show($('#site'),t>4.2);BANDS.forEach((b,i)=>{const k=eOut(P(t,b.t,b.t+.32));b.el.style.opacity=k;b.el.style.transform=`translateY(${(1-k)*22}px)`});
+  $('#fullsite').style.opacity=P(t,4.85,5.0);
+}
+window.renderAsync=async t=>{await draw(t);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))};
+window.render=t=>{draw(t)};
+window.ready=(async()=>{await document.fonts.load('600 100px Fraunces');await document.fonts.load('500 20px "JetBrains Mono"');await document.fonts.ready;
+  await Promise.all([buildFreeze('148'),buildPed(),new Promise(r=>{const i=new Image();i.onload=r;i.src='site_top.png'})]);await draw(0);ready=true;return TOTAL})();
+</script>
+</body></html>

@@ -108,6 +108,17 @@ has actually verified yet.
   Space Grotesk (old README canon), and the entire quarantined mark family (purged, no restore).
   The `brand/` folder is gone; `README.md` was rewritten the same day to match this canon.
 
+- **2026-09-30 · The opening is the page itself, never a video.** After four film directions
+  (orbit, bullet time, clay hero, 3 s concepts) Kazim chose a live loader: a skeleton measured from
+  the real header and hero masks the page, an orange pen draws the box outlines (logo first), every
+  letter is swept in and settles on the real letter's spot, and the mask lifts so nothing moves
+  afterwards. Rules that came with it: **no sound** on a loading screen, **super fast** (about a
+  second), **logo first**, once per session, skipped for reduced motion, deep links and any input.
+  Films belong in reels and case pieces, not in front of the site. Sources of the rejected films:
+  `docs/prototypes/INTRO_FILMS.md`.
+- **2026-10-01 · `docs/` is never deployed** (`.vercelignore`). Until that day every handoff and
+  report under `docs/` was publicly reachable on k13projects.com.
+
 ## Open decisions (do not decide these yourself)
 1. **`pricing/tiger/`** — a named client's confidential pricing, untracked with no git backup.
    Verified not leaked (404 on production, never pushed). Whether it belongs in this repo is

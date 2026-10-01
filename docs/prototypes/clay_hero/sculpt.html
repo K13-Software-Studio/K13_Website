@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K13 Sculpt to Enter</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F5FA;--ink:#141D35;--muted:#515C78;--or:#B94612;--or2:#EA5E14;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0c0907;overflow:hidden;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
+#room{position:fixed;inset:0;cursor:none;touch-action:none}
+#room canvas{position:absolute;inset:0;width:100%;height:100%}
+#hint{position:fixed;left:50%;bottom:9vh;transform:translateX(-50%);text-align:center;color:rgba(243,235,222,.9);pointer-events:none;transition:opacity .6s var(--ease)}
+#hint b{display:block;font-family:Fraunces,serif;font-weight:600;font-size:clamp(24px,3vw,38px);letter-spacing:-.02em}
+#hint span{display:block;margin-top:8px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,235,222,.6)}
+#bar{position:fixed;left:50%;bottom:5vh;width:min(320px,60vw);height:3px;transform:translateX(-50%);background:rgba(243,235,222,.15);border-radius:2px;overflow:hidden}
+#bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#B94612,#EA5E14,#FFB27A);box-shadow:0 0 12px rgba(234,94,20,.8)}
+#skip{position:fixed;right:24px;top:20px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,235,222,.75);background:none;border:1px solid rgba(243,235,222,.25);border-radius:999px;padding:10px 16px;cursor:pointer}
+#skip:hover{color:#fff;border-color:rgba(243,235,222,.6)}
+#chisel{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;pointer-events:none;border-radius:50%;border:1.5px solid rgba(255,178,122,.9);box-shadow:0 0 18px rgba(234,94,20,.6),inset 0 0 10px rgba(234,94,20,.4);transition:transform .15s var(--ease)}
+#paper{position:fixed;inset:0;background:var(--paper);clip-path:circle(0 at 50% 50%);display:grid;place-items:center;pointer-events:none}
+#paper .in{text-align:left;width:min(1100px,88vw)}
+.lock{font-family:Fraunces,serif;font-weight:600;font-size:28px;color:var(--ink);letter-spacing:-.02em}.lock b{color:var(--or);font-weight:600}
+#paper h1{margin-top:24px;font-family:Fraunces,serif;font-weight:600;font-size:clamp(44px,7vw,100px);line-height:1.02;letter-spacing:-.03em;color:var(--ink)}
+#paper h1 i{color:var(--or);font-weight:500}
+#again{margin-top:28px;pointer-events:auto;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:none;border:0;cursor:pointer;text-decoration:underline}
+</style></head><body>
+<div id="room" role="img" aria-label="A block of clay. Sculpt it to reveal Kazim in clay, in orange glasses, on a K13 pedestal."><canvas id="c"></canvas></div>
+<div id="hint"><b>Sculpt to enter</b><span>Drag across the clay</span></div>
+<div id="bar"><i></i></div>
+<button id="skip" type="button">Skip</button>
+<div id="chisel"></div>
+<div id="paper"><div class="in"><span class="lock">K<b>13</b></span><h1>A studio for software that feels <i>obvious.</i></h1><button id="again" type="button">Sculpt again</button></div></div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),lerp=(a,b,k)=>a+(b-a)*k;
+const eOut=t=>1-Math.pow(1-t,3),eIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cv=document.getElementById('c'),g=cv.getContext('2d');
+const img=s=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=s});
+let W,H,DPR,fit; // fit: source 1280x720 -> screen (cover)
+let frame,block,mask,mg,crumbs=[],sparks=[],cleared=0,done=false,doneT=0,lastInput=performance.now(),started=false;
+// block bounds in source px (the figure and its pedestal, with room to spare)
+const BX0=420,BX1=862,BY0=-10,BY1=716,TOP=42; // TOP: depth of the block's lit top face
+async function build(){
+  await document.fonts.load('600 100px Fraunces');await document.fonts.load('500 20px "JetBrains Mono"');
+  const [f,pf,clay]=await Promise.all([img('assets/frame.jpg'),img('assets/pedface.png'),img('assets/clay.jpg')]);
+  // the finished statue, with the real lockup on its pedestal
+  frame=document.createElement('canvas');frame.width=f.width;frame.height=f.height;const fg=frame.getContext('2d');fg.drawImage(f,0,0);
+  const s=f.width/1280,p=lockupPlate(pf);fg.drawImage(p,441*s,516*s,399*s,168*s);
+  // the block: tiled clay with a lit top and a shaded side, so it reads as a block, not a sticker
+  const bw=(BX1-BX0)*s,bh=(BY1-BY0)*s;block=document.createElement('canvas');block.width=bw;block.height=bh;const bg=block.getContext('2d');
+  const tile=document.createElement('canvas');tile.width=clay.width;tile.height=clay.height*2;const tg=tile.getContext('2d');tg.drawImage(clay,0,0);tg.save();tg.scale(1,-1);tg.drawImage(clay,0,-clay.height*2);tg.restore();
+  bg.fillStyle=bg.createPattern(tile,'repeat');bg.fillRect(0,0,bw,bh);
+  let gr=bg.createLinearGradient(0,0,bw,0);gr.addColorStop(0,'rgba(0,0,0,.18)');gr.addColorStop(.12,'rgba(0,0,0,0)');gr.addColorStop(.82,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.42)');bg.fillStyle=gr;bg.fillRect(0,0,bw,bh);
+  gr=bg.createLinearGradient(0,0,0,bh);gr.addColorStop(0,'rgba(255,240,215,.38)');gr.addColorStop(TOP*s/bh,'rgba(255,240,215,.16)');gr.addColorStop(TOP*s/bh+.004,'rgba(0,0,0,.08)');gr.addColorStop(1,'rgba(0,0,0,.28)');bg.fillStyle=gr;bg.fillRect(0,0,bw,bh);
+  // K13 pressed into the block's face, like the old film's cube
+  bg.globalAlpha=.55;bg.font=`600 ${bh*.12}px Fraunces`;bg.textAlign='center';bg.fillStyle='#3a2f24';bg.fillText('K',bw/2-bg.measureText('13').width/2,bh*.52);
+  bg.fillStyle='#7a3714';bg.fillText('13',bw/2+bg.measureText('K').width/2,bh*.52);bg.globalAlpha=1;
+  // carve mask (1 = clay still there), low-res for counting
+  mask=document.createElement('canvas');mask.width=bw;mask.height=bh;mg=mask.getContext('2d');mg.fillStyle='#000';mg.fillRect(0,0,bw,bh);
+  resize();requestAnimationFrame(loop);
+}
+function lockupPlate(pf){const p=document.createElement('canvas');p.width=pf.width;p.height=pf.height;const pg=p.getContext('2d');pg.drawImage(pf,0,0);
+  const PW=p.width,PH=p.height,FS=Math.round(PH*.80),base=Math.round(PH*.68);pg.font=`600 ${FS}px Fraunces`;const kw=pg.measureText('K').width,nw=pg.measureText('13').width,kx=(PW-(kw+nw))/2;
+  const tag='SOFTWARE STUDIO',TS=Math.round(PH*.095),sp=TS*.34;pg.font=`500 ${TS}px "JetBrains Mono"`;let tw=0;for(const ch of tag)tw+=pg.measureText(ch).width+sp;tw-=sp;
+  const txt=(c,dx,dy,f)=>{c.fillStyle=f;c.font=`600 ${FS}px Fraunces`;c.fillText('K',kx+dx,base+dy);c.fillText('13',kx+kw+dx,base+dy);c.font=`500 ${TS}px "JetBrains Mono"`;let x=(PW-tw)/2+dx;for(const ch of tag){c.fillText(ch,x,base+TS*2.45+dy);x+=c.measureText(ch).width+sp}};
+  pg.globalAlpha=.55;txt(pg,3,4,'#fff4e2');pg.globalAlpha=1;pg.font=`600 ${FS}px Fraunces`;pg.fillStyle='#16182a';pg.fillText('K',kx,base);pg.fillStyle='#b8470f';pg.fillText('13',kx+kw,base);
+  pg.font=`500 ${TS}px "JetBrains Mono"`;pg.fillStyle='#262a3c';let x=(PW-tw)/2;for(const ch of tag){pg.fillText(ch,x,base+TS*2.45);x+=pg.measureText(ch).width+sp}
+  const sh=document.createElement('canvas');sh.width=PW;sh.height=PH;const sg=sh.getContext('2d');sg.fillStyle='#000';sg.fillRect(0,0,PW,PH);sg.globalCompositeOperation='destination-out';txt(sg,16,18,'#000');sg.globalCompositeOperation='destination-in';txt(sg,0,0,'#000');
+  pg.filter='blur(7px)';pg.globalAlpha=.78;pg.drawImage(sh,0,0);pg.filter='none';pg.globalAlpha=1;return p}
+function resize(){DPR=Math.min(2,devicePixelRatio);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;g.setTransform(DPR,0,0,DPR,0,0);
+  // frame the block: on a phone, zoom so the statue fills the height
+  if(W<H){const sc=Math.min(W/560,H/780);fit={sc,ox:W/2-641*sc,oy:(H-720*sc)/2}}
+  else{const sc=Math.max(W/1280,H/720);fit={sc,ox:(W-1280*sc)/2,oy:(H-720*sc)/2}}}
+addEventListener('resize',resize);
+const toSrc=(x,y)=>[(x-fit.ox)/fit.sc,(y-fit.oy)/fit.sc];
+// carving
+let down=false,px=null,py=null;const room=document.getElementById('room'),chisel=document.getElementById('chisel');
+function carve(x,y,r){const [sx,sy]=toSrc(x,y);const s=frame.width/1280;const bx=(sx-BX0)*s,by=(sy-BY0)*s;if(bx<-80||by<-80||bx>mask.width+80||by>mask.height+80)return;
+  mg.globalCompositeOperation='destination-out';const rr=r*s;
+  for(let k=0;k<5;k++){const a=Math.random()*6.283,d=Math.random()*rr*.5;mg.beginPath();mg.arc(bx+Math.cos(a)*d,by+Math.sin(a)*d,rr*(.45+Math.random()*.4),0,6.283);mg.fill()}
+  for(let k=0;k<3;k++)crumbs.push({x,y,vx:(Math.random()-.5)*3,vy:-Math.random()*2.5,r:2+Math.random()*4,life:1});
+  if(Math.random()<.35)for(let k=0;k<4;k++)sparks.push({x,y,vx:(Math.random()-.5)*7,vy:-Math.random()*6-1,life:1});}
+function stroke(x,y){if(px===null){px=x;py=y}const d=Math.hypot(x-px,y-py),n=Math.max(1,Math.ceil(d/8));for(let i=1;i<=n;i++)carve(lerp(px,x,i/n),lerp(py,y,i/n),34);px=x;py=y}
+room.addEventListener('pointerdown',e=>{down=true;px=null;started=true;lastInput=performance.now();stroke(e.clientX,e.clientY);room.setPointerCapture(e.pointerId)});
+room.addEventListener('pointermove',e=>{chisel.style.left=e.clientX+'px';chisel.style.top=e.clientY+'px';lastInput=performance.now();
+  // a mouse carves on hover too: sculpting should not need a held button
+  if(down||e.pointerType==='mouse'){started=true;stroke(e.clientX,e.clientY)}});
+room.addEventListener('pointerup',()=>{down=false;px=null});room.addEventListener('pointerleave',()=>{px=null});
+function measure(){const sm=document.createElement('canvas');sm.width=60;sm.height=90;const c=sm.getContext('2d');c.drawImage(mask,0,0,60,90);const d=c.getImageData(0,0,60,90).data;let a=0;for(let i=3;i<d.length;i+=4)a+=d[i];return 1-a/(255*60*90)}
+// a ghost chisel shows the way if nobody moves
+let ghostT=0;
+function finish(){if(done)return;done=true;doneT=performance.now()/1000;document.getElementById('hint').style.opacity=0}
+document.getElementById('skip').onclick=()=>{finish();doneT-=1.2};
+document.getElementById('again').onclick=()=>{mg.globalCompositeOperation='source-over';mg.fillStyle='#000';mg.fillRect(0,0,mask.width,mask.height);done=false;started=false;cleared=0;
+  document.getElementById('hint').style.opacity=1;document.getElementById('paper').style.clipPath='circle(0 at 50% 50%)'};
+if(reduce){setTimeout(()=>{finish();doneT-=1.6},50)}
+function loop(ms){const t=ms/1000;
+  // idle ghost: after 2.5 s without input, a chisel draws a slow stroke across the head
+  if(!done&&!started&&performance.now()-lastInput>2500){ghostT+=1/60;const k=(ghostT%2.4)/2.4;const [x0,y0]=[fit.ox+560*fit.sc,fit.oy+150*fit.sc],[x1,y1]=[fit.ox+720*fit.sc,fit.oy+110*fit.sc];
+    const gx=lerp(x0,x1,eIO(k)),gy=lerp(y0,y1,eIO(k))+Math.sin(k*6)*6*fit.sc;chisel.style.left=gx+'px';chisel.style.top=gy+'px';if(k<.98)carve(gx,gy,22);else px=null}
+  if(!done&&Math.floor(t*6)!==Math.floor((t-1/60)*6)){cleared=measure();document.querySelector('#bar i').style.width=Math.min(100,cleared/.55*100)+'%';if(cleared>.55)finish()}
+  // draw: the room and statue, then the block through its mask
+  g.clearRect(0,0,W,H);g.drawImage(frame,fit.ox,fit.oy,1280*fit.sc,720*fit.sc);
+  const s=frame.width/1280,bx=fit.ox+BX0*fit.sc,by=fit.oy+BY0*fit.sc,bw=(BX1-BX0)*fit.sc,bh=(BY1-BY0)*fit.sc;
+  let fall=0,fade=1;if(done){const k=clamp((t-doneT)/.9);fall=eIO(k);fade=1-k}
+  if(fade>0){const tmp=draw.tmp||(draw.tmp=document.createElement('canvas'));tmp.width=block.width;tmp.height=block.height;const tg=tmp.getContext('2d');
+    tg.drawImage(block,0,0);tg.globalCompositeOperation='destination-in';tg.drawImage(mask,0,0);
+    g.save();g.globalAlpha=fade;g.translate(0,fall*bh*.25);g.drawImage(tmp,bx,by,bw,bh);g.restore();
+    if(done)for(let k=0;k<6;k++)crumbs.push({x:bx+Math.random()*bw,y:by+bh*(.2+Math.random()*.8)+fall*bh*.25,vx:(Math.random()-.5)*2,vy:Math.random()*2,r:3+Math.random()*6,life:1})}
+  for(const c of crumbs){c.vy+=.35;c.x+=c.vx;c.y+=c.vy;c.life-=.02;g.fillStyle=`rgba(214,196,168,${Math.max(0,c.life)})`;g.beginPath();g.arc(c.x,c.y,c.r,0,6.283);g.fill()}
+  crumbs=crumbs.filter(c=>c.life>0&&c.y<H+20).slice(-700);
+  g.globalCompositeOperation='lighter';for(const p of sparks){p.vy+=.25;p.x+=p.vx;p.y+=p.vy;p.life-=.035;g.strokeStyle=`rgba(255,${150+Math.random()*80|0},70,${Math.max(0,p.life)})`;g.lineWidth=2;g.beginPath();g.moveTo(p.x,p.y);g.lineTo(p.x-p.vx*2,p.y-p.vy*2);g.stroke()}
+  g.globalCompositeOperation='source-over';sparks=sparks.filter(p=>p.life>0);
+  // the reveal: a scan of light up the statue, a glint in the glasses, then lights up
+  if(done){const k=t-doneT;
+    if(k>.6&&k<1.6){const u=eIO(clamp((k-.6)/1));const y=fit.oy+(716-u*720)*fit.sc;const gr=g.createLinearGradient(0,y-14,0,y+14);gr.addColorStop(0,'rgba(255,160,80,0)');gr.addColorStop(.5,'rgba(255,200,140,.95)');gr.addColorStop(1,'rgba(255,160,80,0)');
+      g.globalCompositeOperation='lighter';g.fillStyle=gr;g.fillRect(bx-30*fit.sc,y-14,bw+60*fit.sc,28);g.globalCompositeOperation='source-over'}
+    if(k>1.5&&k<2.3){const u=Math.sin(Math.PI*clamp((k-1.5)/.8));const gx=fit.ox+612*fit.sc,gy=fit.oy+128*fit.sc,rr=(30+u*160)*fit.sc;
+      const gr=g.createRadialGradient(gx,gy,0,gx,gy,rr);gr.addColorStop(0,`rgba(255,255,255,${u})`);gr.addColorStop(.3,`rgba(255,200,140,${u*.7})`);gr.addColorStop(1,'rgba(234,94,20,0)');g.globalCompositeOperation='lighter';g.fillStyle=gr;g.fillRect(gx-rr,gy-rr,rr*2,rr*2);g.globalCompositeOperation='source-over'}
+    const up=eIO(clamp((k-2.0)/.8));document.getElementById('paper').style.clipPath=`circle(${up*150}% at ${(fit.ox+612*fit.sc)/W*100}% ${(fit.oy+128*fit.sc)/H*100}%)`;
+    document.getElementById('bar').style.opacity=1-clamp(k*2);}
+  else document.getElementById('bar').style.opacity=1;
+  requestAnimationFrame(loop)}
+function draw(){} // holds the scratch canvas
+build();
+</script>
+</body></html>
