@@ -345,9 +345,33 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
      A control that does nothing is worse than no control. */
   .status-wrap .feed-toggle{display:none}
 }
+
+/* ---------- sketch loader (Kazim, 2026-09-30) ----------
+   Not a video: a paper mask over the real page, a skeleton measured from the real components,
+   a hand that sketches over the skeleton, then mask and sketch fade away element by element and
+   the page that was underneath all along is simply there. Nothing moves after it lifts. */
+#sk{position:fixed;inset:0;z-index:9000;display:none;animation:skFail .5s 5s forwards}
+.sk-on #sk{display:block}
+.sk-on .hero .rv{transition:none}
+#sk .skbg{position:absolute;inset:0;background:var(--paper)}
+#sk .b{position:absolute;border-radius:10px;background:#E4E9F3;overflow:hidden}
+#sk .b::after{content:"";position:absolute;inset:0;translate:-100% 0;animation:skShim 1.6s var(--ease) infinite;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%)}
+#sk svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#sk path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#sk path.o{stroke:var(--blue-2)}
+#sk .pen{position:absolute;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--blue-2);
+  box-shadow:0 0 0 6px rgba(234,94,20,.16);opacity:0}
+@keyframes skShim{to{translate:100% 0}}
+@keyframes skFail{to{opacity:0;visibility:hidden}}
 </style>
+<script>
+/* sketch loader switch: before first paint, so the real page never flashes before its mask */
+try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage.getItem("k13-sk")||/[?&]sketch/.test(location.search))&&!location.hash)document.documentElement.classList.add("sk-on")}catch(e){}
+</script>
 </head>
 <body>
+<div id="sk" aria-hidden="true"><div class="skbg"></div></div>
 
 <a class="skip-link" href="#main">Skip to main content</a>
 
@@ -741,6 +765,75 @@ if(skipLink){
 var hdr=document.getElementById("hdr");
 function onScroll(){ hdr.classList.toggle("scrolled",(window.scrollY||0)>30); }
 window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
+
+/* sketch loader: measure the real hero, lay a skeleton over each part, sketch it, then lift */
+(function(){
+  var root=document.documentElement,sk=document.getElementById("sk");
+  if(!sk) return;
+  if(!root.classList.contains("sk-on")){ sk.remove(); return; }
+  try{ sessionStorage.setItem("k13-sk","1"); }catch(e){}
+  function finish(){ sk.remove(); root.classList.remove("sk-on"); }
+  if((window.scrollY||0)>40){ finish(); return; }
+  /* the hero takes its final state under the mask, so nothing animates after it lifts */
+  document.querySelectorAll(".hero .rv").forEach(function(el){ el.classList.add("in"); });
+  var NS="http://www.w3.org/2000/svg",svg,pen,items=[],t0=0,R=0,skipAt=0;
+  function lines(el){ var r=document.createRange(); r.selectNodeContents(el); var out=[];
+    [].forEach.call(r.getClientRects(),function(q){ if(q.width<2) return; var l=out[out.length-1];
+      if(l&&Math.abs(l.top-q.top)<6){ l.left=Math.min(l.left,q.left); l.right=Math.max(l.right,q.right); l.bottom=Math.max(l.bottom,q.bottom); }
+      else out.push({left:q.left,top:q.top,right:q.right,bottom:q.bottom}); });
+    return out; }
+  function box(el){ var q=el.getBoundingClientRect(); return {left:q.left,top:q.top,right:q.right,bottom:q.bottom}; }
+  function seen(q){ return q.right-q.left>2&&q.bottom>0&&q.top<innerHeight; }
+  function add(q,kind,accent){ if(seen(q)) items.push({q:q,kind:kind,o:!!accent}); }
+  function each(sel,fn){ document.querySelectorAll(sel).forEach(fn); }
+  var n=0; function w(){ n++; return Math.sin(n*12.9898)*1.8; }  /* a hand, not a ruler */
+  function rectPath(q,r){ var x=q.left-4,y=q.top-4,W=q.right-q.left+8,H=q.bottom-q.top+8; r=Math.min(r,H/2);
+    return "M"+(x+r)+" "+(y+w())+" L"+(x+W-r)+" "+(y+w())+" Q"+(x+W)+" "+y+" "+(x+W+w())+" "+(y+r)+" L"+(x+W+w())+" "+(y+H-r)+
+      " Q"+(x+W)+" "+(y+H)+" "+(x+W-r)+" "+(y+H+w())+" L"+(x+r)+" "+(y+H+w())+" Q"+x+" "+(y+H)+" "+(x+w())+" "+(y+H-r)+" L"+(x+w())+" "+(y+r)+" Q"+x+" "+y+" "+(x+r)+" "+y; }
+  function linePath(q){ var y=q.bottom-1; /* an underline, never a strike through */ return "M"+q.left+" "+(y+w())+" Q"+((q.left+q.right)/2)+" "+(y+w()*1.6)+" "+q.right+" "+(y+w()); }
+  function build(){
+    add(box(document.querySelector("#hdr .brand")),"box");
+    each("#hdr .nl",function(e){ add(box(e),"line"); });
+    each("#hdr nav .btn",function(e){ add(box(e),"box",true); });
+    each(".hero .eyebrow",function(e){ add(box(e),"line"); });
+    each(".hero h1",function(e){ lines(e).forEach(function(q){ add(q,"line"); }); });
+    each(".hero-sub",function(e){ lines(e).forEach(function(q){ add(q,"line"); }); });
+    each(".hero-cta .btn",function(e,i){ add(box(e),"box",i===0); });
+    each(".hero-meta span",function(e){ add(box(e),"line"); });
+    each(".hero .status",function(e){ add(box(e),"card"); });
+    each(".hero .status .row1, .hero .status .feed, .hero .status .stats",function(e){ add(box(e),"line"); });
+    svg=document.createElementNS(NS,"svg"); pen=document.createElement("i"); pen.className="pen";
+    items.forEach(function(it){ var q=it.q,h=q.bottom-q.top,d=document.createElement("div");
+      /* the skeleton: a text line is a bar of its x-height, a box is the box */
+      var bh=it.kind==="line"?Math.max(8,h*.56):h,bt=it.kind==="line"?q.top+(h-bh)/2:q.top;
+      d.className="b"; d.style.cssText="left:"+q.left+"px;top:"+bt+"px;width:"+(q.right-q.left)+"px;height:"+bh+"px"+(it.kind==="card"?";border-radius:20px;background:#EDF0F6":"");
+      sk.appendChild(d); it.el=d;
+      var p=document.createElementNS(NS,"path"); p.setAttribute("d",it.kind==="line"?linePath(q):rectPath(q,it.kind==="card"?22:12));
+      if(it.o) p.setAttribute("class","o"); svg.appendChild(p); it.p=p; });
+    sk.appendChild(svg); sk.appendChild(pen);
+    items.forEach(function(it){ it.L=it.p.getTotalLength(); it.p.style.strokeDasharray=it.L; it.p.style.strokeDashoffset=it.L; });
+    var N=items.length,span=.5; items.forEach(function(it,i){ it.a=i===0?.02:.12+(i-1)*(span/Math.max(1,N-2)); it.d=i===0?.22:(it.kind==="line"?.14:.2); });
+    R=Math.max.apply(null,items.map(function(it){ return it.a+it.d; }))+.03;
+    var L0=items[0]; if(L0){ L0.r=L0.a+L0.d+.02; var q=L0.q,x=q.left-10,y=q.top-10,W=q.right-q.left+20,H=q.bottom-q.top+20;
+      L0.hole='path(evenodd,"M0 0H'+innerWidth+'V'+innerHeight+'H0Z M'+x+' '+y+'h'+W+'v'+H+'h'+(-W)+'Z")'; }
+    ["pointerdown","keydown","wheel","touchstart"].forEach(function(ev){ addEventListener(ev,skip,{passive:true,once:true}); });
+    sk.style.animation="none"; requestAnimationFrame(function(ts){ t0=ts; frame(ts); });
+  }
+  function skip(){ if(!skipAt) skipAt=1; }
+  var ease=function(x){ return x<0?0:x>1?1:1-Math.pow(1-x,3); },io=function(x){ x=x<0?0:x>1?1:x; return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; };
+  function frame(ts){ var t=(ts-t0)/1000;
+    if(skipAt===1){ skipAt=t; R=Math.min(R,t); }
+    var fast=skipAt?2.2:1,tip=null;
+    items.forEach(function(it,i){ var k=io((t-it.a)/it.d); it.p.style.strokeDashoffset=it.L*(1-k); if(k>0&&k<1) tip=it.p.getPointAtLength(it.L*k);
+      /* the reveal: each part lifts in the order it was drawn */
+      var at=it.r!=null&&!skipAt?it.r:R+.02+i*.008/fast; var r=ease((t-at)/(.22/fast)); it.el.style.opacity=1-r; it.p.style.opacity=1-r;
+      if(it.hole&&t>=at&&!it.holed){ sk.firstChild.style.clipPath=it.hole; it.holed=1; } });
+    if(tip&&!skipAt){ pen.style.opacity=1; pen.style.transform="translate("+tip.x+"px,"+tip.y+"px)"; } else pen.style.opacity=Math.max(0,1-ease((t-R)/.2));
+    sk.firstChild.style.opacity=1-ease((t-R)/(.26/fast));
+    if(t<R+.02+items.length*.008/fast+.24/fast) requestAnimationFrame(frame); else finish(); }
+  var ready=document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(r){ setTimeout(r,1200); })]):Promise.resolve();
+  ready.then(function(){ requestAnimationFrame(build); });
+})();
 
 /* reveal */
 var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }); },{threshold:0.16,rootMargin:"0px 0px -8% 0px"});
