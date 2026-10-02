@@ -134,6 +134,10 @@ so the subject and body encoding is proven for the mailto path too.
   screens to sit in the hero's background with depth: three rows on a tilted plane, the far one
   blurred, a paper veil so the copy always sits on a quiet ground, a "Pause the screens" control
   (WCAG 2.2.2). The logo wall stays where it was.
+- **2026-10-02 · The hero line is "Software with our name on it." and the site stops leaning on
+  "two people".** Kazim: "I don't know why you are stuck with two people phrases." Headcount is
+  not the pitch: no "two people" lines in headings, hero, stats, footer, meta or the share card.
+  The Studio section can still show the two cards; the copy sells ownership, not size.
 - **2026-10-01 · `docs/` is never deployed** (`.vercelignore`). Until that day every handoff and
   report under `docs/` was publicly reachable on k13projects.com.
 - **2026-09-26 · The client's name is written `Egg&Out`, no spaces.** Kazim: "call Egg&Out

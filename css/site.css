@@ -520,7 +520,6 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 .motif .pin{fill:var(--blue);stroke:none}
 .motif .ticks line{stroke-width:1}
 .motif .big13{font-family:var(--disp);font-weight:600;font-size:420px;letter-spacing:-.04em;fill:none;stroke:var(--ink);stroke-width:1.2;opacity:.6}
-.m1{width:420px;right:-120px;top:520px}
 .m2{width:520px;left:-60px;top:1650px;opacity:.22}
 .m3{width:640px;left:-140px;top:2700px;opacity:.07}
 .m4{width:320px;right:-40px;top:3900px}
