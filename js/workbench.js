@@ -407,106 +407,6 @@ function cengo(mount){
   });
 }
 
-/* ======================= 5. Loose Type (K13) ======================= */
-/* The studio's own lockup as physical pieces: fling them, they bounce and settle, Tidy snaps them home. */
-function letters(mount){
-  var c=card(mount,{title:"Loose Type",from:"K13",instr:"Grab a piece and fling it. Tidy brings the lockup home.",stageClass:"wb-tray-wrap",foot:"Our own lockup, in pieces. Arrow keys nudge, Enter flings."});
-  var iid=mount.querySelector(".wb-instr").id;
-  c.stage.insertAdjacentHTML("beforeend",
-    '<div class="wb-tray" role="group" aria-label="Loose type, four pieces">'+
-      '<button type="button" class="wb-tile wt-k" aria-describedby="'+iid+'">K</button>'+
-      '<button type="button" class="wb-tile wt-13" aria-describedby="'+iid+'">13</button>'+
-      '<button type="button" class="wb-tile wt-tag wt-sw" aria-describedby="'+iid+'">SOFTWARE</button>'+
-      '<button type="button" class="wb-tile wt-tag wt-st" aria-describedby="'+iid+'">STUDIO</button>'+
-    '</div><button type="button" class="wb-tidy">Tidy</button>');
-  var tray=c.stage.querySelector(".wb-tray"), tidyBtn=c.stage.querySelector(".wb-tidy");
-  var els=[].slice.call(tray.querySelectorAll(".wb-tile")), names=["K","13","SOFTWARE","STUDIO"];
-  els.forEach(function(e,i){ e.setAttribute("aria-label",names[i]+", drag it or use the arrow keys, Enter to fling it."); });
-  var tiles=els.map(function(e){ return {el:e,x:0,y:0,angle:0,vx:0,vy:0,av:0,r:26,w:60,h:60,homeX:0,homeY:0,homeAngle:0,dragging:false,homing:false,tidyDelay:0,tidyT:0,fromX:0,fromY:0,fromA:0}; });
-  var K=tiles[0], N=tiles[1], SW=tiles[2], ST=tiles[3];
-  var trayW=0, trayH=0, inited=false, inView=false, raf=null, frameT=0, gen=0, aligned=false, alignDX=0, earned=false;
-  var FRICTION=.9, BOUNCE=.6, TIDYDUR=.62;
-  function setT(t){ t.el.style.transform="translate("+(t.x-t.w/2)+"px,"+(t.y-t.h/2)+"px) rotate("+t.angle+"deg)"; }
-  function measure(){ tiles.forEach(function(t){ var r=t.el.getBoundingClientRect(); t.w=r.width; t.h=r.height; t.r=Math.max(t.w,t.h)*.62/2; }); }
-  function layout(){
-    var r=tray.getBoundingClientRect(); if(!r.width) return; trayW=r.width; trayH=r.height; measure();
-    var cx=trayW/2, cy=trayH/2, groupW=K.w+N.w+4, leftX=cx-groupW/2;
-    K.homeX=leftX+K.w/2; K.homeY=cy; K.homeAngle=0;
-    N.homeX=leftX+K.w+4+N.w/2; N.homeY=cy; N.homeAngle=0;
-    SW.homeX=Math.min(N.homeX+N.w/2+28+SW.w/2,trayW-SW.w/2-8); SW.homeY=cy-SW.h/2-3; SW.homeAngle=0;
-    ST.homeX=Math.min(SW.homeX,trayW-ST.w/2-8); ST.homeY=cy+ST.h/2+3; ST.homeAngle=0;
-    alignDX=N.homeX-K.homeX;
-    if(!inited){ inited=true; tiles.forEach(function(t){ t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; setT(t); }); }
-  }
-  function nudge(t,dx,dy){ t.homing=false; earned=true; t.x=clamp(t.x+dx,t.r,trayW-t.r); t.y=clamp(t.y+dy,t.r,trayH-t.r); t.vx=t.vy=0; setT(t); c.touch(); }
-  function fling(t){
-    t.homing=false; earned=true; c.touch();
-    if(reduced){ var a0=Math.random()*Math.PI*2; t.x=clamp(t.x+Math.cos(a0)*70,t.r,trayW-t.r); t.y=clamp(t.y+Math.sin(a0)*70,t.r,trayH-t.r); setT(t); c.read.innerHTML="<span>Flung.</span>"; return; }
-    var a=Math.random()*Math.PI*2, sp=340+Math.random()*160;
-    t.vx=Math.cos(a)*sp; t.vy=Math.sin(a)*sp; t.av=(Math.random()-.5)*420; c.read.innerHTML="<span>Flung.</span>";
-  }
-  tiles.forEach(function(t){
-    t.el.addEventListener("pointerdown",function(e){ e.preventDefault(); t.el.setPointerCapture(e.pointerId); t.dragging=true; t.homing=false; earned=true; t.vx=t.vy=t.av=0; var r=tray.getBoundingClientRect(); t._lx=e.clientX-r.left; t._ly=e.clientY-r.top; t._lt=performance.now(); t.el.classList.add("grabbed"); c.touch(); });
-    t.el.addEventListener("pointermove",function(e){ if(!t.dragging) return; var r=tray.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top, now=performance.now(), dt=Math.max(1,now-t._lt)/1000; t.vx=(x-t._lx)/dt; t.vy=(y-t._ly)/dt; t.x=clamp(x,t.r,trayW-t.r); t.y=clamp(y,t.r,trayH-t.r); t._lx=x; t._ly=y; t._lt=now; setT(t); });
-    function endDrag(){ if(!t.dragging) return; t.dragging=false; t.el.classList.remove("grabbed"); if(reduced){ t.vx=t.vy=t.av=0; } else { t.av=clamp(t.vx*.12,-260,260); } }
-    t.el.addEventListener("pointerup",endDrag); t.el.addEventListener("pointercancel",endDrag);
-    t.el.addEventListener("keydown",function(e){
-      var s=16;
-      if(e.key==="ArrowLeft"){ e.preventDefault(); nudge(t,-s,0); } else if(e.key==="ArrowRight"){ e.preventDefault(); nudge(t,s,0); }
-      else if(e.key==="ArrowUp"){ e.preventDefault(); nudge(t,0,-s); } else if(e.key==="ArrowDown"){ e.preventDefault(); nudge(t,0,s); }
-      else if(e.key==="Enter"){ e.preventDefault(); fling(t); }
-    });
-  });
-  function ang0(a){ a=((a%360)+360)%360; return Math.min(a,360-a); }
-  function checkAlign(){
-    if(!earned) return; /* only a discovery the visitor earns by playing, never the resting state after load, Reset or Tidy */
-    var dx=N.x-K.x, dy=N.y-K.y;
-    var close=Math.abs(dx-alignDX)<20 && Math.abs(dy)<16 && ang0(K.angle)<12 && ang0(N.angle)<12;
-    var rest=Math.hypot(K.vx,K.vy)<6 && Math.hypot(N.vx,N.vy)<6 && !K.dragging && !N.dragging && !K.homing && !N.homing;
-    if(close&&rest){ if(!aligned){ aligned=true; c.read.innerHTML="<span>That reads K13. Nicely done.</span>"; } } else aligned=false;
-  }
-  function stepAll(dt,now){
-    tiles.forEach(function(t,i){
-      if(t.dragging) return;
-      if(t.homing){
-        t.tidyDelay-=dt;
-        if(t.tidyDelay<=0){ t.tidyT=Math.min(1,t.tidyT+dt/TIDYDUR); var e=POP(t.tidyT); t.x=lerp(t.fromX,t.homeX,e); t.y=lerp(t.fromY,t.homeY,e); t.angle=lerp(t.fromA,t.homeAngle,e); if(t.tidyT>=1){ t.homing=false; t.vx=t.vy=t.av=0; t.angle=t.homeAngle; } }
-        setT(t); return;
-      }
-      if(!reduced){
-        var f=Math.pow(FRICTION,dt*60); t.vx*=f; t.vy*=f; t.av*=f; t.x+=t.vx*dt; t.y+=t.vy*dt; t.angle+=t.av*dt;
-        if(t.x<t.r){ t.x=t.r; t.vx=Math.abs(t.vx)*BOUNCE; } else if(t.x>trayW-t.r){ t.x=trayW-t.r; t.vx=-Math.abs(t.vx)*BOUNCE; }
-        if(t.y<t.r){ t.y=t.r; t.vy=Math.abs(t.vy)*BOUNCE; } else if(t.y>trayH-t.r){ t.y=trayH-t.r; t.vy=-Math.abs(t.vy)*BOUNCE; }
-        if(Math.abs(t.vx)<.5) t.vx=0; if(Math.abs(t.vy)<.5) t.vy=0; if(Math.abs(t.av)<.5) t.av=0;
-      }
-      if(!reduced && mount.classList.contains("wb-attract")){ var ph=now/1000, bob=Math.sin(ph*1.6+i*1.1)*3, rot=Math.sin(ph*1.1+i*.7)*2.2; t.el.style.transform="translate("+(t.x-t.w/2)+"px,"+(t.y-t.h/2+bob)+"px) rotate("+(t.angle+rot)+"deg)"; }
-      else setT(t);
-    });
-    if(!reduced){
-      for(var i=0;i<tiles.length;i++) for(var j=i+1;j<tiles.length;j++){
-        var a=tiles[i], b=tiles[j]; if(a.dragging||b.dragging||a.homing||b.homing) continue;
-        var dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy)||.01, min=a.r+b.r;
-        if(dist<min){ var nx=dx/dist, ny=dy/dist, overlap=(min-dist)/2; a.x-=nx*overlap; a.y-=ny*overlap; b.x+=nx*overlap; b.y+=ny*overlap;
-          var avn=a.vx*nx+a.vy*ny, bvn=b.vx*nx+b.vy*ny, diff=(bvn-avn)*.9; a.vx+=nx*diff; a.vy+=ny*diff; b.vx-=nx*diff; b.vy-=ny*diff; setT(a); setT(b); }
-      }
-    }
-    checkAlign();
-  }
-  function step(now){ if(!inView){ raf=null; return; } var dt=Math.min(0.05,frameT?((now-frameT)/1000):0.016); frameT=now; stepAll(dt,now); raf=requestAnimationFrame(step); }
-  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(inView){ layout(); if(!raf) raf=requestAnimationFrame(step); } },{threshold:.1}).observe(mount);
-  tidyBtn.addEventListener("click",function(){
-    c.touch(); earned=false; aligned=false;
-    if(reduced){ tiles.forEach(function(t){ t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; t.vx=t.vy=t.av=0; t.homing=false; setT(t); }); c.read.innerHTML="<span>Tidied.</span>"; return; }
-    tiles.forEach(function(t,i){ t.dragging=false; t.homing=true; t.tidyDelay=i*.08; t.tidyT=0; t.fromX=t.x; t.fromY=t.y; t.fromA=t.angle; t.vx=t.vy=t.av=0; });
-    c.read.innerHTML="<span>Tidying up.</span>";
-  });
-  c.reset.addEventListener("click",function(){
-    gen++; aligned=false; earned=false; tiles.forEach(function(t){ t.dragging=false; t.homing=false; t.vx=t.vy=t.av=0; t.x=t.homeX; t.y=t.homeY; t.angle=t.homeAngle; setT(t); });
-    c.read.innerHTML=""; c.untouch();
-  });
-  window.addEventListener("resize",layout); setTimeout(layout,0);
-}
-
 /* ======================= Runny Egg (Egg&Out) ======================= */
 /* Their site's cursor, kept in a pan: the yolk leads on a stiff spring, the white trails on a
    soft one and can never let the yolk escape, grease streaks smear out behind. Click jiggles,
@@ -997,7 +897,7 @@ var hunt=(function(){
 
 /* ======================= boot ======================= */
 window.K13=window.K13||{}; window.K13.hunt=hunt;
-var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,letters:letters,
+var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,
   goldenhour:goldenhour,pours:pours,limewash:limewash};
 document.querySelectorAll("[data-game]").forEach(function(m){ var g=games[m.getAttribute("data-game")]; if(g) g(m); });
 document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
