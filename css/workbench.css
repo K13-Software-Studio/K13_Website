@@ -1,4 +1,4 @@
-/* K13 workbench: five games, the hunt, night shift, blueprint, the pencil. Tokens come from css/site.css. */
+/* K13 workbench: five games, the hunt, night shift, blueprint. Tokens come from css/site.css. */
 .wb{gap:10px}
 .wb-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .wb-title{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
@@ -138,10 +138,6 @@
 .bp-cap{position:fixed;right:16px;bottom:16px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:8px 12px;border-radius:100px}
 :root[data-blueprint] .draft-grid{opacity:1;mask-image:none;background-size:20px 20px;background-image:linear-gradient(rgba(185,70,18,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(185,70,18,.12) 1px,transparent 1px)}
 
-/* ---------- idle pencil ---------- */
-.pencil{position:fixed;z-index:5;pointer-events:none;overflow:visible;opacity:1;transition:opacity .5s var(--ease)}
-.pencil.gone{opacity:0}
-.pencil path{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;transition:stroke-dashoffset .9s var(--ease)}
 
 
 
