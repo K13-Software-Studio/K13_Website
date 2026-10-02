@@ -10,49 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="%23F3F5FA"/><text x="50" y="68" font-family="Georgia,serif" font-weight="700" font-size="46" text-anchor="middle"><tspan fill="%2316203A">K</tspan><tspan fill="%23CB4D14">13</tspan></text></svg>'>
-<style>
-:root{
-  --paper:#F3F5FA; --ink:#141D35; --ink-2:#2A3554;
-  --muted:#515C78; --faint:#646B7E;
-  --blue:#B94612;
-  --line:rgba(20,29,53,.12);
-  --disp:"Fraunces",Georgia,serif;
-  --body:"Inter",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  background:var(--paper);color:var(--ink-2);font-family:var(--body);font-size:18px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:32px;text-align:center;overflow-x:hidden;
-}
-a{color:inherit;text-decoration:none}
-.wash{position:fixed;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:0;opacity:.5;
-  width:420px;height:380px;left:-80px;top:8vh;background:#E8E1FB}
-.brand{display:flex;align-items:center;gap:11px;margin-bottom:44px;position:relative;z-index:1}
-.brand .k{font-family:var(--disp);font-weight:700;font-size:27px;line-height:1;letter-spacing:-.01em}
-.brand .k b{color:var(--ink);font-weight:700}
-.brand .k i{color:var(--blue);font-style:normal}
-main{position:relative;z-index:1;opacity:0;transform:translateY(16px);animation:rise .7s var(--ease) .1s forwards}
-@keyframes rise{to{opacity:1;transform:none}}
-.code{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
-h1{font-family:var(--disp);font-weight:600;letter-spacing:-.02em;line-height:1.08;
-  font-size:clamp(32px,5vw,54px);color:var(--ink);margin:18px 0 16px}
-h1 i{font-style:italic;font-weight:500;color:var(--blue)}
-p{max-width:440px;margin:0 auto;color:var(--muted);font-size:17px;line-height:1.6}
-.cta{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:600;font-size:14.5px;
-  padding:12px 22px;border-radius:10px;background:var(--blue);color:#fff;margin-top:32px;
-  transition:transform .3s var(--ease),background .3s;box-shadow:0 10px 24px -12px rgba(203,77,20,.7)}
-.cta:hover{background:var(--ink);transform:translateY(-2px)}
-.foot{margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--faint)}
-.foot a:hover{color:var(--blue)}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
-  main{opacity:1;transform:none}
-}
-</style>
+<link rel="stylesheet" href="css/404.css">
 </head>
 <body>
 <div class="wash" aria-hidden="true"></div>

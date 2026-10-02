@@ -4,3 +4,6 @@ node_modules/
 .gstack/
 .claude/
 pricing/
+
+# design prototypes: kept on disk, never shipped; the chosen ones live in generatedAssets too
+docs/prototypes/

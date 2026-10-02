@@ -1,0 +1,23 @@
+/* ---------- sketch loader (Kazim, 2026-09-30) ----------
+   Not a video: a paper mask over the real page, a skeleton measured from the real components,
+   a hand that sketches over the skeleton, then mask and sketch fade away element by element and
+   the page that was underneath all along is simply there. Nothing moves after it lifts. */
+#sk{position:fixed;inset:0;z-index:9000;display:none;animation:skFail .5s 5s forwards}
+.sk-on #sk{display:block}
+.sk-on .hero .rv{transition:none}
+#sk .skbg{position:absolute;inset:0;background:var(--paper)}
+#sk .b{position:absolute;border-radius:10px;background:#E4E9F3;overflow:hidden}
+#sk .b::after{content:"";position:absolute;inset:0;translate:-100% 0;animation:skShim 1.6s var(--ease) infinite;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%)}
+#sk svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#sk path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#sk path.o{stroke:var(--blue-2)}
+#sk .pen{position:absolute;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--blue-2);
+  box-shadow:0 0 0 6px rgba(234,94,20,.16);opacity:0}
+#sk .ch{position:absolute;white-space:pre;line-height:normal;letter-spacing:0;opacity:0;will-change:transform,opacity;transform-origin:50% 60%}
+#sk .b.filled::after{display:none}
+#sk .broom{position:absolute;width:3px;margin-left:-1.5px;border-radius:3px;opacity:0;
+  background:linear-gradient(180deg,transparent,#FFB27A 30%,var(--blue-2) 50%,#FFB27A 70%,transparent);
+  box-shadow:0 0 14px 3px rgba(234,94,20,.45),-18px 0 22px -6px rgba(234,94,20,.25)}
+@keyframes skShim{to{translate:100% 0}}
+@keyframes skFail{to{opacity:0;visibility:hidden}}
