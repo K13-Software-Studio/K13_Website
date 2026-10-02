@@ -1,378 +1,45 @@
 <!DOCTYPE html>
+<!--
+  Hello, curious one. This page is hand-built: one HTML file, two stylesheets, three scripts,
+  no framework, no tracker. Everything you see loads from this domain, plus two font hosts.
+  There are thirteen small "13"s hidden on the page. The console has a note for you too.
+  K13 Software Studio, San Diego. projects.k13@gmail.com
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>K13 Software Studio · Kazim K. · Clear software, built end to end</title>
-<meta name="description" content="K13 Software Studio. I'm Kazim, a solo builder who ships software end to end, design through deploy, and gives every project my full attention. Selected work, how I work, and how to start a project.">
+<title>K13 Software Studio · Software That Feels Obvious</title>
+<meta name="description" content="K13 Software Studio: software that feels obvious. Sixteen shipped, thirteen live, for restaurant groups, founders, brands and institutions, worldwide.">
 <link rel="canonical" href="https://k13projects.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="K13 Software Studio">
 <meta property="og:url" content="https://k13projects.com/">
-<meta property="og:title" content="K13 Software Studio · Kazim K. · Clear software, built end to end">
-<meta property="og:description" content="I'm Kazim, a solo builder who ships software end to end, design through deploy, and gives every project my full attention. Selected work, how I work, and how to start a project.">
-<meta property="og:image" content="https://k13projects.com/assets/kazim.jpg">
+<meta property="og:title" content="K13 Software Studio: Software That Feels Obvious">
+<meta property="og:description" content="Sixteen shipped, thirteen live: restaurant groups, founders, brands and institutions. Built by two people, worldwide.">
+<meta property="og:image" content="https://k13projects.com/assets/og/k13-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="K13 Software Studio: software that feels obvious, built by two people who answer.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="K13 Software Studio · Kazim K.">
-<meta name="twitter:description" content="Clear software, built end to end: from the first sketch to the deploy.">
-<meta name="twitter:image" content="https://k13projects.com/assets/kazim.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="twitter:title" content="K13 Software Studio · Software That Feels Obvious">
+<meta name="twitter:description" content="Two people. Sixteen shipped, thirteen live. Software that feels obvious.">
+<meta name="twitter:image" content="https://k13projects.com/assets/og/k13-og.png">
+<link rel="preload" href="assets/fonts/fraunces-normal-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<style>
-/* =========================================================
-   K13 Software Studio · beta_v7 · "THE DRAFTING TABLE"
-   Calm, editorial, high-contrast and readable. Light paper,
-   one accent blue, glass cards, hand-drawn accents used only
-   as annotation (never on the words). Single file. Lenis.
-   ========================================================= */
-:root{
-  --paper:#F3F5FA; --paper-2:#FFFFFF; --paper-3:#E9EDF7;
-  --ink:#141D35; --ink-2:#2A3554;
-  --muted:#515C78; --faint:#646B7E;
-  --blue:#B94612; --blue-2:#EA5E14;
-  --wash-blue:#FCE0CC; --wash-lilac:#E8E1FB; --wash-mint:#D6F0E6; --wash-peach:#FBE6DD;
-  --line:rgba(20,29,53,.12); --line-2:rgba(20,29,53,.22); --line-3:rgba(20,29,53,.52);
-  --glass:rgba(255,255,255,.62);
-  --disp:"Fraunces",Georgia,serif;
-  --body:"Inter",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
-html.lenis,html.lenis body{height:auto}
-.lenis.lenis-smooth{scroll-behavior:auto!important}
-body{background:var(--paper);color:var(--ink-2);font-family:var(--body);font-size:18px;line-height:1.65;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden}
-::selection{background:var(--blue);color:#fff}
-a{color:inherit;text-decoration:none}
-img,svg,iframe{display:block;max-width:100%}
-button{font:inherit;border:none;background:none;cursor:pointer;color:inherit}
-strong{color:var(--ink);font-weight:600}
-
-/* ---------- accessibility utilities ---------- */
-.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-  clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.skip-link{position:absolute;top:-60px;left:12px;z-index:2000;background:var(--ink);color:#fff;
-  padding:12px 18px;border-radius:8px;font-family:var(--body);font-weight:600;font-size:14px;
-  transition:top .25s var(--ease)}
-.skip-link:focus{top:12px}
-
-/* ---------- atmosphere ---------- */
-.draft-grid{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;
-  background-image:radial-gradient(rgba(203,77,20,.14) 1px,transparent 1.4px);
-  background-size:30px 30px;
-  mask-image:radial-gradient(120vw 90vh at 70% -10%,#000,transparent 80%)}
-.wash{position:fixed;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:0;opacity:.5;
-  transform:translateZ(0)}
-
-/* ---------- cursor preview (work index) ---------- */
-.peek{position:fixed;top:0;left:0;z-index:60;width:340px;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.94) rotate(-2deg);
-  transition:opacity .3s var(--ease),transform .3s var(--ease);will-change:transform}
-.peek.on{opacity:1}
-.peek .fr{border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line-2);box-shadow:0 30px 60px -28px rgba(20,29,53,.5)}
-.peek .fr .top{height:26px;display:flex;align-items:center;gap:5px;padding:0 11px;background:var(--paper-3)}
-.peek .fr .top i{width:7px;height:7px;border-radius:50%;background:var(--line-2)}
-.peek img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
-@media(hover:none),(max-width:920px){.peek{display:none}}
-
-/* ---------- header ---------- */
-header{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;
-  padding:18px clamp(18px,4vw,56px);transition:padding .4s var(--ease)}
-header .bg{position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .4s;
-  background:rgba(243,245,250,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
-header.scrolled{padding:12px clamp(18px,4vw,56px)}
-header.scrolled .bg{opacity:1}
-.brand{display:flex;align-items:center;gap:11px}
-.brand .k{font-family:var(--disp);font-weight:700;font-size:27px;line-height:1;letter-spacing:-.01em}
-.brand .k b{color:var(--ink);font-weight:700}.brand .k i{color:var(--blue);font-style:normal}
-.brand .tag{font-family:var(--mono);font-size:10px;line-height:1.35;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
-nav{display:flex;gap:30px;align-items:center}
-.nl{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);position:relative;padding:4px 0;transition:color .3s}
-.nl:hover{color:var(--ink)}
-.nl::after{content:"";position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
-.nl:hover::after{transform:scaleX(1)}
-.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:600;font-size:14.5px;
-  padding:11px 20px;border-radius:10px;background:var(--blue);color:#fff;transition:transform .3s var(--ease),background .3s,box-shadow .3s;
-  box-shadow:0 10px 24px -12px rgba(203,77,20,.7)}
-.btn:hover{background:var(--ink);transform:translateY(-2px)}
-.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1.5px solid var(--line-3)}
-.btn.ghost:hover{background:transparent;border-color:var(--blue);color:var(--blue)}
-
-/* ---------- reveal ---------- */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.rv.in{opacity:1;transform:none}
-
-/* ---------- layout ---------- */
-section{position:relative;z-index:2}
-.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(18px,4vw,56px)}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
-.eyebrow::before{content:"";width:24px;height:1.5px;background:var(--blue)}
-.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
-.h2{font-family:var(--disp);font-weight:600;letter-spacing:-.015em;line-height:1.04;font-size:clamp(32px,4.6vw,56px);color:var(--ink);margin-top:18px}
-.h2 i{font-style:italic;font-weight:500;color:var(--blue)}
-.sec-note{max-width:330px;color:var(--muted);font-size:16px;line-height:1.6}
-
-/* ---------- hero ---------- */
-.hero{padding:clamp(130px,17vw,200px) 0 clamp(60px,8vw,110px)}
-.hero-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:clamp(36px,5vw,72px);align-items:center}
-.hero h1{font-family:var(--disp);font-weight:600;letter-spacing:-.02em;line-height:1.02;
-  font-size:clamp(40px,6vw,82px);color:var(--ink);margin:26px 0 0}
-.hero h1 .ci{position:relative;display:inline-block;color:var(--blue);font-style:italic;font-weight:500}
-.hero-sub{margin-top:28px;max-width:560px;font-size:clamp(17px,1.4vw,20px);color:var(--ink-2);line-height:1.6}
-.hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;align-items:center}
-.hero-meta{margin-top:30px;display:flex;gap:22px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-.hero-meta b{color:var(--ink);font-weight:500}
-/* glass status card */
-.status{border-radius:18px;padding:24px 24px 20px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,.8);box-shadow:0 26px 60px -34px rgba(20,29,53,.5)}
-.status .row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.status .open{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink)}
-.status .open i{width:9px;height:9px;border-radius:50%;background:#27B584;animation:beat 2s infinite}
-@keyframes beat{0%,100%{box-shadow:0 0 0 0 rgba(39,181,132,.5)}60%{box-shadow:0 0 0 8px rgba(39,181,132,0)}}
-.status .yr{font-family:var(--mono);font-size:11px;color:var(--faint)}
-.status .now{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
-.status .feed{font-family:var(--disp);font-style:italic;font-weight:500;font-size:19px;color:var(--ink);line-height:1.3;min-height:50px;transition:opacity .4s}
-/* status-wrap: the card itself is aria-hidden (decorative ticker) but its pause control is a real
-   interactive control -- aria-hidden="false" on a descendant cannot undo an ancestor's aria-hidden,
-   so the toggle lives as a DOM sibling, positioned to sit on the card visually */
-.status-wrap{position:relative}
-.status-wrap .feed-toggle{position:absolute;top:-13px;right:16px;z-index:3;min-height:24px;min-width:24px;
-  display:inline-flex;align-items:center;justify-content:center;padding:0 14px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
-  background:var(--paper-2);border:1px solid var(--line-3);border-radius:100px;
-  box-shadow:0 8px 18px -10px rgba(20,29,53,.35);transition:border-color .3s,color .3s}
-.status-wrap .feed-toggle:hover{border-color:var(--blue);color:var(--blue)}
-.status .div{height:1px;background:var(--line);margin:18px 0}
-.status .stats{display:flex;gap:26px}
-.status .st b{display:block;font-family:var(--disp);font-weight:600;font-size:30px;color:var(--ink);line-height:1}
-.status .st span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
-
-/* ---------- approach ---------- */
-.approach{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:clamp(40px,5vw,60px)}
-.card{border-radius:16px;padding:30px 28px;background:var(--paper-2);border:1px solid var(--line);transition:transform .4s var(--ease),box-shadow .4s}
-.card:hover{transform:translateY(-5px);box-shadow:0 24px 50px -34px rgba(20,29,53,.5)}
-.card .num{font-family:var(--mono);font-size:12px;color:var(--blue);letter-spacing:.1em}
-.card h3{font-family:var(--disp);font-weight:600;font-size:24px;color:var(--ink);letter-spacing:-.01em;margin:16px 0 12px;line-height:1.15}
-.card p{color:var(--muted);font-size:16px;line-height:1.62}
-.card .tint{display:inline-block;width:34px;height:6px;border-radius:4px;margin-top:18px}
-
-/* ---------- work index ---------- */
-.work{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
-.index{margin-top:clamp(34px,4vw,52px);border-top:1px solid var(--line-2)}
-.row{display:grid;grid-template-columns:42px 1.1fr 1.5fr 250px;gap:clamp(14px,3vw,40px);align-items:center;
-  padding:clamp(20px,2.6vw,30px) 6px;border-bottom:1px solid var(--line);position:relative;transition:padding-left .4s var(--ease)}
-.row::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--ease)}
-.row:hover{padding-left:18px}
-.row:hover::after{transform:scaleX(1)}
-.row .rnum{font-family:var(--mono);font-size:13px;color:var(--faint)}
-.row .rname{font-family:var(--disp);font-weight:600;font-size:clamp(22px,2.4vw,30px);color:var(--ink);letter-spacing:-.01em;line-height:1.1}
-.row:hover .rname{color:var(--blue)}
-.row .rdesc{color:var(--muted);font-size:16px;line-height:1.5}
-.row .rthumb{display:none}
-.row .rmeta{display:flex;align-items:center;gap:14px;justify-content:flex-end;flex-wrap:wrap}
-.row .tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 11px;white-space:nowrap}
-.row .go{font-family:var(--mono);font-size:12px;color:var(--blue);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:transform .3s}
-.row:hover .go{transform:translateX(3px)}
-.index-foot{margin-top:22px;font-family:var(--mono);font-size:13px;color:var(--muted)}
-.index-foot b{color:var(--ink);font-weight:500}
-
-/* ---------- capabilities ---------- */
-.cap{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line);background:var(--paper-3)}
-.cap-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(28px,4vw,56px);margin-top:clamp(40px,5vw,58px)}
-.cap-col h3{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em}
-.cap-col p{color:var(--muted);font-size:15.5px;line-height:1.6;margin-bottom:18px}
-.cap-col .stk{display:flex;flex-direction:column;gap:0}
-.cap-col .stk span{font-family:var(--mono);font-size:13.5px;color:var(--ink-2);padding:9px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between}
-.cap-col .stk span em{font-style:normal;color:var(--faint);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
-.craft{margin-top:clamp(48px,6vw,76px);padding-top:clamp(28px,3.5vw,40px);border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(24px,4vw,56px)}
-.craft-head h3{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em;line-height:1.2}
-.craft-head p{color:var(--muted);font-size:15.5px;line-height:1.6}
-.craft-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.craft-list li{border-top:2px solid var(--ink);padding-top:14px;color:var(--muted);font-size:15px;line-height:1.55;display:flex;flex-direction:column;gap:8px}
-.craft-list .lvl{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
-
-/* ---------- about strip ---------- */
-.about{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
-.about-grid{display:grid;grid-template-columns:minmax(290px,410px) 1fr;gap:clamp(40px,6vw,90px);align-items:center}
-.about p{font-family:var(--disp);font-weight:500;font-style:italic;font-size:clamp(22px,2.5vw,32px);line-height:1.38;color:var(--ink);letter-spacing:-.01em}
-.about p .hl{font-style:normal;color:var(--blue);font-weight:600}
-
-/* ---------- about portrait (layered scroll depth) ---------- */
-.portrait{position:relative;margin:0}
-.p-back{position:absolute;top:9%;left:13%;right:-16px;bottom:-16px;border-radius:20px;
-  background-color:var(--paper-3);border:1px solid var(--line);
-  background-image:radial-gradient(rgba(203,77,20,.22) 1px,transparent 1.4px);background-size:14px 14px;
-  will-change:transform}
-.p-frame{position:relative;z-index:1;border-radius:18px;overflow:hidden;border:1px solid var(--line-2);background:var(--paper-3);
-  box-shadow:0 36px 80px -44px rgba(20,29,53,.65);will-change:transform;
-  clip-path:inset(9% 7% round 18px);transition:clip-path 1.1s var(--ease) .1s}
-.rv.in .p-frame{clip-path:inset(0% 0% round 18px)}
-.p-frame img{width:100%;aspect-ratio:3/4;object-fit:cover;transform:scale(1.06);will-change:transform}
-.p-cap{position:absolute;z-index:2;right:22px;bottom:20px;text-align:right;will-change:transform;
-  background:var(--paper-2);border-radius:10px;padding:8px 12px;
-  box-shadow:0 10px 22px -12px rgba(20,29,53,.4)}
-.p-cap b{display:block;font-family:var(--disp);font-weight:600;font-size:20px;color:var(--ink);letter-spacing:-.01em;line-height:1.25}
-.p-cap span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);line-height:1.7}
-.facts{display:flex;flex-direction:column;margin-top:36px}
-.facts .f{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-top:1px solid var(--line);font-size:15px}
-.facts .f:first-child{border-top:none}
-.facts .f .k{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
-.facts .f .v{color:var(--ink);font-weight:500;text-align:right}
-
-/* ---------- contact ---------- */
-.contact{padding:clamp(70px,9vw,130px) 0 clamp(50px,7vw,90px);border-top:1px solid var(--line);position:relative;overflow:hidden}
-.contact-grid{display:grid;grid-template-columns:1fr minmax(380px,460px);gap:clamp(40px,5vw,72px);align-items:center}
-.contact .big{font-family:var(--disp);font-weight:600;letter-spacing:-.02em;line-height:1.04;font-size:clamp(34px,5vw,66px);color:var(--ink);max-width:13ch}
-.contact .big i{font-style:italic;font-weight:500;color:var(--blue)}
-.contact p{margin-top:24px;max-width:480px;font-size:18px;color:var(--ink-2);line-height:1.6}
-.contact .mail{display:inline-flex;align-items:center;gap:9px;margin-top:30px;font-family:var(--mono);font-size:14px;letter-spacing:.01em;color:var(--muted);position:relative}
-.contact .mail b{color:var(--blue);font-weight:500}
-.contact .mail svg{width:14px;height:14px;stroke:var(--blue);stroke-width:2;fill:none;transition:transform .3s}
-.contact .mail:hover svg{transform:translate(3px,-3px)}
-.contact .mail::after{content:"";position:absolute;left:0;bottom:-3px;width:100%;height:1.5px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--ease)}
-.contact .mail:hover::after{transform:scaleX(1)}
-.contact .lines{margin-top:34px;display:flex;gap:30px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;color:var(--muted)}
-.contact .lines b{color:var(--ink);font-weight:500}
-.contact .lines a:hover b{color:var(--blue)}
-
-/* ---------- contact stepper ---------- */
-.stepper{position:relative;border-radius:20px;min-height:448px;display:flex;flex-direction:column;overflow:hidden;
-  background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border:1px solid rgba(255,255,255,.8);box-shadow:0 30px 70px -38px rgba(20,29,53,.55)}
-.step-body{display:flex;flex-direction:column;flex:1;min-height:0}
-.step-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);position:relative;z-index:2}
-.step-back{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);display:inline-flex;align-items:center;gap:6px;opacity:0;pointer-events:none;transition:opacity .3s,color .3s}
-.step-back.on{opacity:1;pointer-events:auto}
-.step-back:hover{color:var(--ink)}
-.step-back:disabled{cursor:default}
-.step-lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
-.step-prog{display:flex;gap:6px;align-items:center}
-.step-prog i{width:22px;height:3px;border-radius:2px;background:var(--line-3);transition:background .4s}
-.step-prog i.on{background:var(--blue)}
-.step-sum{display:flex;flex-wrap:wrap;gap:7px;padding:0 20px;max-height:0;overflow:hidden;transition:max-height .4s,padding .4s;position:relative;z-index:2}
-.step-sum.on{max-height:70px;padding:14px 20px 0}
-.step-sum .sc{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);background:rgba(255,255,255,.7);border:1px solid var(--line-2);border-radius:100px;padding:6px 12px;cursor:pointer;transition:border-color .3s,color .3s}
-.step-sum .sc:hover{border-color:var(--blue);color:var(--blue)}
-.step-sum .sc b{color:var(--faint);font-weight:400;margin-right:6px}
-.step-stage{position:relative;flex:1;overflow:hidden;z-index:2}
-.screen-s{position:absolute;inset:0;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;
-  opacity:0;transform:translateX(34px);pointer-events:none;transition:opacity .45s var(--ease),transform .45s var(--ease)}
-.screen-s.on{opacity:1;transform:none;pointer-events:auto}
-.screen-s.past{transform:translateX(-34px)}
-.screen-s[data-s="0"]{justify-content:flex-start;padding-top:26px}
-.screen-s .q{font-family:var(--disp);font-weight:600;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.02em;line-height:1.14;color:var(--ink)}
-.screen-s .q i{font-style:italic;font-weight:500;color:var(--blue)}
-.screen-s .hint{margin-top:10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-.opts{display:flex;flex-direction:column;gap:9px;margin-top:24px}
-.opt{position:relative;text-align:center;font-family:var(--body);font-weight:500;font-size:16px;color:var(--ink);border:1.5px solid var(--line-3);border-radius:13px;padding:15px 44px;display:flex;align-items:center;justify-content:center;gap:12px;transition:border-color .3s,background .3s,transform .3s;background:rgba(255,255,255,.5)}
-.opt:hover{border-color:var(--blue);background:rgba(255,255,255,.85);transform:translateY(-2px)}
-.opt .ar{position:absolute;right:18px;color:var(--blue);font-family:var(--mono);opacity:.55;transition:transform .3s,opacity .3s}
-.opt:hover .ar{transform:translateX(4px);opacity:1}
-.s-field{margin-top:24px;border-bottom:1.5px solid var(--line-3);padding-bottom:9px;transition:border-color .3s}
-.s-field:focus-within{border-color:var(--blue)}
-.s-field+.s-field{margin-top:18px}
-.s-field input,.s-field textarea{width:100%;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:19px;padding:6px 0;resize:none;line-height:1.4}
-.s-field input::placeholder,.s-field textarea::placeholder{color:var(--faint)}
-.s-field textarea{min-height:80px;font-size:16.5px}
-.s-row{display:flex;gap:14px;margin-top:24px;align-items:center}
-.s-next{font-family:var(--body);font-weight:600;font-size:14.5px;color:#fff;background:var(--blue);border-radius:100px;padding:12px 24px;display:inline-flex;gap:9px;align-items:center;transition:transform .3s,background .3s}
-.s-next:hover{transform:translateY(-2px);background:var(--ink)}
-.s-skip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
-.s-skip:hover{color:var(--ink)}
-.sent{position:absolute;inset:0;background:var(--paper-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:34px;opacity:0;pointer-events:none;transition:opacity .5s;z-index:5}
-.sent.on{opacity:1;pointer-events:auto}
-.sent .ring{width:62px;height:62px;border-radius:50%;border:2px solid #229F74;display:flex;align-items:center;justify-content:center;color:#229F74;font-size:27px;animation:pop .5s var(--ease)}
-@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
-.sent h3{font-family:var(--disp);font-weight:600;font-size:24px;color:var(--ink)}
-.sent p{color:var(--muted);font-size:14.5px;max-width:300px;line-height:1.5}
-.sent-fallback{margin-top:-6px}
-.sent-fallback b{color:var(--blue);font-weight:600}
-.sent-fallback a{text-decoration:underline}
-@media(max-width:880px){
-  .contact-grid{grid-template-columns:1fr;gap:44px}
-  /* let the card grow to fit the active step instead of clipping it */
-  .stepper{min-height:340px}
-  .step-stage{overflow:visible}
-  .screen-s{position:absolute}
-  .screen-s.on{position:relative}
-  .screen-s,.screen-s[data-s="0"]{padding:24px 20px}
-}
-
-/* ---------- footer ---------- */
-footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index:2}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.foot .fb{display:flex;align-items:baseline;gap:9px;color:var(--ink)}
-.foot .fb .k{font-family:var(--disp);font-weight:700;font-size:18px}.foot .fb .k i{color:var(--blue);font-style:normal}
-.foot a:hover{color:var(--blue)}
-
-/* ---------- responsive ---------- */
-@media(max-width:920px){
-  .hero-grid{grid-template-columns:1fr;gap:44px}
-  .cards{grid-template-columns:1fr}
-  .cap-grid{grid-template-columns:1fr}
-  .craft{grid-template-columns:1fr}
-  .craft-list{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .about-grid{grid-template-columns:1fr;gap:44px}
-  .portrait{width:100%;max-width:430px;margin:0 auto}
-  /* caption stays on the photo, compacted to clear the shoe (person right edge <=60% in the lower band) */
-  .p-cap{right:14px;bottom:12px;padding:6px 10px}
-  .p-cap b{font-size:17px}
-  .p-cap span{font-size:8px;letter-spacing:.1em}
-  .row{grid-template-columns:30px 1fr;gap:8px 16px}
-  .row .rdesc{grid-column:2}
-  .row .rmeta{grid-column:1/-1;justify-content:flex-start;margin-top:4px}
-}
-/* touch / narrow: no hover preview, so show the screenshot inline + keep the copy */
-@media(hover:none),(max-width:920px){
-  .row .rthumb{display:block;grid-column:1/-1;order:-1;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;
-    border-radius:11px;border:1px solid var(--line-2);box-shadow:0 18px 40px -30px rgba(20,29,53,.5);margin-bottom:6px;background:var(--paper-3)}
-  .row:hover{padding-left:6px}
-}
-@media(max-width:600px){
-  .craft-list{grid-template-columns:1fr}
-  nav .nl{display:none}
-  .hero-meta{gap:14px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
-  .rv{opacity:1;transform:none}
-  /* Must out-specify `.status-wrap .feed-toggle` (0,2,0) or reduced-motion users get a visible,
-     focusable Pause button with no listener attached — the feed script bails before wiring it.
-     A control that does nothing is worse than no control. */
-  .status-wrap .feed-toggle{display:none}
-}
-
-/* ---------- sketch loader (Kazim, 2026-09-30) ----------
-   Not a video: a paper mask over the real page, a skeleton measured from the real components,
-   a hand that sketches over the skeleton, then mask and sketch fade away element by element and
-   the page that was underneath all along is simply there. Nothing moves after it lifts. */
-#sk{position:fixed;inset:0;z-index:9000;display:none;animation:skFail .5s 5s forwards}
-.sk-on #sk{display:block}
-.sk-on .hero .rv{transition:none}
-#sk .skbg{position:absolute;inset:0;background:var(--paper)}
-#sk .b{position:absolute;border-radius:10px;background:#E4E9F3;overflow:hidden}
-#sk .b::after{content:"";position:absolute;inset:0;translate:-100% 0;animation:skShim 1.6s var(--ease) infinite;
-  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%)}
-#sk svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-#sk path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-#sk path.o{stroke:var(--blue-2)}
-#sk .pen{position:absolute;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--blue-2);
-  box-shadow:0 0 0 6px rgba(234,94,20,.16);opacity:0}
-#sk .ch{position:absolute;white-space:pre;line-height:normal;letter-spacing:0;opacity:0;will-change:transform,opacity;transform-origin:50% 60%}
-#sk .b.filled::after{display:none}
-#sk .broom{position:absolute;width:3px;margin-left:-1.5px;border-radius:3px;opacity:0;
-  background:linear-gradient(180deg,transparent,#FFB27A 30%,var(--blue-2) 50%,#FFB27A 70%,transparent);
-  box-shadow:0 0 14px 3px rgba(234,94,20,.45),-18px 0 22px -6px rgba(234,94,20,.25)}
-@keyframes skShim{to{translate:100% 0}}
-@keyframes skFail{to{opacity:0;visibility:hidden}}
-</style>
-<script>
-/* sketch loader switch: before first paint, so the real page never flashes before its mask */
-try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage.getItem("k13-sk")||/[?&]sketch/.test(location.search))&&!location.hash)document.documentElement.classList.add("sk-on")}catch(e){}
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/workbench.css">
+<link rel="stylesheet" href="css/sketch.css">
+<script src="js/sketch-switch.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"Organization","@id":"https://k13projects.com/#org","name":"K13 Software Studio","url":"https://k13projects.com/","email":"projects.k13@gmail.com","telephone":"+1 949 306 6998","logo":"https://k13projects.com/favicon.svg","description":"Software that feels obvious, built by two people who answer.","founder":{"@id":"https://k13projects.com/#kazim"},"employee":[{"@id":"https://k13projects.com/#kazim"},{"@id":"https://k13projects.com/#gurkan"}],"areaServed":"Worldwide"},
+ {"@type":"Person","@id":"https://k13projects.com/#kazim","name":"Kazim K.","jobTitle":"Principal","worksFor":{"@id":"https://k13projects.com/#org"},"address":{"@type":"PostalAddress","addressLocality":"San Diego","addressRegion":"CA","addressCountry":"US"}},
+ {"@type":"Person","@id":"https://k13projects.com/#gurkan","name":"Gürkan A.","jobTitle":"Toolmaker","worksFor":{"@id":"https://k13projects.com/#org"},"address":{"@type":"PostalAddress","addressCountry":"BE"}},
+ {"@type":"WebSite","@id":"https://k13projects.com/#site","url":"https://k13projects.com/","name":"K13 Software Studio","publisher":{"@id":"https://k13projects.com/#org"}}
+]}
 </script>
 </head>
 <body>
@@ -381,11 +48,19 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <div class="draft-grid"></div>
-<div class="wash" style="width:420px;height:380px;left:-80px;top:8vh;background:var(--wash-lilac)"></div>
-<div class="wash" style="width:380px;height:340px;right:-60px;top:30vh;background:var(--wash-blue)"></div>
-<div class="wash" style="width:460px;height:380px;left:20vw;top:120vh;background:var(--wash-mint)"></div>
+<div class="motifs" aria-hidden="true">
+  <svg class="motif m1" data-depth="0.12" viewBox="0 0 400 400"><circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="120" class="dot"/><path d="M200 20v360M20 200h360" class="thin"/><path d="M200 200 L327 73" class="arm"/><circle cx="327" cy="73" r="5" class="pin"/></svg>
+  <svg class="motif m2" data-depth="0.28" viewBox="0 0 520 60"><path d="M0 30h520" class="thin"/><g class="ticks"></g></svg>
+  <svg class="motif m3" data-depth="-0.08" viewBox="0 0 600 420"><text x="0" y="360" class="big13">13</text></svg>
+  <svg class="motif m4" data-depth="0.2" viewBox="0 0 300 300"><path d="M20 280 A260 260 0 0 1 280 20" /><path d="M60 280 A220 220 0 0 1 280 60" class="dot"/><circle cx="280" cy="280" r="4" class="pin"/></svg>
+  <svg class="motif m5" data-depth="0.35" viewBox="0 0 200 200"><rect x="30" y="30" width="140" height="140" rx="4" transform="rotate(12 100 100)"/><path d="M30 100h140M100 30v140" class="thin" transform="rotate(12 100 100)"/></svg>
+  <svg class="motif m6" data-depth="0.16" viewBox="0 0 400 400"><circle cx="200" cy="200" r="150" class="dot"/><circle cx="200" cy="200" r="6" class="pin"/><path d="M200 50 L200 200 L320 260" class="arm"/></svg>
+</div>
+<div class="wash wash-1"></div>
+<div class="wash wash-2"></div>
+<div class="wash wash-3"></div>
 
-<div class="peek" id="peek"><div class="fr"><div class="top"><i></i><i></i><i></i></div><img id="peekImg" alt=""></div></div>
+<div class="peek" id="peek"><div class="fr"><div class="top"><i></i><i></i><i></i></div><video id="peekVid" muted loop playsinline preload="none" aria-hidden="true"></video></div></div>
 
 <header id="hdr">
   <div class="bg"></div>
@@ -393,27 +68,34 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
     <span class="k"><b>K</b><i>13</i></span>
     <span class="tag">Software<br>Studio</span>
   </a>
-  <nav>
+  <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  <nav id="siteNav">
     <a class="nl" href="#approach" data-c>Approach</a>
     <a class="nl" href="#work" data-c>Work</a>
+    <a class="nl" href="#workbench" data-c>Workbench</a>
     <a class="nl" href="#about" data-c>Studio</a>
-    <a class="btn" href="#contact" data-c>Start a project</a>
+    <a class="btn sheen" href="#contact" data-c>Start a project</a>
   </nav>
 </header>
 
 <main id="main" tabindex="-1">
 <!-- ===================== HERO ===================== -->
-<section class="hero" id="top">
+<section class="hero" id="top" data-craft="Signature" data-craft-why="Two names, one line: no template could carry it as written." data-craft-opening="Immersive" data-craft-opening-why="A first impression happens once a visit. Worth the weight, here only.">
+  <div class="hero-stage" id="heroStage" aria-hidden="true"><div class="hero-plane">
+    <div class="wall-rows">
+    <div class="wall-row"><div class="wall-track"><figure class="wall-tile"><img src="assets/shots/webp/thg-hero-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Tiger Hospitality</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/lavida-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>La Vida San Diego</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/miramar-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Miramar Food Hall</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/cengo-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>CENGO</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/station8-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Station8</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/globalfork-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Global Fork</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/eggout-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Egg&amp;Out</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/thg-hero-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Tiger Hospitality</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/lavida-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>La Vida San Diego</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/miramar-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Miramar Food Hall</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/cengo-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>CENGO</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/station8-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Station8</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/globalfork-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Global Fork</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/eggout-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Egg&amp;Out</figcaption></figure></div></div>
+    <div class="wall-row wall-row-rev"><div class="wall-track"><figure class="wall-tile"><img src="assets/shots/webp/trustmebro-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>TrustMeBro</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/baa-stop-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>baa atelier</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/barfix-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>BarFix</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/lobsterlab-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Lobster Lab</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/cosmos-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Cosmos Burger</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/carlos-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Carlos Almaraz</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/trustmebro-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>TrustMeBro</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/baa-stop-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>baa atelier</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/barfix-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>BarFix</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/lobsterlab-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Lobster Lab</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/cosmos-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Cosmos Burger</figcaption></figure><figure class="wall-tile"><img src="assets/shots/webp/carlos-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"><figcaption>Carlos Almaraz</figcaption></figure></div></div>
+  </div>
+  </div></div>
+  <div class="hero-stage-ctl"><button type="button" class="wall-toggle" id="wallToggle" aria-pressed="false">Pause the screens</button></div>
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <span class="eyebrow rv">K13 Software Studio · Kazim K.</span>
-        <h1 class="rv">A studio for software that feels
-          <span class="ci">obvious.</span>
-        </h1>
-        <p class="hero-sub rv">I'm Kazim. I design and build software end to end, from the first sketch to the deploy, and I give every project my full attention. The goal is always the same: a product that feels simple to use, even when the work underneath it is not.</p>
+        <span class="eyebrow rv"><span>K<span data-hunt>13</span> Software Studio · San Diego, working worldwide</span></span>
+        <h1 class="rv">Software that feels obvious, built by two people who <span class="ci">answer.</span></h1>
+        <p class="hero-sub rv">Two people, not a queue. You talk to the ones who build it, and it ends up feeling simpler than the work underneath.</p>
         <div class="hero-cta rv">
-          <a class="btn" href="#contact" data-c>Start a project</a>
+          <a class="btn sheen" href="#contact" data-c>Start a project</a>
           <a class="btn ghost" href="#work" data-c>See the work</a>
         </div>
         <div class="hero-meta rv">
@@ -427,7 +109,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
         <aside class="status rv" aria-hidden="true">
           <div class="row1">
             <span class="open"><i></i>Open for projects</span>
-            <span class="yr">2026</span>
+            <span class="yr" data-current-year>2026</span>
           </div>
           <div class="now">Currently</div>
           <div class="feed" id="feed">Launching a public market site for UC San Diego</div>
@@ -435,7 +117,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
           <div class="stats">
             <div class="st"><b data-count="16">0</b><span>shipped</span></div>
             <div class="st"><b data-count="13">0</b><span>live now</span></div>
-            <div class="st"><b>1</b><span>builder</span></div>
+            <div class="st"><b>2</b><span>people</span></div>
           </div>
         </aside>
         <button type="button" class="feed-toggle" id="feedToggle" aria-pressed="false" aria-label="Pause rotating status text">Pause</button>
@@ -444,148 +126,247 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
   </div>
 </section>
 
-<!-- ===================== APPROACH ===================== -->
-<section class="approach" id="approach">
+
+<!-- ===================== WALL OF WORK ===================== -->
+<section class="wall" id="wall" aria-labelledby="clientsTitle">
+  <div class="wrap wall-head"><span class="eyebrow" id="clientsTitle">Who we've worked with</span><span class="wall-sub">All <span data-hunt>13</span> of them are live.</span></div>
+  <div class="wrap">
+    <ul class="logo-wall rv">
+      <li class="logo logo-ink"><img src="assets/clients/tiger-hospitality.webp" alt="Tiger Hospitality" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/la-vida.webp" alt="La Vida San Diego" loading="lazy" decoding="async"></li>
+      <li class="logo logo-ink"><img src="assets/clients/miramar.webp" alt="Miramar Food Hall" loading="lazy" decoding="async"></li>
+      <li class="logo logo-ink"><img src="assets/clients/cengo.webp" alt="CENGO" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/station8.webp" alt="Station8" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/global-fork.webp" alt="Global Fork" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/egg-and-out.svg" alt="Egg&amp;Out" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/trustmebro.webp" alt="TrustMeBro" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/baa-atelier.webp" alt="baa atelier" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/barfix.webp" alt="BarFix" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/lobster-lab.webp" alt="Lobster Lab" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/cosmos-burger.svg" alt="Cosmos Burger" loading="lazy" decoding="async"></li>
+      <li class="logo logo-ink"><img src="assets/clients/carlos-almaraz.svg" alt="Carlos Almaraz" loading="lazy" decoding="async"></li>
+      <li class="logo"><img src="assets/clients/noxzipper.webp" alt="NoxZipper" loading="lazy" decoding="async"></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== WHO IT'S FOR ===================== -->
+<section class="doors" id="for" data-craft="Signature" data-craft-why="Four real problems, named plainly, not a generic services list.">
   <div class="wrap">
     <div class="sec-head rv">
       <div>
-        <span class="eyebrow">How I work</span>
-        <h2 class="h2">Three rules I don't <i>bend.</i></h2>
+        <span class="eyebrow">Who it's for</span>
+        <h2 class="h2">Four kinds of client, one <i>standard.</i></h2>
       </div>
-      <p class="sec-note">No account managers, no handoffs, no surprises. The way the work gets made is the reason it holds up.</p>
+      <p class="sec-note">Tap a door. The <span data-hunt>13</span> projects below sort themselves.</p>
+    </div>
+    <div class="door-grid" id="doorGrid">
+      <div class="door rv" data-door="hospitality">
+        <button class="door-btn" type="button" aria-pressed="false" data-door="hospitality">
+          <span class="door-pic"><img src="assets/shots/webp/thg-hero-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"></span>
+          <span class="door-num">01</span>
+          <span class="door-title">Restaurant and hospitality groups</span>
+          <span class="door-line">A site that sells the room, a menu that updates itself, and a partner who answers.</span>
+        </button>
+        <div class="door-proof"><a href="#w01">Tiger Hospitality</a><a href="#w11">Lobster Lab</a><a href="#w12">Cosmos Burger</a><a href="#w03">Miramar Food Hall</a><a href="#w06">Global Fork</a><a href="#w07">Egg&amp;Out</a><a href="#w02">La Vida San Diego</a></div>
+      </div>
+      <div class="door rv" data-door="founders">
+        <button class="door-btn" type="button" aria-pressed="false" data-door="founders">
+          <span class="door-pic"><img src="assets/shots/webp/trustmebro-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"></span>
+          <span class="door-num">02</span>
+          <span class="door-title">Founders with a product</span>
+          <span class="door-line">Someone who has shipped odds engines and inventory software, not just brochures.</span>
+        </button>
+        <div class="door-proof"><a href="#w08">TrustMeBro</a><a href="#w10">BarFix</a></div>
+      </div>
+      <div class="door rv" data-door="brands">
+        <button class="door-btn" type="button" aria-pressed="false" data-door="brands">
+          <span class="door-pic"><img src="assets/shots/webp/baa-stop-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"></span>
+          <span class="door-num">03</span>
+          <span class="door-title">Brands and makers</span>
+          <span class="door-line">Editorial craft and a site that sells without ever raising its voice.</span>
+        </button>
+        <div class="door-proof"><a href="#w09">baa atelier</a><a href="#w04">CENGO</a><a href="#w13">Carlos Almaraz</a></div>
+      </div>
+      <div class="door rv" data-door="institutions">
+        <button class="door-btn" type="button" aria-pressed="false" data-door="institutions">
+          <span class="door-pic"><img src="assets/shots/webp/station8-live-750.webp" alt="" loading="lazy" decoding="async" width="750" height="469"></span>
+          <span class="door-num">04</span>
+          <span class="door-title">Institutions</span>
+          <span class="door-line">Accessibility and stability from day one, not fixed after the fact.</span>
+        </button>
+        <div class="door-proof"><a href="#w05">Station8 at UC San Diego</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== APPROACH ===================== -->
+<section class="approach" id="approach" data-craft="Essential" data-craft-why="Three rules don't need decoration to be true.">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="eyebrow">How we work</span>
+        <h2 class="h2">Three rules we don't <i>bend.</i></h2>
+      </div>
+      <p class="sec-note">The way the work gets made is why it holds up.</p>
     </div>
     <div class="cards">
-      <div class="card rv">
+      <div class="card rv sheen">
         <div class="num">01</div>
-        <h3>One person accountable, start to finish</h3>
-        <p>You deal with me from the first call to the launch. Behind me works Team K13, a crew of AI specialists for design, code, testing and security, and nothing they make reaches you before it passes my desk.</p>
-        <div class="tint" style="background:var(--wash-blue)"></div>
+        <h3>Two people, no one in between</h3>
+        <p>You talk to the people who build it, first call to launch. Nothing reaches you before it works where your visitors will see it.</p>
+        <div class="tint tint-blue"></div>
       </div>
-      <div class="card rv">
+      <div class="card rv sheen">
         <div class="num">02</div>
         <h3>Slow where it counts</h3>
-        <p>Fast on the easy parts, careful on the ones that bite later: accessibility, security, and the test suites that keep running while everyone sleeps.</p>
-        <div class="tint" style="background:var(--wash-mint)"></div>
+        <p>Fast on the easy parts. Careful on the ones that bite later: accessibility, security, the parts nobody notices until they fail.</p>
+        <div class="tint tint-mint"></div>
       </div>
-      <div class="card rv">
+      <div class="card rv sheen">
         <div class="num">03</div>
         <h3>Honest from the first reply</h3>
-        <p>If a project is not a fit, you hear that within a day, along with a better direction. I would rather send you somewhere good than fill a calendar.</p>
-        <div class="tint" style="background:var(--wash-peach)"></div>
+        <p>If a project isn't a fit, you hear it within a day, with a better direction. We'd rather send you somewhere good than fill a calendar.</p>
+        <div class="tint tint-peach"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===================== WORK ===================== -->
-<section class="work" id="work">
+<section class="work" id="work" data-craft="Tailored" data-craft-why="Thirteen real domains needed thirteen real answers, not a template row.">
   <div class="wrap">
     <div class="sec-head rv">
       <div>
         <span class="eyebrow">Selected work</span>
         <h2 class="h2">Real products, on <i>real</i> domains.</h2>
       </div>
-      <p class="sec-note">Hover a line to see it. Click to open the live site in a new tab. Every one of these is running in production right now.</p>
+      <p class="sec-note">Hover a row to see it move. Every one is live, checked by hand.</p>
     </div>
+    <div class="door-reset" id="doorReset" hidden><span id="doorResetLabel">Showing one kind of client.</span> <button type="button" class="reset-link" id="doorResetBtn">Show all 13</button></div>
     <div class="index" id="index">
-      <a class="row" href="https://tigerhospitalitygroup.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/thg-hero.jpg" data-c>
+      <a class="row sheen" id="w01" href="https://tigerhospitalitygroup.com" target="_blank" rel="noopener noreferrer" data-peek="thg-hero" data-door="hospitality" data-c>
         <span class="rnum">01</span>
         <span class="rname">Tiger Hospitality</span>
         <span class="rdesc">One roof for a family of restaurant brands, with a map where every pin is a new neighborhood.</span>
-        <span class="rmeta"><span class="tag">Brand · Maps</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Brand · Maps</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://lavida.fit" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/lavida-live.jpg" data-c>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w01">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w01" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>One restaurant group, six concepts, six separate sites. One of them was about to lose the rented platform it lived on, with a hard cutoff date.</p></div><div class="story-step"><span class="story-k">What we built</span><p>A flagship with a map where every pin is a location, and a rebuilt site for each concept: menus the teams update themselves, catering enquiries that land in a real inbox, structured data for every restaurant.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>Seven live sites under one roof, a perfect search score on the flagship, and a family that can open a new neighbourhood by adding one pin.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>7</b><span>live sites</span></div><div class="story-fact"><b>600+</b><span>commits across the family</span></div><div class="story-fact"><b>Nov 2025</b><span>since</span></div><div class="story-fact"><b>100</b><span>flagship search score</span></div></div>
+        </div>
+      </div>
+      <a class="row sheen" id="w02" href="https://lavida.fit" target="_blank" rel="noopener noreferrer" data-peek="lavida-live" data-door="hospitality" data-c>
         <span class="rnum">02</span>
         <span class="rname">La Vida San Diego</span>
         <span class="rdesc">An all day healthy kitchen that had to feel like sunshine before you read a single word.</span>
-        <span class="rmeta"><span class="tag">Restaurant</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Restaurant</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://miramarfoodhall.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/miramar-live.jpg" data-c>
+      <a class="row sheen" id="w03" href="https://miramarfoodhall.com" target="_blank" rel="noopener noreferrer" data-peek="miramar-live" data-door="hospitality" data-c>
         <span class="rnum">03</span>
         <span class="rname">Miramar Food Hall</span>
         <span class="rdesc">A 1938 theatre brought back online as a food hall, opening night drumroll included.</span>
-        <span class="rmeta"><span class="tag">Brand · Reporting</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Brand · Reporting</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://cengo.party" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/cengo-live.jpg" data-c>
+      <a class="row sheen" id="w04" href="https://cengo.party" target="_blank" rel="noopener noreferrer" data-peek="cengo-live" data-door="brands" data-c>
         <span class="rnum">04</span>
         <span class="rname">CENGO</span>
         <span class="rdesc">A DJ and producer's corner of the night that restocks its own music, mixes, and tour dates while no one is touching the code.</span>
-        <span class="rmeta"><span class="tag">Artist · Self-updating</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Artist · Self-updating</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://station8publicmarket.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/station8-live.jpg" data-c>
+      <a class="row sheen" id="w05" href="https://station8publicmarket.com" target="_blank" rel="noopener noreferrer" data-peek="station8-live" data-door="institutions" data-c>
         <span class="rnum">05</span>
         <span class="rname">Station8</span>
         <span class="rdesc">A 20,000 square foot public market at UC San Diego, accessible and stable from day one.</span>
-        <span class="rmeta"><span class="tag">CMS · A11y</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">CMS · A11y</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://globalforkfh.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/globalfork-live.jpg" data-c>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w05">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w05" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>A 20,000 square foot public market at UC San Diego needed its site before the doors opened, and it had to work for every student from day one.</p></div><div class="story-step"><span class="story-k">What we built</span><p>A Next.js site the market's own team runs through a CMS, a bookings form that actually delivers, and a map of the vendors. Accessibility was a requirement, not a pass at the end.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>Live since spring 2026. The page paints in about half a second and ships a full set of security headers.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>Apr 2026</b><span>first commit</span></div><div class="story-fact"><b>69</b><span>commits</span></div><div class="story-fact"><b>0.53s</b><span>time to paint</span></div><div class="story-fact"><b>2026-09-25</b><span>checked</span></div></div>
+        </div>
+      </div>
+      <a class="row sheen" id="w06" href="https://globalforkfh.com" target="_blank" rel="noopener noreferrer" data-peek="globalfork-live" data-door="hospitality" data-c>
         <span class="rnum">06</span>
         <span class="rname">Global Fork</span>
         <span class="rdesc">A Little Italy food hall built to the standard of the designer who shaped the room.</span>
-        <span class="rmeta"><span class="tag">Scroll craft</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Scroll craft</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://egg.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/eggout-live.jpg" data-c>
+      <a class="row sheen" id="w07" href="https://egg.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="eggout-live" data-door="hospitality" data-c>
         <span class="rnum">07</span>
         <span class="rname">Egg&amp;Out</span>
         <span class="rdesc">An all day, egg forward kitchen by Tiger Hospitality, opened on the web inside a wordmark that spirals on without end.</span>
-        <span class="rmeta"><span class="tag">Restaurant · Brand</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Restaurant · Brand</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://tmb.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/trustmebro-live.jpg" data-c>
+      <a class="row sheen" id="w08" href="https://tmb.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="trustmebro-live" data-door="founders" data-c>
         <span class="rnum">08</span>
         <span class="rname">TrustMeBro</span>
         <span class="rdesc">A betting brain that does the cold math on every wager, then faces the scoreboard the next morning whether the pick won or lost.</span>
-        <span class="rmeta"><span class="tag">Data · EV engine</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Data · EV engine</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://baa2.k13projects.com/" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/baa-stop.jpg" data-c>
+      <a class="row sheen" id="w09" href="https://www.atelierbaa.com/" target="_blank" rel="noopener noreferrer" data-peek="baa-stop" data-door="brands" data-c>
         <span class="rnum">09</span>
         <span class="rname">baa atelier</span>
         <span class="rdesc">A finishing studio in Roman clay and limewash, presented like an art book that quietly sells.</span>
-        <span class="rmeta"><span class="tag">Editorial</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Editorial</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://bfx.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/barfix-live.jpg" data-c>
+      <a class="row sheen" id="w10" href="https://bfx.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="barfix-live" data-door="founders" data-c>
         <span class="rnum">10</span>
         <span class="rname">BarFix</span>
         <span class="rdesc">Every bottle steps on a scale, so the liquor that used to quietly walk out the back door has nowhere left to hide.</span>
-        <span class="rmeta"><span class="tag">SaaS · Inventory</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">SaaS · Inventory</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://lobsterlab.us" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/lobsterlab-live.jpg" data-c>
+      <div class="story-row">
+        <button type="button" class="story-btn" aria-expanded="false" aria-controls="story-w10">Read the story <span aria-hidden="true">↓</span></button>
+        <div class="story" id="story-w10" hidden>
+          <div class="story-grid"><div class="story-step"><span class="story-k">The problem</span><p>Bars lose liquor they never ring up, and nobody counts bottles at 2am. Our own product, built for the Turkish market.</p></div><div class="story-step"><span class="story-k">What we built</span><p>Every bottle steps on a scale. A counting engine with 27 passing tests turns weight into pours, event-sourced stock makes every change auditable, and row-level security keeps each bar's numbers its own.</p></div><div class="story-step"><span class="story-k">What it does now</span><p>The first working build took five days. It paints in under a third of a second and connects to point-of-sale and e-invoice systems.</p></div></div>
+          <div class="story-facts"><div class="story-fact"><b>5 days</b><span>first build</span></div><div class="story-fact"><b>27 passing</b><span>engine tests</span></div><div class="story-fact"><b>0.28s</b><span>time to paint</span></div><div class="story-fact"><b>Jun 2026</b><span>built</span></div></div>
+        </div>
+      </div>
+      <a class="row sheen" id="w11" href="https://lobsterlab.us" target="_blank" rel="noopener noreferrer" data-peek="lobsterlab-live" data-door="hospitality" data-c>
         <span class="rnum">11</span>
         <span class="rname">Lobster Lab</span>
         <span class="rdesc">A Tiger Hospitality seafood spot, moved off a rented menu platform onto a site it finally owns, lobster rolls first.</span>
-        <span class="rmeta"><span class="tag">Restaurant · Migration</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Restaurant · Migration</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://cosmos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/cosmos-live.jpg" data-c>
+      <a class="row sheen" id="w12" href="https://cosmos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="cosmos-live" data-door="hospitality" data-c>
         <span class="rnum">12</span>
         <span class="rname">Cosmos Burger</span>
         <span class="rdesc">Smash burgers from Tiger Hospitality, served loud: bold color, big type, and a menu you can almost taste from the couch.</span>
-        <span class="rmeta"><span class="tag">Restaurant · Brand</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Restaurant · Brand</span><span class="go">Open ↗</span></span>
       </a>
-      <a class="row" href="https://carlos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="assets/shots/carlos-live.jpg" data-c>
+      <a class="row sheen" id="w13" href="https://carlos.k13projects.com" target="_blank" rel="noopener noreferrer" data-peek="carlos-live" data-door="brands" data-c>
         <span class="rnum">13</span>
         <span class="rname">Carlos Almaraz</span>
         <span class="rdesc">A living memorial for a founder of Los Four, the painter who turned Los Angeles into a dream of fire.</span>
-        <span class="rmeta"><span class="tag">Editorial · Memorial</span><span class="go">Open ↗</span></span>
+        <span class="rmeta"><span class="rlive"><i></i>Live</span><span class="tag">Editorial · Memorial</span><span class="go">Open ↗</span></span>
       </a>
     </div>
-    <p class="index-foot rv">Also cooking in the studio: <b>an AI copilot</b> that finally pays attention in your meetings, <b>a sports private equity home</b> that is all thesis and no hype, <b>a gallery grade site</b> for an LA interior designer, <b>a project control room</b> that flags which job is stuck and who owns it, and <b>factory vision</b> that catches the flaw a tired eye misses.</p>
-    <p class="index-foot rv">Built for the studio itself: <b>a war room</b> that keeps every project, deadline and loose end on one screen, <b>a UI library</b> of parts already proven on live sites, and <b>a 3D office</b> where Team K13 clocks in.</p>
+    <p class="index-foot rv index-checked">All <span data-hunt>13</span> checked live on <time datetime="2026-09-25">2026-09-25</time>.</p>
+    <p class="index-foot rv">Also cooking in the studio: <b>an AI copilot</b> that finally pays attention in your meetings, <b>a gallery grade site</b> for an LA interior designer, <b>a project control room</b> that flags which job is stuck and who owns it, and <b>factory vision</b> that catches the flaw a tired eye misses.</p>
+    <p class="index-foot rv">Built for the studio itself: <b>a war room</b> that keeps every project, deadline and loose end on one screen, <b>a UI library</b> of parts already proven on live sites, and <b>a 3D office</b> we show up to every day.</p>
   </div>
 </section>
 
-<!-- ===================== CAPABILITIES ===================== -->
+<!-- ===================== CAPABILITIES + CRAFT ===================== -->
 <section class="cap" id="cap">
   <div class="wrap">
     <div class="sec-head rv">
       <div>
-        <span class="eyebrow">What I can build</span>
-        <h2 class="h2">Three lanes, one <i>builder.</i></h2>
+        <span class="eyebrow">What we build</span>
+        <h2 class="h2">Three lanes, two <i>people.</i></h2>
       </div>
-      <p class="sec-note">The tools matter less than knowing when to reach for each. These ship the work above.</p>
+      <p class="sec-note">Knowing when to reach for each matters more than the tools.</p>
     </div>
     <div class="cap-grid">
       <div class="cap-col rv">
         <h3>Products, end to end</h3>
-        <p>AI tools, SaaS, and internal platforms taken from a sentence to a launched product, owned by one person the whole way.</p>
+        <p>AI tools, SaaS and internal platforms, from a sentence to a launched product, and kept running after.</p>
         <div class="stk">
           <span>TypeScript <em>core</em></span>
           <span>React · Next.js <em>app</em></span>
@@ -595,7 +376,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
       </div>
       <div class="cap-col rv">
         <h3>Brand sites that sell</h3>
-        <p>Sites bold enough to remember and fast enough to rank, wired to actually convert and easy for your team to run.</p>
+        <p>We build sites bold enough to remember and fast enough to rank, wired to actually convert and easy for your own team to run.</p>
         <div class="stk">
           <span>Tailwind <em>style</em></span>
           <span>GSAP · Lenis <em>motion</em></span>
@@ -605,7 +386,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
       </div>
       <div class="cap-col rv">
         <h3>The hard, specific stuff</h3>
-        <p>Odds engines, live data feeds, AI vision, and accessibility critical builds. The work other studios quietly pass on.</p>
+        <p>We take on odds engines, live data feeds, AI vision and accessibility critical builds: the work other studios quietly pass on.</p>
         <div class="stk">
           <span>Stripe <em>payments</em></span>
           <span>Playwright <em>tests</em></span>
@@ -616,40 +397,88 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
     </div>
     <div class="craft rv">
       <div class="craft-head">
-        <h3>Four levels of craft, chosen part by part</h3>
-        <p>Not every part of a site deserves the same effort. You see each level on your own site before you choose, and I will tell you where not to spend.</p>
+        <h3>Four levels of craft, seen live on this page.</h3>
+        <p>Not every part of a site deserves the same effort. Flip the switch to see which level went where on this page, and why.</p>
       </div>
-      <ol class="craft-list">
-        <li><span class="lvl">Essential</span><span>It works, it is clean, nothing is missing. Most sites should be exactly this.</span></li>
-        <li><span class="lvl">Signature</span><span>It carries your character instead of looking like anyone's.</span></li>
-        <li><span class="lvl">Tailored</span><span>Cut for you alone. It only exists on your site.</span></li>
-        <li><span class="lvl">Immersive</span><span>The part people remember and show someone else. Two or three per site, at most.</span></li>
-      </ol>
+      <div class="showroom">
+        <button class="switch" type="button" role="switch" aria-checked="false" id="showroom" aria-describedby="showroomHelp">
+          <span class="knob" aria-hidden="true"></span>
+          <span class="sw-label">Show the craft levels on this page</span>
+        </button>
+        <p class="sw-help" id="showroomHelp">Flip it. See what level of craft went into this exact page.</p>
+        <ol class="ladder" aria-label="The four craft levels">
+          <li><b>Essential</b> It works, it is clean, nothing is missing.</li>
+          <li><b>Signature</b> It looks like you.</li>
+          <li><b>Tailored</b> Made for you alone.</li>
+          <li><b>Immersive</b> You are inside it. Two or three per site, at most.</li>
+        </ol>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== ABOUT ===================== -->
+<!-- ===================== ON THE RECORD ===================== -->
+<section class="record" id="record">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="eyebrow">How you can check</span>
+        <h2 class="h2">Proof, not <i>promises.</i></h2>
+      </div>
+      <p class="sec-note">What "we care about quality" means in numbers, and when we last checked.</p>
+    </div>
+    <ol class="proof">
+      <li class="rv"><b>Zero accessibility violations, checked with axe-core.</b><span>Nobody using a keyboard or a screen reader gets stuck on this site.</span><time datetime="2026-09-25" data-record="a11y">Checked 2026-09-25</time></li>
+      <li class="rv"><b>Six security headers, named and live on this exact site.</b><span>You don't have to take our word for it, check it yourself, right now.</span><time datetime="2026-09-25" data-record="headers">Checked 2026-09-25</time></li>
+      <li class="rv"><b>All <span data-hunt>13</span> live projects fetched and checked, one by one.</b><span>"Live" on this page is not a guess. It was verified.</span><time datetime="2026-09-25" data-record="links">Checked 2026-09-25</time></li>
+      <li class="rv"><b>Every build is QA'd in a real browser, desktop and mobile, before it ships.</b><span>What we review is what your visitors get, not a screenshot that never left staging.</span><time datetime="2026-09-25">As of 2026-09-25</time></li>
+      <li class="rv"><b>Security and legal audits run on client work, written down.</b><span>The paperwork exists before anything goes wrong, not after.</span><time datetime="2026-09-25">As of 2026-09-25</time></li>
+    </ol>
+    <p class="index-foot rv">Check it yourself: open your browser's dev tools, read the response headers, or read this page's own CSP. Nothing here is a claim you have to take on faith.</p>
+  </div>
+</section>
+
+<!-- ===================== THE STUDIO ===================== -->
 <section class="about" id="about">
   <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="eyebrow">The studio</span>
+        <h2 class="h2">Two people, one <i>standard.</i></h2>
+      </div>
+    </div>
     <div class="about-grid">
       <figure class="portrait rv" id="portrait">
         <div class="p-back" data-depth="-.45" aria-hidden="true"></div>
         <div class="p-frame" data-depth=".08">
-          <img src="assets/kazim.jpg" alt="Kazim K., founder of K13 Software Studio, leaning on a plinth in front of a burnt-orange circle" loading="lazy" decoding="async" data-depth=".16" data-scale="1.06">
+          <img src="assets/kazim.jpg" alt="Kazim K., Principal of K13 Software Studio, leaning on a plinth in front of a burnt-orange circle" loading="lazy" decoding="async" data-depth=".16" data-scale="1.06">
         </div>
         <figcaption class="p-cap" data-depth=".16">
           <b>Kazim K.</b>
-          <span>Founder</span>
-          <span>K13 Software Studio</span>
+          <span>Principal</span>
+          <span>San Diego</span>
         </figcaption>
       </figure>
       <div class="rv">
-        <p>I don't run an agency. I'm one builder who treats every project like <span class="hl">it has my name on it,</span> because it does. One name on the door, a whole crew behind it: that crew is Team K13. I would rather make six things I believe in than sixty I don't.</p>
+        <p class="note">I don't run an agency. I'm one builder who treats every project like <span class="hl">it has my name on it,</span> because it does. One name on the door, a whole crew behind it: that crew is Team K13. I would rather make six things I believe in than sixty I don't.</p>
+        <div class="people">
+          <div class="person">
+            <span class="p-init" aria-hidden="true">KK</span>
+            <b>Kazim K.</b>
+            <span class="p-role">Principal · San Diego</span>
+            <p>Leads every project start to call to launch, and still does the work himself.</p>
+          </div>
+          <div class="person">
+            <span class="p-init" aria-hidden="true">GA</span>
+            <b>Gürkan A.</b>
+            <span class="p-role">Toolmaker · Belgium</span>
+            <p>Builds the infrastructure behind every deploy: the parts we sell on top of.</p>
+          </div>
+        </div>
         <div class="facts">
           <div class="f"><span class="k">Status</span><span class="v">Open for a new project</span></div>
-          <div class="f"><span class="k">Based</span><span class="v">Worldwide, remote</span></div>
-          <div class="f"><span class="k">Track record</span><span class="v">16 shipped, 13 live</span></div>
+          <div class="f"><span class="k">Based</span><span class="v">San Diego and Belgium, worldwide remote</span></div>
+          <div class="f"><span class="k">Track record</span><span class="v">16 shipped, <span data-hunt>13</span> live</span></div>
           <div class="f"><span class="k">What earns a yes</span><span class="v">A real connection</span></div>
         </div>
       </div>
@@ -658,15 +487,15 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
 </section>
 
 <!-- ===================== CONTACT ===================== -->
-<section class="contact" id="contact">
+<section class="contact" id="contact" data-craft="Tailored" data-craft-why="Getting in touch should fit how you want to reach us, not one form.">
   <div class="wrap">
     <div class="contact-grid">
       <div class="contact-text">
         <span class="eyebrow rv">Start a project</span>
-        <h2 class="big rv" style="margin-top:18px">Have something worth <i>building?</i></h2>
-        <p class="rv">Tell me what it is and why it matters to you. A few taps, in your own words. You will hear back within a day, with real thoughts either way.</p>
+        <h2 class="big rv big-gap">Have something worth <i>building?</i></h2>
+        <p class="rv">A few taps, in your own words. You'll hear back within a day, with real thoughts either way.</p>
         <a class="mail rv" href="mailto:projects.k13@gmail.com?subject=Project%20inquiry" data-c>Or just email <b>projects.k13@gmail.com</b>
-          <svg viewBox="0 0 24 24"><path d="M7 17 L17 7 M9 7 H17 V15"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 L17 7 M9 7 H17 V15"/></svg>
         </a>
         <div class="lines rv">
           <a href="tel:+19493066998" data-c>Phone <b>+1 949 306 6998</b></a>
@@ -679,7 +508,7 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
         <div class="step-body" id="stepBody">
           <div class="step-top">
             <button class="step-back" id="stepBack" type="button" disabled>&lsaquo; Back</button>
-            <span class="step-lab" id="stepLab">Step 1 of 3</span>
+            <span class="step-lab" id="stepLab">Step 1 of 4</span>
             <div class="step-prog" id="stepProg"></div>
           </div>
           <div class="step-sum" id="stepSum"></div>
@@ -701,16 +530,21 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
               <div class="s-row"><button class="s-next" id="nameNext" type="button">Continue &rarr;</button></div>
             </div>
             <div class="screen-s" data-s="2" inert>
-              <div class="q">Where do I <i>reach you?</i></div>
-              <div class="hint">I reply within a day.</div>
+              <div class="q">Where do <i>we</i> reach you?</div>
+              <div class="hint">Email, skip is fine. We reply within a day.</div>
               <div class="s-field"><label class="vh" for="sEmail">Your email address</label><input id="sEmail" type="email" autocomplete="email" placeholder="you@email.com" enterkeyhint="next"></div>
               <div class="s-row"><button class="s-next" id="emailNext" type="button">Continue &rarr;</button><button class="s-skip" id="emailSkip" type="button">skip</button></div>
             </div>
             <div class="screen-s" data-s="3" inert>
               <div class="q">Last one. <i>Why does it matter to you?</i></div>
-              <div class="hint">The honest version. That is the part I read for.</div>
-              <div class="s-field"><label class="vh" for="sWhy">Why this project matters to you</label><textarea id="sWhy" rows="3" placeholder="Tell me the real reason..."></textarea></div>
-              <div class="s-row"><button class="s-next" id="sendIt" type="button">Send it &rarr;</button></div>
+              <div class="hint">The honest version, that's the part we read for.</div>
+              <div class="s-field"><label class="vh" for="sWhy">Why this project matters to you</label><textarea id="sWhy" rows="3" placeholder="Tell us the real reason..."></textarea></div>
+              <div class="s-row s-row-wrap">
+                <button class="s-next" id="sendIt" type="button">Send it &rarr;</button>
+                <button class="s-alt" id="gmailIt" type="button">Open in Gmail</button>
+                <button class="s-alt" id="copyIt" type="button">Copy the message</button>
+              </div>
+              <p class="s-note" id="copyNote" role="status" aria-live="polite"></p>
             </div>
           </div>
         </div>
@@ -718,360 +552,57 @@ try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(!sessionStorage
           <div class="ring">&check;</div>
           <h3 id="sentTitle"></h3>
           <p id="sentMsg"></p>
-          <p class="sent-fallback" id="sentFallback" hidden>Nothing open? Email me directly &mdash; <a id="sentMailLink" href="mailto:projects.k13@gmail.com"><b>projects.k13@gmail.com</b></a></p>
+          <p class="sent-fallback" id="sentFallback" hidden>Nothing open? Email us directly at <a id="sentMailLink" href="mailto:projects.k13@gmail.com"><b>projects.k13@gmail.com</b></a></p>
         </div>
       </div>
     </div>
   </div>
 </section>
+<!-- ===================== WORKBENCH ===================== -->
+<section class="workbench" id="workbench" data-craft="Immersive" data-craft-why="The one place we let ourselves show off. It's still real code.">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="eyebrow">The workbench</span>
+        <h2 class="h2">Things from the work, made <i>playable.</i></h2>
+      </div>
+      <p class="sec-note">Desk toys made from the work. No rules, no reading. Light all <span data-hunt>13</span> to open the doors.</p>
+    </div>
+    <div class="bench">
+      <div class="bench-card rv" data-game="carlos"></div>
+      <div class="bench-card rv" data-game="miramar"></div>
+      <div class="bench-card rv" data-game="egg"></div>
+      <div class="bench-card rv" data-game="cengo"></div>
+      <div class="bench-card rv" data-game="pindrop"></div>
+      <div class="bench-card rv" data-game="goldenhour"></div>
+      <div class="bench-card rv bench-wide" data-game="sandwich"></div>
+      <div class="bench-card rv" data-game="eggcursor"></div>
+      <div class="bench-card rv" data-game="stalls"></div>
+      <div class="bench-card rv" data-game="twirl"></div>
+      <div class="bench-card rv" data-game="nextmorning"></div>
+      <div class="bench-card rv" data-game="pours"></div>
+      <div class="bench-card rv" data-game="limewash"></div>
+      <div class="bench-card rv bench-wide" data-game="letters"></div>
+    </div>
+    <noscript><p class="index-foot">The workbench needs JavaScript to play. Everything else on this page works without it.</p></noscript>
+  </div>
+</section>
+
 </main>
 
-<footer>
+<footer data-craft="Essential" data-craft-why="A footer's job is to end the page cleanly. Nothing more.">
   <div class="wrap">
     <div class="foot">
-      <span class="fb"><span class="k">K<i>13</i></span> Software Studio</span>
-      <span>Clear software, shipped by one builder.</span>
-      <span><a href="mailto:projects.k13@gmail.com" data-c>projects.k13@gmail.com</a> · © <span data-current-year>2026</span></span>
+      <span class="fb"><span class="k">K<i data-hunt>13</i></span> Software Studio</span>
+      <span>Clear software, built by two people.</span>
+      <span class="foot-tools"><span data-hunt-counter hidden></span><span data-theme-slot></span></span>
+      <span><a href="mailto:projects.k13@gmail.com" data-c>projects.k13@gmail.com</a> · © <span data-current-year data-hunt>2026</span></span>
     </div>
   </div>
 </footer>
 
 <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" integrity="sha384-tKsJDT6PlUI0pSBt9/sBKJluKgA19/a6mBrDsZaXotLB4ZYfMGM6xt6/WgGpYhTm" crossorigin="anonymous"></script>
-<script>
-(function(){
-"use strict";
-var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* footer year: never goes stale by hand; the typed year is the no-JS fallback */
-document.querySelectorAll("[data-current-year]").forEach(function(el){el.textContent=new Date().getFullYear();});
-
-/* smooth scroll */
-var lenis=null;
-function startLenis(){ if(reduced || !window.Lenis) return;
-  lenis=new Lenis({lerp:0.13,smoothWheel:true});
-  var raf=function(t){ lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
-if(window.Lenis) startLenis(); else window.addEventListener("DOMContentLoaded",startLenis);
-function scrollTo(el){ if(lenis) lenis.scrollTo(el,{offset:-30,duration:1.2}); else el.scrollIntoView({behavior:reduced?"auto":"smooth"}); }
-document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach(function(a){
-  a.addEventListener("click",function(e){ var id=a.getAttribute("href"); if(id.length>1){ var el=document.querySelector(id); if(el){ e.preventDefault(); scrollTo(el); } } });
-});
-/* skip link: same smooth-scroll, but also actually move focus into <main> -- the shared
-   handler above intentionally short-circuits native anchor navigation (which is what would
-   normally focus the target), so a skip link needs its own explicit focus() call */
-var skipLink=document.querySelector(".skip-link");
-if(skipLink){
-  skipLink.addEventListener("click",function(e){
-    var el=document.querySelector(skipLink.getAttribute("href"));
-    if(el){ e.preventDefault(); scrollTo(el); el.focus({preventScroll:true}); }
-  });
-}
-
-/* header */
-var hdr=document.getElementById("hdr");
-function onScroll(){ hdr.classList.toggle("scrolled",(window.scrollY||0)>30); }
-window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
-
-/* sketch loader: the logo is drawn first and shown through the mask; boxes are outlined by hand;
-   every letter of the real copy is swept in from left, above and below and settles in reading order,
-   on the exact spot of the real letter beneath; then the mask lifts and the real page is just there */
-(function(){
-  var root=document.documentElement,sk=document.getElementById("sk");
-  if(!sk) return;
-  if(!root.classList.contains("sk-on")){ sk.remove(); return; }
-  try{ sessionStorage.setItem("k13-sk","1"); }catch(e){}
-  function finish(){ sk.remove(); root.classList.remove("sk-on"); }
-  if((window.scrollY||0)>40){ finish(); return; }
-  /* the hero takes its final state under the mask, so nothing changes after it lifts */
-  document.querySelectorAll(".hero .rv").forEach(function(el){ el.classList.add("in"); });
-  document.querySelectorAll(".hero [data-count]").forEach(function(el){ el.textContent=el.getAttribute("data-count"); el.removeAttribute("data-count"); });
-  var NS="http://www.w3.org/2000/svg",svg,pen,boxes=[],lines=[],chars=[],t0=0,R=0,skipAt=0;
-  var n=0; function w(){ n++; return Math.sin(n*12.9898)*1.8; }
-  function rnd(k){ var x=Math.sin(k*78.233+12.9898)*43758.5453; return x-Math.floor(x); }
-  function seen(q){ return q.right-q.left>2&&q.bottom>0&&q.top<innerHeight; }
-  function box(el){ var q=el.getBoundingClientRect(); return {left:q.left,top:q.top,right:q.right,bottom:q.bottom}; }
-  function rectPath(q,r){ var x=q.left-4,y=q.top-4,W=q.right-q.left+8,H=q.bottom-q.top+8; r=Math.min(r,H/2);
-    return "M"+(x+r)+" "+(y+w())+" L"+(x+W-r)+" "+(y+w())+" Q"+(x+W)+" "+y+" "+(x+W+w())+" "+(y+r)+" L"+(x+W+w())+" "+(y+H-r)+
-      " Q"+(x+W)+" "+(y+H)+" "+(x+W-r)+" "+(y+H+w())+" L"+(x+r)+" "+(y+H+w())+" Q"+x+" "+(y+H)+" "+(x+w())+" "+(y+H-r)+" L"+(x+w())+" "+(y+r)+" Q"+x+" "+y+" "+(x+r)+" "+y; }
-  function addBox(el,r,accent,fill){ if(!el) return; var q=box(el); if(!seen(q)) return;
-    var cs=getComputedStyle(el); boxes.push({q:q,r:r,o:!!accent,bg:fill?cs.backgroundColor:null,rad:cs.borderRadius}); }
-  /* every visible letter of an element, measured where the browser actually drew it */
-  function addText(el){ if(!el) return; var tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),node,rg=document.createRange(),mine=[];
-    while((node=tw.nextNode())){ var cs=getComputedStyle(node.parentElement),d=node.data;
-      for(var i=0;i<d.length;i++){ if(/\s/.test(d[i])) continue; rg.setStart(node,i); rg.setEnd(node,i+1);
-        var rs=rg.getClientRects(); if(!rs.length) continue; var q=rs[0]; if(!seen(q)||q.width<.5) continue;
-        mine.push({ch:d[i],x:q.left,y:q.top,w:q.width,h:q.height,cs:cs}); } }
-    /* group into visual lines, in reading order */
-    mine.forEach(function(c){ var L=null; for(var j=lines.length-1;j>=0&&j>=lines.length-6;j--){ if(lines[j].el===el&&Math.abs(lines[j].top-c.y)<c.h*.5){ L=lines[j]; break; } }
-      if(!L){ L={el:el,top:c.y,h:c.h,left:c.x,right:c.x+c.w,cs:[]}; lines.push(L); }
-      L.left=Math.min(L.left,c.x); L.right=Math.max(L.right,c.x+c.w); L.h=Math.max(L.h,c.h); L.cs.push(c); c.L=L; chars.push(c); }); }
-  function each(sel,fn){ document.querySelectorAll(sel).forEach(fn); }
-  function build(){
-    addBox(document.querySelector("#hdr .brand"),10);
-    addBox(document.querySelector("#hdr nav .btn"),12,true,true);
-    each(".hero-cta .btn",function(e,i){ addBox(e,12,i===0,true); });
-    addBox(document.querySelector(".hero .status"),22,false,true);
-    each("#hdr .nl",addText); each("#hdr nav .btn",addText);
-    each(".hero .eyebrow",addText); each(".hero h1",addText); each(".hero-sub",addText);
-    each(".hero-cta .btn",addText); each(".hero-meta span",addText);
-    each(".hero .status .open, .hero .status .yr, .hero .status .now, .hero .status .feed, .hero .status .st b, .hero .status .st span",addText);
-    svg=document.createElementNS(NS,"svg"); pen=document.createElement("i"); pen.className="pen";
-    boxes.forEach(function(it,i){ var q=it.q,d=document.createElement("div"); d.className="b";
-      d.style.cssText="left:"+q.left+"px;top:"+q.top+"px;width:"+(q.right-q.left)+"px;height:"+(q.bottom-q.top)+"px;border-radius:"+it.rad;
-      sk.appendChild(d); it.el=d;
-      var p=document.createElementNS(NS,"path"); p.setAttribute("d",rectPath(q,it.r)); if(it.o) p.setAttribute("class","o"); svg.appendChild(p); it.p=p;
-      it.a=i===0?.02:.07+(i-1)*.06; it.d=i===0?.2:.24; });
-    sk.appendChild(svg);
-    /* text: a soft skeleton bar per line, the broom, and the letters */
-    lines.forEach(function(L,li){ var b=document.createElement("div"); b.className="b";
-      var bh=Math.max(8,L.h*.5); b.style.cssText="left:"+L.left+"px;top:"+(L.top+(L.h-bh)/2)+"px;width:"+(L.right-L.left)+"px;height:"+bh+"px"; sk.appendChild(b); L.bar=b;
-      var br=document.createElement("i"); br.className="broom"; br.style.top=(L.top-L.h*.15)+"px"; br.style.height=(L.h*1.3)+"px"; sk.appendChild(br); L.broom=br;
-      L.s=.1+li*.026; L.D=.26+Math.min(.12,(L.right-L.left)/4000); });
-    chars.forEach(function(c,i){ var e=document.createElement("span"),cs=c.cs; e.className="ch"; e.textContent=c.ch;
-      e.style.cssText="left:"+c.x+"px;top:"+c.y+"px;font-family:"+cs.fontFamily+";font-size:"+cs.fontSize+";font-weight:"+cs.fontWeight+";font-style:"+cs.fontStyle+
-        ";color:"+cs.color+";text-transform:"+cs.textTransform+";font-feature-settings:"+cs.fontFeatureSettings+";font-variation-settings:"+cs.fontVariationSettings+
-        ";font-optical-sizing:"+cs.fontOpticalSizing+";font-variant-numeric:"+cs.fontVariantNumeric;
-      sk.appendChild(e); c.e=e; var L=c.L,u=(c.x-L.left)/Math.max(1,L.right-L.left);
-      c.land=L.s+L.D*u; c.fly=.26; c.dx=-(40+rnd(i)*150)*(.6+L.h/80); c.dy=(rnd(i+.5)<.5?-1:1)*(10+rnd(i+.3)*55)*(.5+L.h/70); c.rot=(rnd(i+.7)-.5)*50; });
-    sk.appendChild(pen);
-    boxes.forEach(function(it){ it.L=it.p.getTotalLength(); it.p.style.strokeDasharray=it.L; it.p.style.strokeDashoffset=it.L; });
-    var lastLand=chars.reduce(function(m,c){ return Math.max(m,c.land); },0),lastBox=boxes.reduce(function(m,it){ return Math.max(m,it.a+it.d+.12); },0);
-    R=Math.max(lastLand,lastBox)+.05;
-    if(boxes[0]){ var q=boxes[0].q,x=q.left-10,y=q.top-10,W=q.right-q.left+20,H=q.bottom-q.top+20; boxes[0].r0=boxes[0].a+boxes[0].d+.02;
-      boxes[0].hole='path(evenodd,"M0 0H'+innerWidth+'V'+innerHeight+'H0Z M'+x+' '+y+'h'+W+'v'+H+'h'+(-W)+'Z")'; }
-    ["pointerdown","keydown","wheel","touchstart"].forEach(function(ev){ addEventListener(ev,skip,{passive:true,once:true}); });
-    sk.style.animation="none"; requestAnimationFrame(function(ts){ t0=ts; frame(ts); });
-  }
-  function skip(){ if(!skipAt) skipAt=1; }
-  function cl(x){ return x<0?0:x>1?1:x; }
-  var ease=function(x){ x=cl(x); return 1-Math.pow(1-x,3); },io=function(x){ x=cl(x); return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; },
-      back=function(x){ x=cl(x); var c=1.4; return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2); };
-  function frame(ts){ var t=(ts-t0)/1000;
-    if(skipAt===1){ skipAt=t; R=Math.min(R,t); }
-    var done=skipAt?1:0,tip=null;
-    /* outlines, then the box takes its real fill so white button text has somewhere to land */
-    boxes.forEach(function(it,i){ var k=done?1:io((t-it.a)/it.d); it.p.style.strokeDashoffset=it.L*(1-k); if(k>0&&k<1) tip=it.p.getPointAtLength(it.L*k);
-      if(it.bg){ var f=done?1:ease((t-it.a-it.d+.04)/.14); if(f>0) it.el.style.background=it.bg; it.el.style.opacity=1; it.el.classList.toggle("filled",f>0); }
-      if(it.hole){ var lr=done?1:ease((t-it.r0)/.12); it.el.style.opacity=1-lr; it.p.style.opacity=1-lr; if(!it.holed&&t>=it.r0){ sk.firstChild.style.clipPath=it.hole; it.holed=1; } } });
-    /* letters: pulled toward their line first (the broom gathers them), then slid into place */
-    chars.forEach(function(c){ var u=done?1:cl((t-(c.land-c.fly))/c.fly);
-      if(u<=0){ c.e.style.opacity=0; return; }
-      var ux=back(u),uy=ease(Math.min(1,u*1.6));
-      c.e.style.opacity=cl(u*2.4); c.e.style.transform="translate("+(c.dx*(1-ux))+"px,"+(c.dy*(1-uy))+"px) rotate("+(c.rot*(1-ease(u)))+"deg) scale("+(.55+.45*ease(u))+")"; });
-    lines.forEach(function(L){ var u=done?1:cl((t-L.s)/L.D); L.bar.style.opacity=1-ease((t-L.s-L.D*.4)/(L.D*.8))*(done?0:1)*(done?0:1)-(done?1:0);
-      L.broom.style.opacity=done?0:Math.sin(Math.PI*u)*.95; L.broom.style.left=(L.left+(L.right-L.left)*u+6)+"px"; });
-    if(tip&&!done){ pen.style.opacity=1; pen.style.transform="translate("+tip.x+"px,"+tip.y+"px)"; } else pen.style.opacity=0;
-    /* the lift: paper first, then letters, bars and outlines; the real page is already underneath */
-    var lift=ease((t-R)/.24); sk.firstChild.style.opacity=1-lift;
-    var rest=1-ease((t-R-.04)/.2); svg.style.opacity=rest; boxes.forEach(function(it){ if(!it.hole) it.el.style.opacity=rest; });
-    chars.forEach(function(c){ if(t>R) c.e.style.opacity=rest; });
-    if(t<R+.3) requestAnimationFrame(frame); else finish(); }
-  var ready=document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(r){ setTimeout(r,1200); })]):Promise.resolve();
-  ready.then(function(){ requestAnimationFrame(build); });
-})();
-
-/* reveal */
-var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }); },{threshold:0.16,rootMargin:"0px 0px -8% 0px"});
-document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
-setTimeout(function(){ document.querySelectorAll(".hero .rv").forEach(function(el){ el.classList.add("in"); }); },160);
-
-/* count-up */
-var counted=false;
-function countUp(){ if(counted)return; var els=document.querySelectorAll("[data-count]"); if(!els.length)return;
-  if(els[0].getBoundingClientRect().top>window.innerHeight*0.95)return; counted=true;
-  els.forEach(function(el){ var target=parseInt(el.getAttribute("data-count"),10),start=null;
-    if(reduced){ el.textContent=target; return; }
-    function step(t){ if(!start)start=t; var p=Math.min(1,(t-start)/1300); p=1-Math.pow(1-p,3); el.textContent=Math.round(target*p); if(p<1) requestAnimationFrame(step); }
-    requestAnimationFrame(step); }); }
-window.addEventListener("scroll",countUp,{passive:true}); countUp();
-
-/* rotating status feed */
-(function(){
-  var feed=document.getElementById("feed"); if(!feed||reduced) return;
-  var items=[
-    "Teaching an AI to actually pay attention in meetings, so people don't have to",
-    "Getting five different AI models to agree on what your meeting actually decided",
-    "Turning a one hour call into a summary you can read before it ends",
-    "Keeping a meeting copilot honest across 1,100 plus commits and counting",
-    "Dropping black-and-gold pins across a whole family of restaurants",
-    "Giving a restaurant group one online home, without the brands stepping on each other",
-    "Putting every location on one map, so a new neighborhood is just one more pin",
-    "Making a hospitality group look as considered as the plating",
-    "Bottling San Diego sunshine into an all-day kitchen, before a word is read",
-    "Making a healthy menu feel like a vacation the moment the page loads",
-    "Building a kitchen's site to sell the mood first and the calories never",
-    "Turning a 1938 movie theatre into a food hall, online first",
-    "Giving an 87 year old theatre a second opening night, this one on the web",
-    "Mailing a food hall its own monthly report, no spreadsheet to open",
-    "Reopening a cinema as a food hall, the drumroll built right into the scroll",
-    "Building a DJ a site that restocks its own mixes overnight",
-    "Wiring up an artist's page that updates its own tour dates while he plays",
-    "Letting a producer ship new music without ever opening the code",
-    "Wiring up a 20,000 square foot public market at UC San Diego",
-    "Making twenty thousand square feet of food hall load like a single snack",
-    "Building a campus market that every student can use, from day one",
-    "Handing a food hall a CMS its team can run without ever calling me",
-    "Giving a Little Italy food hall the scroll it deserves",
-    "Building a food hall to the exact standard of the designer who shaped the room",
-    "Making a menu worth scrolling slowly, the way Sunday dinner is eaten",
-    "Crunching live betting math so the odds never quietly short-change you",
-    "Building a betting brain brave enough to grade its own picks each morning",
-    "Re-pricing a coupon when one leg gets voided, instead of refunding the lot",
-    "Doing the cold EV math on every wager, with feelings left at the door",
-    "Making a clay and limewash studio look like an art book",
-    "Turning a finishing studio into an art book that quietly closes the sale",
-    "Selling the feel of a Roman clay wall before anyone touches one",
-    "Putting the bar's disappearing whiskey on a scale, and on notice",
-    "Turning a bottle's weight into the exact pour, and the exact loss",
-    "Giving a bar the honest gap between what it poured and what it sold",
-    "Putting every bottle on a scale, so free pours have nowhere left to hide",
-    "Letting a buyer spin a 3D lawn before they ever ask what it costs",
-    "Turning a turf supplier's catalog into a sales floor that closes quotes",
-    "Making artificial grass look worth the drive across San Diego",
-    "Giving a sports private equity firm a site as quiet and certain as its thesis",
-    "Dressing a sports investment house in ink navy and a single line of brass",
-    "Hanging an LA interior studio's rooms online like a gallery, Scandi calm and all",
-    "Plating an all day egg kitchen on the web before the first pan is hot",
-    "Replacing an architecture office's Excel matrix with something that actually alerts",
-    "Showing a project office which job is stuck, who owns it, and for how long",
-    "Teaching factory cameras to catch the flaw tired eyes miss",
-    "Giving a production line a second set of eyes that never blink",
-    "Spotting the bad part before it ever reaches the box",
-    "Catching defects at line speed, one frame at a time"
-  ];
-  for(var j=items.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1));var t=items[j];items[j]=items[k];items[k]=t;}
-  feed.textContent=items[0];
-  var i=0,timer=null,paused=false;
-  function tick(){ i=(i+1)%items.length; feed.style.opacity=0;
-    setTimeout(function(){ feed.textContent=items[i]; feed.style.opacity=1; },420); }
-  function start(){ if(!timer) timer=setInterval(tick,3800); }
-  function stop(){ clearInterval(timer); timer=null; }
-  start();
-  var toggle=document.getElementById("feedToggle");
-  if(toggle){ toggle.addEventListener("click",function(){
-    paused=!paused;
-    if(paused){ stop(); toggle.textContent="Play"; toggle.setAttribute("aria-pressed","true"); toggle.setAttribute("aria-label","Resume rotating status text"); }
-    else{ start(); toggle.textContent="Pause"; toggle.setAttribute("aria-pressed","false"); toggle.setAttribute("aria-label","Pause rotating status text"); }
-  }); }
-})();
-
-/* touch / narrow: inject inline screenshot per row (no hover preview there) */
-(function(){
-  if(!window.matchMedia("(hover:none), (max-width:920px)").matches) return;
-  document.querySelectorAll(".row[data-peek]").forEach(function(row){
-    if(row.querySelector(".rthumb")) return;
-    var im=document.createElement("img");
-    im.className="rthumb"; im.loading="lazy"; im.decoding="async"; im.alt="";
-    im.src=row.getAttribute("data-peek");
-    row.insertBefore(im,row.firstChild);
-  });
-})();
-
-/* work index cursor preview */
-(function(){
-  var peek=document.getElementById("peek"), img=document.getElementById("peekImg");
-  if(!peek || !window.matchMedia("(hover:hover)").matches) return;
-  var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
-  function loop(){ cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
-    peek.style.transform="translate("+cx+"px,"+cy+"px) translate(-50%,-50%) scale("+(active?1:.94)+") rotate(-2deg)";
-    var moving=Math.abs(tx-cx)>0.5||Math.abs(ty-cy)>0.5;
-    raf = (active||moving) ? requestAnimationFrame(loop) : null; }
-  function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
-  document.querySelectorAll(".row[data-peek]").forEach(function(row){
-    row.addEventListener("mouseenter",function(){ var src=row.getAttribute("data-peek"); if(img.getAttribute("src")!==src) img.setAttribute("src",src); active=true; peek.classList.add("on"); kick(); });
-    row.addEventListener("mouseleave",function(){ active=false; peek.classList.remove("on"); kick(); });
-  });
-  document.addEventListener("mousemove",function(e){ tx=e.clientX+150; ty=e.clientY; if(active) kick(); },{passive:true});
-})();
-
-/* about portrait: layered scroll depth (transform-only, runs only while visible) */
-(function(){
-  var wrap=document.getElementById("portrait"); if(!wrap||reduced) return;
-  var layers=Array.prototype.map.call(wrap.querySelectorAll("[data-depth]"),function(el){
-    return { el:el, d:parseFloat(el.getAttribute("data-depth"))||0, s:el.getAttribute("data-scale")||"" };
-  });
-  var vis=false,ticking=false;
-  function update(){
-    ticking=false;
-    var r=wrap.getBoundingClientRect(), vh=window.innerHeight||1;
-    var p=(r.top+r.height/2-vh/2)/vh; /* 0 at viewport centre, ±~0.8 at the edges */
-    for(var i=0;i<layers.length;i++){ var l=layers[i];
-      l.el.style.transform="translate3d(0,"+(p*l.d*90).toFixed(2)+"px,0)"+(l.s?" scale("+l.s+")":"");
-    }
-  }
-  function ask(){ if(vis&&!ticking){ ticking=true; requestAnimationFrame(update); } }
-  new IntersectionObserver(function(es){ vis=es[0].isIntersecting; ask(); },{rootMargin:"12% 0px"}).observe(wrap);
-  window.addEventListener("scroll",ask,{passive:true});
-  window.addEventListener("resize",ask,{passive:true});
-})();
-
-/* multi-step contact -> drafts a pre-filled email */
-(function(){
-  var stage=document.getElementById("stepStage"); if(!stage) return;
-  var screens=Array.prototype.slice.call(stage.querySelectorAll(".screen-s"));
-  var prog=document.getElementById("stepProg"), sum=document.getElementById("stepSum");
-  var back=document.getElementById("stepBack"), lab=document.getElementById("stepLab"), sent=document.getElementById("sent");
-  var data={type:"",name:"",email:"",why:""}, idx=0;
-  screens.forEach(function(){ var i=document.createElement("i"); prog.appendChild(i); });
-  var dots=prog.querySelectorAll("i");
-  function render(){
-    screens.forEach(function(s,i){ s.classList.toggle("on",i===idx); s.classList.toggle("past",i<idx); s.inert=(i!==idx); });
-    dots.forEach(function(d,i){ d.classList.toggle("on",i<=idx); });
-    back.classList.toggle("on",idx>0);
-    back.disabled=(idx===0);
-    lab.textContent="Step "+(idx+1)+" of "+screens.length;
-    sum.innerHTML=""; var parts=[];
-    if(data.type) parts.push(["Building",data.type,0]);
-    if(data.name) parts.push(["Name",data.name,1]);
-    if(data.email) parts.push(["Email",data.email,2]);
-    parts.forEach(function(p){ var c=document.createElement("button"); c.type="button"; c.className="sc"; c.innerHTML="<b>"+p[0]+"</b>"+p[1];
-      c.addEventListener("click",function(){ idx=p[2]; render(); }); sum.appendChild(c); });
-    sum.classList.toggle("on",parts.length>0 && idx>0);
-    var inp=screens[idx].querySelector("input,textarea"); if(inp) setTimeout(function(){ inp.focus(); },360);
-  }
-  function go(i){ idx=Math.max(0,Math.min(screens.length-1,i)); render(); }
-  back.addEventListener("click",function(){ go(idx-1); });
-  stage.querySelectorAll(".opt").forEach(function(o){ o.addEventListener("click",function(){ data.type=o.getAttribute("data-pick"); go(1); }); });
-  var nameI=document.getElementById("sName");
-  document.getElementById("nameNext").addEventListener("click",function(){ data.name=nameI.value.trim(); go(2); });
-  nameI.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); data.name=nameI.value.trim(); go(2); } });
-  var emailI=document.getElementById("sEmail");
-  document.getElementById("emailNext").addEventListener("click",function(){ data.email=emailI.value.trim(); go(3); });
-  document.getElementById("emailSkip").addEventListener("click",function(){ data.email=""; go(3); });
-  emailI.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); data.email=emailI.value.trim(); go(3); } });
-  document.getElementById("sendIt").addEventListener("click",function(){
-    data.why=document.getElementById("sWhy").value.trim();
-    /* guard: never send/claim success on empty data (e.g. reached here without completing steps 1-2) */
-    if(!data.type || !data.name){ go(!data.type?0:1); return; }
-    var subject="Project inquiry"+(data.type?": "+data.type:"")+(data.name?" ("+data.name+")":"");
-    var body="Hi Kazim,\r\n\r\n"
-      +(data.type?"We're building: "+data.type+"\r\n":"")
-      +(data.why?"\r\nWhy it matters: "+data.why+"\r\n":"")
-      +"\r\n--\r\n"+(data.name||"")+(data.email?"\r\n"+data.email:"");
-    var mailHref="mailto:projects.k13@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
-    var title=document.getElementById("sentTitle"), msg=document.getElementById("sentMsg"), fallback=document.getElementById("sentFallback");
-    var handedOff=false;
-    function markHandedOff(){ if(handedOff) return; handedOff=true; title.textContent="Your mail app opened."; }
-    window.addEventListener("blur",markHandedOff,{once:true});
-    document.addEventListener("visibilitychange",function onVis(){
-      if(document.hidden){ markHandedOff(); document.removeEventListener("visibilitychange",onVis); } });
-    /* seal the form behind the success panel: inert the whole step-body (back button, chips, the
-       active screen's field + send button) so nothing is tabbable underneath it, then reveal .sent
-       (removing its own inert) and set its text fresh so the role=status live region actually has
-       something to announce -- a region that was already inert/hidden at load never "changes" */
-    document.getElementById("stepBody").inert=true;
-    sent.inert=false;
-    title.textContent="Opening your mail app…";
-    msg.textContent="Your message is filled in and ready. Review it in your mail app, then hit send.";
-    sent.classList.add("on");
-    setTimeout(function(){
-      window.location.href=mailHref;
-      /* can't know for certain a mail client opened -- if nothing took focus away, offer a fallback instead of a false success claim */
-      setTimeout(function(){ if(!handedOff) fallback.hidden=false; },1200);
-    },700);
-  });
-  render();
-})();
-})();
-</script>
+<script src="js/site.js"></script>
+<script src="js/workbench.js" defer></script>
 </body>
 </html>
