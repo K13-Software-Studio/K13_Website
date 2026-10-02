@@ -11,6 +11,7 @@
 .bp-drop{background:#F2EAD3;border-color:#E2D6B8}
 .bp-tide{background:#BFE0EC;border-color:#9CC6D6}
 .bp-stack{background:#FFEFC4;border-color:#EBCD8A}
+.bp-egg{background:#F0EBD7;border-color:#E2D8BF}
 
 /* action pills sit top left, mirroring the reset pill top right */
 .bp-acts{position:absolute;left:10px;top:10px;z-index:4;display:flex;gap:8px}

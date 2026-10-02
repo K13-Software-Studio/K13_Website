@@ -122,17 +122,6 @@
 .wb-deck .wb-reset{background:rgba(255,255,255,.1);color:#F6EEDC;border-color:rgba(255,255,255,.3);box-shadow:none}
 .wb-deck .wb-reset:hover{color:#F0762F;border-color:#F0762F}
 
-/* ---------- 5. Loose Type ---------- */
-.wb-tray-wrap{min-height:280px;padding:20px}
-.wb-tray{position:relative;width:100%;height:236px}
-.wb-tile{position:absolute;left:0;top:0;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;border-radius:14px;user-select:none;transition:box-shadow .2s var(--work)}
-.wb-tile.grabbed{cursor:grabbing;box-shadow:0 10px 22px -8px rgba(20,29,53,.35)}
-.wt-k{width:clamp(50px,14vw,66px);height:clamp(50px,14vw,66px);font-family:var(--disp);font-weight:700;font-size:clamp(30px,9vw,42px);color:var(--ink);background:var(--paper-2);border:1px solid var(--line)}
-.wt-13{width:clamp(66px,17vw,84px);height:clamp(50px,14vw,66px);font-family:var(--disp);font-weight:700;font-size:clamp(28px,8vw,38px);color:var(--blue);background:var(--paper-2);border:1px solid var(--line)}
-.wt-tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--paper-2);border:1px solid var(--line-2);border-radius:100px;height:30px;width:auto;padding:0 14px;white-space:nowrap}
-.wb-tidy{position:absolute;left:10px;top:10px;z-index:4;display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 6px 14px -8px rgba(20,29,53,.35);transition:color .3s var(--work),border-color .3s var(--work)}
-.wb-tidy:hover{color:var(--blue);border-color:var(--blue)}
-
 /* ---------- night shift switch (footer) ---------- */
 .night-switch{display:inline-flex;align-items:center;gap:8px;min-height:24px;font-family:var(--mono);font-size:12.5px;color:var(--muted);padding:2px 0}
 .night-switch .knob{width:30px;height:18px;border-radius:100px;background:var(--line-3);position:relative;transition:background .3s var(--work)}
@@ -258,8 +247,6 @@
 }
 .bench .wb-stage{min-height:340px}
 .bench .wb-build{min-height:0}
-.bench .wb-tray-wrap{display:flex;min-height:300px}
-.bench .wb-tray{flex:1;height:auto;min-height:236px}
 .wb-title{min-height:1.15em}
 .wb-from{overflow-wrap:anywhere}
 .wb-foot{align-self:start}
