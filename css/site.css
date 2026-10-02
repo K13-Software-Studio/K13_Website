@@ -653,3 +653,13 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 @media(prefers-reduced-motion:reduce){.hero-stage-ctl{display:none}.hero-plane{transform:rotateX(18deg) rotateY(-30deg) rotateZ(-7deg)}}
 .hero-stage-ctl .wall-toggle{background:var(--paper-2)}
 .hero .status{background:color-mix(in srgb,var(--paper-2) 86%,transparent)}
+/* the people you'll work with: small frames beside the contact form (Kazim, 2026-10-02) */
+.about .note{margin-bottom:0}
+.contact .crew{margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+.crew-lab{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.crew-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px}
+.pm{display:flex;align-items:center;gap:12px;padding:8px 18px 8px 8px;border-radius:14px;background:var(--paper-2);border:1px solid var(--line)}
+.pm img{width:48px;height:48px;border-radius:11px;object-fit:cover;background:var(--paper-3)}
+.pm-t{display:flex;flex-direction:column;gap:2px}
+.pm-t b{font-family:var(--disp);font-weight:600;font-size:17px;color:var(--ink);letter-spacing:-.01em;line-height:1.2}
+.pm-t span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
