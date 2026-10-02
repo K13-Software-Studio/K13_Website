@@ -432,6 +432,7 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 .people{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .person{border-radius:16px;background:var(--paper-2);border:1px solid var(--line);padding:22px 20px;display:flex;flex-direction:column;gap:6px}
 .person .p-init{width:52px;height:52px;border-radius:14px;background:var(--wash-peach);color:var(--ink);font-family:var(--disp);font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.person .p-photo{object-fit:cover;background:var(--paper-3)}
 .person b{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);letter-spacing:-.01em}
 .person .p-role{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
 .about .person p{font-family:var(--body);font-style:normal;font-weight:400;font-size:15px;line-height:1.55;color:var(--muted);margin-top:6px;letter-spacing:0}

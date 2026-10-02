@@ -27,10 +27,6 @@
 .hunt-mark.found{color:var(--ink);background:var(--wash-peach);transform:rotate(-6deg)}
 .hunt-mark:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .wb-hunt{font-family:var(--mono);font-size:11px;color:var(--faint)}
-.wb-hunt-map{position:absolute;right:10px;bottom:6px}
-.wb-hunt-map2{position:absolute;left:10px;bottom:6px}
-.wb-slip{position:absolute;left:14px;bottom:4px;font-family:var(--mono);font-size:11px;color:var(--faint)}
-.wb-tmb{padding-top:54px;padding-bottom:30px}
 .wb-row13{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B9AD9A}
 .wb-sign .hunt-mark{color:#B9AD9A}
 .wb-sign .hunt-mark.found{color:#FFD27A;background:rgba(255,210,122,.15)}
@@ -280,39 +276,15 @@
 .wb-fill{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 .wb-fill:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
 
-/* ---------- 8. Pin Drop (Tiger Hospitality) ---------- */
-.wb-map{background:#EFE7D6;border-color:#E0D5BC}
-.wb-mapfield{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation;
   background:
     linear-gradient(90deg,transparent 0 46%,#DCCFB2 46% 49%,transparent 49% 100%) 0 0/34% 100%,
     linear-gradient(0deg,transparent 0 52%,#DCCFB2 52% 55%,transparent 55% 100%) 0 0/100% 26%,
     linear-gradient(115deg,transparent 0 60%,#D3E3DC 60% 78%,transparent 78% 100%),
     #EFE7D6}
-.wb-mapfield:focus-visible{outline:2px solid #B94612;outline-offset:-3px}
-.wb-pinwrap{position:absolute;width:30px;height:40px;transform:translate(-50%,-100%);pointer-events:none}
-.wb-pinwrap svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 3px rgba(20,29,53,.3))}
-.wb-dropped{animation:wb-drop .5s var(--pop)}
-@keyframes wb-drop{0%{transform:translate(-50%,-190%);opacity:0}60%{opacity:1}100%{transform:translate(-50%,-100%)}}
-.wb-ghostpin{opacity:.55}
-.wb-attract .wb-ghostpin svg{animation:wb-bob 1.6s var(--work) infinite}
-@keyframes wb-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.wb-cross{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2px solid #141D35;box-shadow:0 0 0 2px #F6EEDC;opacity:0;pointer-events:none;transition:opacity .2s}
-.wb-cross::before,.wb-cross::after{content:"";position:absolute;background:#141D35;left:50%;top:50%}
-.wb-cross::before{width:2px;height:10px;margin:-5px 0 0 -1px}.wb-cross::after{width:10px;height:2px;margin:-1px 0 0 -5px}
-.wb-mapfield:focus-visible .wb-cross{opacity:1}
 
 /* ---------- 9. Golden Hour (La Vida San Diego) ---------- */
 .wb-sun{display:flex;flex-direction:column;background:var(--paper-3)}
 .wb-skyfield{position:relative;flex:1;min-height:250px;overflow:hidden;cursor:ew-resize;touch-action:pan-y;background:linear-gradient(180deg,#9FD3E8,#FFF1CC)}
-.wb-sunball{position:absolute;width:46px;height:46px;margin:0 0 0 -23px;border-radius:50%;box-shadow:0 0 40px 14px rgba(255,190,70,.55);pointer-events:none}
-.wb-hill{position:absolute;left:-10%;right:-10%;bottom:0;border-radius:50% 50% 0 0/100% 100% 0 0;pointer-events:none}
-.wb-hill1{height:34%;background:#6FA67A;left:-30%;right:20%}
-.wb-hill2{height:26%;background:#4F8C66;left:15%;right:-25%}
-.wb-cafe{position:absolute;left:50%;bottom:7%;width:92px;margin-left:-46px;pointer-events:none}
-.wb-cafe-roof{display:block;height:16px;background:repeating-linear-gradient(90deg,#E24E1B 0 12px,#F6EEDC 12px 24px);border-radius:6px 6px 0 0}
-.wb-cafe-body{display:flex;gap:6px;justify-content:center;padding:8px 6px;background:#F6EEDC;border:1px solid #D8CFBA;border-top:0}
-.wb-win{width:18px;height:22px;border-radius:3px 3px 0 0;background:#9FB6C4;transition:background .5s var(--work),box-shadow .5s var(--work)}
-.wb-cafe.lit .wb-win{background:#FFD27A;box-shadow:0 0 12px 3px rgba(255,210,122,.7)}
 .wb-sunctl{padding:12px 16px 14px;background:var(--paper-2);border-top:1px solid var(--line)}
 .wb-range{width:100%;height:32px;margin:0;background:none;cursor:pointer;-webkit-appearance:none;appearance:none}
 .wb-range::-webkit-slider-runnable-track{height:6px;border-radius:100px;background:var(--line-3)}
@@ -321,41 +293,12 @@
 .wb-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#FFC93C;border:3px solid var(--ink)}
 .wb-range:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:8px}
 
-/* ---------- 10. Stall Call (Station8) ---------- */
-.wb-market{display:grid;place-items:center;padding:52px 14px 18px;transition:box-shadow .5s var(--work)}
-.wb-market.lit{box-shadow:inset 0 0 0 3px #F0B429}
-.wb-stalls{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px}
-.wb-stall{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:44px;padding:0;border-radius:10px}
-.wb-stall:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-.wb-sbox{position:relative;display:block;width:100%;aspect-ratio:1/1.05;border-radius:8px 8px 4px 4px;background:#F6EEDC;border:1px solid var(--line-2);overflow:hidden}
-.wb-awning{position:absolute;left:0;right:0;top:0;height:30%;background:repeating-linear-gradient(90deg,var(--c) 0 9px,#F6EEDC 9px 18px);border-bottom:2px solid rgba(20,29,53,.35);z-index:2}
-.wb-goods{position:absolute;left:12%;right:12%;bottom:14%;height:34%;background:radial-gradient(circle at 20% 60%,var(--c) 0 28%,transparent 30%),radial-gradient(circle at 50% 40%,var(--c) 0 28%,transparent 30%),radial-gradient(circle at 80% 60%,var(--c) 0 28%,transparent 30%)}
-.wb-shutter{position:absolute;left:0;right:0;top:30%;bottom:0;background:repeating-linear-gradient(180deg,#6B6A75 0 5px,#5C5B66 5px 7px);transform:translateY(0);transition:transform .45s var(--ease);z-index:1}
-.wb-stall[aria-pressed="true"] .wb-shutter{transform:translateY(-101%)}
-.wb-stall:hover .wb-sbox{border-color:var(--blue)}
-.wb-sname{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink)}
-.wb-attract .wb-stall:first-child .wb-sbox{animation:wb-wiggle 2.4s var(--work) infinite}
-@keyframes wb-wiggle{0%,70%,100%{transform:rotate(0)}78%{transform:rotate(-4deg)}86%{transform:rotate(3deg)}94%{transform:rotate(-2deg)}}
 
-/* ---------- 11. Twirl (Global Fork) ---------- */
-.wb-twirl{background:#F3E9D2;border-color:#E4DCC3}
-.wb-twirl .wb-fill{cursor:grab}
-.wb-twirl .wb-fill:active{cursor:grabbing}
 
-/* ---------- 12. Next Morning (TrustMeBro) ---------- */
-.wb-ev{display:flex;flex-direction:column;gap:10px;padding:52px 14px 14px;background:#141D35;border-color:#141D35;color:#F6EEDC}
-.wb-evtop{position:absolute;left:14px;top:12px;display:flex;gap:18px}
-.wb-evstat{display:flex;flex-direction:column;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#B9AD9A;line-height:1.3}
-.wb-evstat b{font-weight:500;font-size:16px;letter-spacing:0;color:#F6EEDC;text-transform:none}
-.wb-evcv{flex:1;width:100%;min-height:150px;display:block;border-radius:8px;background:rgba(255,255,255,.04)}
-.wb-evctl{display:flex;gap:10px;flex-wrap:wrap}
-.wb-evbtn{font-family:var(--body);font-weight:600;font-size:14px;color:#141D35;background:#F6EEDC;border-radius:100px;padding:0 18px;min-height:40px;transition:transform .3s var(--pop),background .3s var(--work)}
-.wb-evbtn:hover:not(:disabled){transform:translateY(-2px)}
-.wb-evghost{background:transparent;color:#F6EEDC;border:1px solid rgba(246,238,220,.5)}
-.wb-evbtn:disabled,.wb-barbtn:disabled{opacity:.5;cursor:not-allowed}
-.wb-ev .wb-reset,.wb-bar .wb-reset,.wb-clay .wb-reset{background:rgba(20,29,53,.6);color:#F6EEDC;border-color:rgba(246,238,220,.4);box-shadow:none}
-.wb-ev .wb-reset:hover,.wb-bar .wb-reset:hover{color:#FFD27A;border-color:#FFD27A}
-.wb-ev button:focus-visible,.wb-bar button:focus-visible{outline-color:#FFD27A}
+.wb-barbtn:disabled{opacity:.5;cursor:not-allowed}
+.wb-bar .wb-reset,.wb-clay .wb-reset{background:rgba(20,29,53,.6);color:#F6EEDC;border-color:rgba(246,238,220,.4);box-shadow:none}
+.wb-bar .wb-reset:hover{color:#FFD27A;border-color:#FFD27A}
+.wb-bar button:focus-visible{outline-color:#FFD27A}
 .wb-attract .wb-nudge{animation:wb-nudge 1.8s var(--work) infinite}
 @keyframes wb-nudge{0%,60%,100%{transform:scale(1)}72%{transform:scale(1.07)}84%{transform:scale(.98)}}
 
@@ -383,14 +326,57 @@
 /* ---------- 14. Limewash (baa atelier) ---------- */
 .wb-clay{background:#9C8F7E;border-color:#8B7F6E}
 .wb-clay .wb-fill{cursor:crosshair}
-.wb-trowel{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:6px;border:2px solid #141D35;box-shadow:0 0 0 2px #F6EEDC;opacity:0;pointer-events:none;transition:opacity .2s}
-.wb-trowel.on{opacity:1}
 
 @media(max-width:420px){
-  .wb-stalls{gap:10px 6px}
   .wb-barread div{min-width:112px}
 }
 @media(prefers-reduced-motion:reduce){
-  .wb-dropped,.wb-attract .wb-ghostpin svg,.wb-attract .wb-stall:first-child .wb-sbox,.wb-attract .wb-nudge{animation:none}
-  .wb-shutter,.wb-liq,.wb-win,.wb-market,.wb-cross{transition:none}
+  .wb-attract .wb-nudge{animation:none}
+  .wb-liq{transition:none}
+}
+
+/* upgrades 2026-10-02: limewash, golden hour, night shift deck */
+/* limewash: a held tool that follows the hand */
+.wb-clay.has-tool .wb-fill{cursor:none}
+.wb-tools{position:absolute;left:10px;bottom:10px;z-index:4;display:flex;gap:6px}
+.wb-toolbtn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;min-height:32px;padding:0 14px;border-radius:100px;color:#F6EEDC;background:rgba(20,29,53,.6);border:1px solid rgba(246,238,220,.4);transition:background .3s var(--work),color .3s var(--work)}
+.wb-toolbtn:hover{border-color:#F6EEDC}
+.wb-toolbtn[aria-pressed="true"]{background:#F6EEDC;color:#141D35;border-color:#F6EEDC}
+.wb-clay .wb-toolbtn:focus-visible{outline:2px solid #F6EEDC;outline-offset:3px}
+.wb-tool{position:absolute;left:0;top:0;width:0;height:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .2s;filter:drop-shadow(7px 13px 7px rgba(30,22,12,.42));will-change:transform}
+.wb-tool.on{opacity:1}
+.wb-tool.down{filter:drop-shadow(1px 2px 2px rgba(30,22,12,.5))}
+.wb-tool.on{transition:opacity .2s,filter .18s ease-out}
+.wb-tilt{position:absolute;left:0;top:0;width:0;height:0}
+.wb-lift{position:absolute;left:0;top:0;width:0;height:0;transform:scale(1.1);transition:transform .18s var(--pop)}
+.wb-tool.down .wb-lift{transform:scale(.94)}
+.wb-tsvg{position:absolute;left:-110px;top:-34px;width:120px;max-width:none;height:68px;overflow:visible}
+.wb-tool[data-tool="trowel"] .wb-ts-brush,.wb-tool[data-tool="brush"] .wb-ts-trowel{display:none}
+/* golden hour: a canvas scene, drawn at device pixel ratio */
+.wb-skycv{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* night shift deck */
+.wb-deckrow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px 24px;width:100%}
+.wb-platwrap{flex:0 0 auto}
+.wb-nub{position:absolute;top:5%;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#F0762F;pointer-events:none}
+.wb-panel{flex:1 1 230px;max-width:340px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.wb-meter{display:flex;align-items:flex-end;gap:12px}
+.wb-wave{flex:1;min-width:0;height:34px;display:block;border-radius:6px;background:rgba(255,255,255,.06)}
+.wb-dctl{flex-wrap:wrap}
+.wb-bspin{font-family:var(--body);font-weight:600;font-size:13.5px;color:#F6EEDC;background:transparent;border:1.5px solid rgba(246,238,220,.7);border-radius:100px;padding:0 16px;min-height:36px;transition:transform .3s var(--pop),color .3s var(--work),border-color .3s var(--work)}
+.wb-bspin:hover{transform:translateY(-2px);color:#F0762F;border-color:#F0762F}
+.wb-faders{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.wb-flab{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#E7E2D8}
+.wb-fval{color:#FFD27A;text-transform:none;letter-spacing:0}
+.wb-fdr{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:none;cursor:pointer}
+.wb-fdr::-webkit-slider-runnable-track{height:5px;border-radius:100px;background:#6A6878}
+.wb-fdr::-moz-range-track{height:5px;border-radius:100px;background:#6A6878}
+.wb-fdr::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8.5px;border-radius:50%;background:#F6EEDC;border:3px solid #F0762F}
+.wb-fdr::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#F6EEDC;border:3px solid #F0762F}
+.wb-pads{display:flex;gap:10px}
+.wb-pad{flex:1;min-height:44px;border-radius:10px;border:1.5px solid rgba(246,238,220,.7);color:#F6EEDC;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.06);touch-action:none;transition:background .2s var(--work),color .2s var(--work),border-color .2s var(--work)}
+.wb-pad[aria-pressed="true"]{background:#F0762F;color:#1B1B22;border-color:#F0762F}
+.wb-deck button:focus-visible,.wb-deck input:focus-visible{outline:2px solid #F0762F;outline-offset:3px}
+@media(max-width:420px){ .wb-faders{grid-template-columns:1fr} }
+@media(prefers-reduced-motion:reduce){
+  .wb-tool,.wb-tool.on,.wb-lift,.wb-pad,.wb-bspin,.wb-toolbtn{transition:none}
 }

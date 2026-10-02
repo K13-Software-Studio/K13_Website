@@ -1,0 +1,34 @@
+/* K13 bench physics: the four simulated toys (js/bench-physics.js). Tokens come from css/site.css.
+   The card, head, reset and status line reuse the .wb rules in css/workbench.css; this file only adds the stage skins,
+   the canvas, and the small action pills. */
+.bp-stage{touch-action:none;overflow:hidden;-webkit-user-select:none;user-select:none}
+.bp-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;border-radius:inherit;-webkit-tap-highlight-color:transparent}
+.bp-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+.bp-dark .bp-cv:focus-visible,.bp-tide .bp-cv:focus-visible{outline-color:#FFD27A}
+
+/* stage skins: fixed palettes, drawn behind the canvas so the card never flashes empty */
+.bp-roof{background:#16203A;border-color:#0F1629}
+.bp-drop{background:#F2EAD3;border-color:#E2D6B8}
+.bp-tide{background:#BFE0EC;border-color:#9CC6D6}
+.bp-stack{background:#FFEFC4;border-color:#EBCD8A}
+
+/* action pills sit top left, mirroring the reset pill top right */
+.bp-acts{position:absolute;left:10px;top:10px;z-index:4;display:flex;gap:8px}
+.bp-btn{display:inline-flex;align-items:center;justify-content:center;height:34px;min-width:44px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 6px 14px -8px rgba(20,29,53,.35);transition:color .3s var(--work,ease),border-color .3s var(--work,ease),transform .3s var(--pop)}
+.bp-btn:hover{color:var(--blue);border-color:var(--blue)}
+.bp-btn:active{transform:scale(.96)}
+.bp-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.bp-dark .bp-btn,.bp-dark .wb-reset{background:rgba(255,255,255,.1);color:#F6EEDC;border-color:rgba(255,255,255,.3);box-shadow:none}
+.bp-dark .bp-btn:hover,.bp-dark .wb-reset:hover{color:#FFD27A;border-color:#FFD27A}
+.bp-dark .bp-btn:focus-visible,.bp-dark .wb-reset:focus-visible{outline-color:#FFD27A}
+@media(max-width:420px){
+  .bp-acts{gap:6px;left:8px;top:8px}
+  .bp-btn{padding:0 10px;letter-spacing:.04em}
+  .bp-stage .wb-reset{top:8px;right:8px;padding:0 10px 0 8px}
+  .bp-stage .wb-reset svg{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .bp-btn{transition:none}
+  .bp-btn:active{transform:none}
+}
