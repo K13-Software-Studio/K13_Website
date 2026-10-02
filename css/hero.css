@@ -1,0 +1,225 @@
+/* ---------- hero: "From I wish to it works." (Kazim, verbal, 2026-10-02) ----------
+   The hero performs its own motto. The headline is the claim; the wish machine beside it is the proof:
+   a real client wish is typed, the build log ticks, the real shipped screen lands with a Live badge.
+   Every state is the same markup, driven by one attribute (data-phase on #wm) from js/wish.js.
+   Base rules describe the settled, final composition (reduced motion and no-JS show exactly that);
+   animations only ever add the journey to it. Tokens only, so the night shift follows. */
+
+.hero{padding:clamp(104px,11vw,150px) 0 clamp(54px,6vw,90px)}
+.hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,540px);gap:clamp(32px,4.4vw,72px);align-items:center}
+
+/* the headline: the wish is soft and italic, the result is set solid and gets a live dot for its full stop */
+.hero h1{font-size:clamp(46px,5.9vw,88px);line-height:.98;letter-spacing:-.025em;margin-top:24px}
+.hero h1 .hl{display:block;white-space:nowrap}
+.hero h1 i{font-style:italic;font-weight:500;color:var(--muted);letter-spacing:-.015em}
+.hero h1 b{font-weight:600;color:var(--ink)}
+.hl-dot{position:relative;display:inline-block;width:.15em;height:.15em;margin-left:.07em;border-radius:50%;background:#27B584;vertical-align:baseline}
+.hl-dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #27B584;opacity:0}
+.hl-dot.ping::after{animation:wmRing 1.3s var(--ease) both}
+.hl-dot{animation:beat 2.6s infinite}
+.hero-sub{max-width:520px}
+.hero-meta{gap:6px 22px}
+
+/* ---------- the machine ---------- */
+.wm{position:relative;width:100%;max-width:560px;justify-self:end;border-radius:22px;overflow:hidden;
+  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 44px 80px -46px rgba(20,29,53,.6),0 1px 0 rgba(255,255,255,.7) inset}
+.wm-bar{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--paper-3);border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wm-dots{display:flex;gap:6px}
+.wm-dots i{width:8px;height:8px;border-radius:50%;background:var(--line-3)}
+.wm-title{white-space:nowrap}
+.wm-steps{margin-left:auto;display:flex;gap:4px;list-style:none}
+.wm-steps li{padding:3px 9px;border-radius:100px;color:var(--muted);transition:background .3s,color .3s}
+.wm-steps li.on{background:var(--ink);color:var(--paper)}
+
+.wm-wish{padding:18px 22px 4px}
+.wm-wlab{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wm-wlab b{font-weight:500;color:var(--blue)}
+.wm-wlab b::before{content:"";display:inline-block;width:14px;height:1.5px;background:var(--blue);vertical-align:middle;margin-right:10px}
+.wm-say{margin-top:8px;font-family:var(--disp);font-style:italic;font-weight:500;font-size:clamp(22px,2vw,27px);line-height:1.2;color:var(--ink);min-height:2.4em;text-wrap:balance}
+.wm-caret{display:none;width:2px;height:1em;margin-left:2px;background:var(--blue);vertical-align:-.12em}
+[data-phase="wish"] .wm-caret{display:inline-block;animation:wmCaret .9s steps(2) infinite}
+.wm-say.typing::after{content:"";display:inline-block;width:34px;height:8px;margin-left:4px;vertical-align:middle;
+  background:radial-gradient(circle,var(--muted) 3px,transparent 3.5px) 0 50%/12px 8px repeat-x;animation:wmDots 1s steps(4) infinite}
+
+/* the stage: build log, skeleton, the real screen */
+.wm-stage{position:relative;margin:12px 16px 0;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:var(--paper-3);border:1px solid var(--line)}
+.wm-view{position:absolute;inset:0}
+.wm-view::before{content:"";position:absolute;inset:0;opacity:.7;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:24px 24px}
+.wm-shot{position:absolute;inset:0;margin:0;clip-path:inset(0);transition:clip-path .45s var(--ease)}
+.wm-shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transform-origin:50% 0}
+[data-phase="wish"] .wm-shot,[data-phase="build"] .wm-shot{clip-path:inset(0 0 100% 0)}
+[data-phase="land"] .wm-shot{animation:wmWipe .65s var(--ease) .3s both}
+[data-phase="hold"] .wm-shot img{animation:wmDrift 10s var(--ease) both}
+
+.wm-skel{position:absolute;inset:0;opacity:0}
+.wm-skel span{position:absolute;border-radius:8px;background:var(--line-2);transform:scale(.9);opacity:0}
+.wm-skel .sa{left:5%;right:5%;top:5%;height:8%}
+.wm-skel .sb{left:5%;top:20%;width:52%;height:34%}
+.wm-skel .sc{left:61%;top:20%;width:34%;height:34%}
+.wm-skel .sd{left:5%;top:62%;width:43%;height:30%}
+.wm-skel .se{left:52%;top:62%;width:43%;height:30%}
+[data-phase="land"] .wm-skel{opacity:1}
+[data-phase="land"] .wm-skel span{animation:wmBlock .3s var(--ease) both}
+[data-phase="land"] .wm-skel .sb{animation-delay:.05s}[data-phase="land"] .wm-skel .sc{animation-delay:.1s}
+[data-phase="land"] .wm-skel .sd{animation-delay:.15s}[data-phase="land"] .wm-skel .se{animation-delay:.2s}
+
+.wm-scan{position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue-2);box-shadow:0 0 18px 4px rgba(234,94,20,.45);opacity:0;pointer-events:none}
+[data-phase="land"] .wm-scan{animation:wmScan .65s var(--ease) .3s both}
+
+.wm-badge{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 9px;border-radius:100px;
+  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 8px 20px -10px rgba(20,29,53,.5);
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:0}
+.wm-badge i{width:8px;height:8px;border-radius:50%;background:#27B584}
+[data-phase="hold"] .wm-badge{opacity:1;animation:wmPop .55s var(--pop) both}
+[data-phase="hold"] .wm-badge i{animation:beat 2s infinite}
+
+/* the build log: lines tick in, the tools that power it pop, a bar fills */
+.wm-build{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;gap:10px;padding:18px 20px 22px;opacity:0;pointer-events:none;
+  background:color-mix(in srgb,var(--paper-3) 92%,transparent);transition:opacity .22s}
+[data-phase="build"] .wm-build{opacity:1}
+.wm-blab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wm-specs{list-style:none;display:flex;flex-direction:column;gap:9px}
+.wm-specs li{position:relative;padding-left:26px;font-family:var(--mono);font-size:13px;line-height:1.35;color:var(--ink);opacity:0;transform:translateX(-8px)}
+.wm-specs li::before{content:"";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:#1E8A66}
+.wm-specs li::after{content:"";position:absolute;left:5.5px;top:3px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.wm-chips{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.wm-chips li{padding:5px 11px;border-radius:100px;border:1px solid var(--line-3);background:var(--paper-2);font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:var(--ink);opacity:0}
+.wm-specs li:nth-child(1){--i:0}.wm-specs li:nth-child(2){--i:1}.wm-specs li:nth-child(3){--i:2}.wm-specs li:nth-child(4){--i:3}
+.wm-chips li:nth-child(1){--i:0}.wm-chips li:nth-child(2){--i:1}.wm-chips li:nth-child(3){--i:2}.wm-chips li:nth-child(4){--i:3}
+[data-phase="build"] .wm-specs li{animation:wmIn .45s var(--ease) calc(var(--i)*.5s + .15s) both}
+[data-phase="build"] .wm-chips li{animation:wmPop .5s var(--pop) calc(1.5s + var(--i)*.16s) both}
+.wm-prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--line)}
+.wm-prog i{display:block;height:100%;background:var(--blue-2);transform-origin:0 50%;transform:scaleX(0)}
+[data-phase="build"] .wm-prog i{animation:wmFill 2.1s linear both}
+
+/* what the visitor made: honest, it routes to us, nothing pretends to build */
+.wm-yours{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:20px 22px;background:var(--paper-3)}
+.wm-yours[hidden]{display:none}
+.wm-ytitle{font-family:var(--disp);font-weight:600;font-size:clamp(22px,2vw,26px);line-height:1.1;letter-spacing:-.01em;color:var(--ink)}
+.wm-ytext{font-size:14.5px;line-height:1.5;color:var(--ink-2)}
+.wm-yact{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:4px}
+.wm-yact .btn{min-height:44px}
+.wm-back{min-height:44px;padding:0 4px;font-family:var(--mono);font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.wm-back:hover{color:var(--blue)}
+.wm[data-mode="yours"] .wm-build,.wm[data-mode="yours"] .wm-view{display:none}
+
+.wm-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 16px 0 22px}
+.wm-live{display:inline-flex;align-items:center;gap:9px;min-height:44px;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);min-width:0}
+.wm-live span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wm-live .wm-dot{flex:none;width:9px;height:9px;border-radius:50%;background:#27B584;animation:beat 2s infinite}
+.wm-live:hover{color:var(--blue)}
+.wm-foot .wall-toggle{flex:none;min-height:32px}
+/* while a new wish is being built the previous link steps aside, so the footer never points at the wrong project */
+.wm-pending{display:none;align-items:center;gap:9px;min-height:44px;margin-right:auto;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.wm-pending::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;border:2px solid var(--blue-2);border-top-color:transparent;animation:wmSpin .9s linear infinite}
+[data-phase="wish"] .wm-live,[data-phase="build"] .wm-live{display:none}
+[data-phase="wish"] .wm-pending,[data-phase="build"] .wm-pending{display:inline-flex}
+[data-mode="yours"] .wm-pending{display:none!important}
+.wm-listen{position:absolute;left:50%;top:50%;translate:-50% -50%;display:none;align-items:center;gap:6px;padding:7px 14px;border-radius:100px;background:var(--paper-2);border:1px solid var(--line-2);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wm-listen i{width:3px;height:12px;border-radius:2px;background:var(--blue-2);animation:wmBar 1s ease-in-out infinite}
+.wm-listen i:nth-child(2){animation-delay:.15s}.wm-listen i:nth-child(3){animation-delay:.3s}
+.wm-listen i+i+i{margin-right:6px}
+[data-phase="wish"] .wm-listen{display:inline-flex}
+.wm[data-mode="yours"] .wm-foot{visibility:hidden}
+
+.wm-stats{list-style:none;display:flex;gap:28px;padding:10px 22px 14px;margin-top:2px}
+.wm-stats .st{display:flex;align-items:baseline;gap:8px}
+.wm-stats .st b{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1;color:var(--ink)}
+.wm-stats .st span{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+.wm-form{padding:12px 16px 16px;background:var(--paper-3);border-top:1px solid var(--line)}
+.wm-flab{display:block;margin:0 0 7px 6px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wm-frow{display:flex;gap:8px}
+.wm-frow input{flex:1;min-width:0;min-height:46px;padding:0 14px;border-radius:11px;border:1.5px solid var(--line-3);background:var(--paper-2);color:var(--ink);font-family:var(--body);font-size:16px}
+.wm-frow input::placeholder{color:var(--muted);opacity:1}
+.wm-frow input:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-color:var(--blue)}
+.wm-go{flex:none;min-height:46px;padding:0 18px;border-radius:11px;background:var(--ink);color:var(--paper);font-family:var(--body);font-weight:600;font-size:15px;transition:background .3s,transform .3s var(--ease)}
+.wm-go:hover{background:var(--blue);color:#fff;transform:translateY(-1px)}
+.wm-go:focus-visible,.wm-back:focus-visible,.wm-live:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+.wm.is-paused *,.wm.is-paused *::before,.wm.is-paused *::after{animation-play-state:paused!important}
+
+/* the screens that used to be the hero now keep it company: quieter, never competing with the machine */
+.hero-stage{opacity:.5}
+.hero-plane{left:46%;top:-22%}
+.hero-stage::after{background:linear-gradient(90deg,var(--paper) 0%,var(--paper) 56%,color-mix(in srgb,var(--paper) 70%,transparent) 66%,color-mix(in srgb,var(--paper) 24%,transparent) 84%,color-mix(in srgb,var(--paper) 10%,transparent) 100%),
+  linear-gradient(180deg,color-mix(in srgb,var(--paper) 55%,transparent) 0%,transparent 22%,transparent 72%,var(--paper) 100%)}
+
+/* the stepper hears the wish */
+.s-wishnote{color:var(--blue)!important}
+
+/* ---------- keyframes ---------- */
+@keyframes wmCaret{to{opacity:0}}
+@keyframes wmSpin{to{transform:rotate(360deg)}}
+@keyframes wmBar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+@keyframes wmDots{from{background-position:0 50%}to{background-position:-48px 50%}}
+@keyframes wmIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+@keyframes wmPop{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:none}}
+@keyframes wmFill{to{transform:scaleX(1)}}
+@keyframes wmWipe{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes wmScan{0%{top:0;opacity:1}85%{opacity:1}100%{top:calc(100% - 2px);opacity:0}}
+@keyframes wmBlock{from{opacity:0;transform:scale(.9)}to{opacity:.9;transform:none}}
+@keyframes wmDrift{from{transform:scale(1)}to{transform:scale(1.06)}}
+@keyframes wmRing{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(3.4)}}
+
+/* ---------- tablets and phones ---------- */
+@media(max-width:920px){
+  .hero-stage::after{background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 62%,color-mix(in srgb,var(--paper) 55%,transparent) 80%,color-mix(in srgb,var(--paper) 30%,transparent) 100%)}
+  .hero{padding-top:clamp(96px,16vw,130px)}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:36px}
+  .hero h1{font-size:clamp(44px,11.5vw,84px)}
+  .wm{justify-self:stretch;max-width:620px}
+  .hero-plane{left:-10%;top:auto}
+}
+/* phone: its own sequence. The wish is a chat bubble, the build log is a receipt that stays on screen
+   and grows line by line, and the finished screen unfolds beneath it. */
+@media(max-width:600px){
+  .wm{border-radius:18px}
+  .wm-bar{padding:10px 12px;gap:10px}
+  .wm-title{display:none}
+  .wm-wish{padding:14px 14px 0}
+  .wm-say{margin-top:8px;padding:11px 14px 12px;min-height:calc(2.4em + 23px);border-radius:16px 16px 16px 4px;background:var(--paper-3);font-size:21px}
+  .wm-stage{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;margin:10px 12px 0;border:0;background:transparent;border-radius:0;overflow:visible}
+  .wm-build{position:relative;opacity:1;pointer-events:auto;min-height:134px;padding:12px 14px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper-3);overflow:hidden;transition:none;gap:8px}
+  .wm-specs li{font-size:12.5px}
+  .wm-chips li{font-size:11px;padding:4px 9px}
+  [data-phase="land"] .wm-specs li,[data-phase="hold"] .wm-specs li{opacity:1;transform:none}
+  [data-phase="land"] .wm-chips li,[data-phase="hold"] .wm-chips li{opacity:1}
+  [data-phase="land"] .wm-prog i,[data-phase="hold"] .wm-prog i{transform:scaleX(1)}
+  .wm-view{position:relative;inset:auto;aspect-ratio:16/10;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--paper-3)}
+  [data-phase="wish"] .wm-view,[data-phase="build"] .wm-view{opacity:.55}
+  [data-phase="land"] .wm-view,[data-phase="hold"] .wm-view{opacity:1;transition:opacity .3s}
+  [data-phase="land"] .wm-view{animation:wmRise .6s var(--ease) both}
+  .wm-yours{position:static;border-radius:12px;padding:16px 14px}
+  .wm-foot{padding:4px 12px 0 14px}
+  .wm-foot .wall-toggle{min-height:44px}
+  .wm-live{font-size:12.5px;line-height:1.25}
+  .wm-live span{white-space:normal;overflow-wrap:anywhere}
+  .wm-stats{gap:20px;padding:8px 14px 12px}
+  .wm-stats .st b{font-size:22px}
+  .wm-form{padding:10px 12px 12px}
+  .wm-go{padding:0 14px}
+  .wm-frow input{font-size:16px}
+}
+@keyframes wmRise{from{transform:translateY(22px) scale(.97)}to{transform:none}}
+@media(max-width:360px){
+  .hero h1{font-size:42px}
+  .wm-steps li{padding:3px 7px}
+  .wm-stats{gap:14px}
+  .wm-stats .st{flex-direction:column;gap:4px;align-items:flex-start}
+}
+/* short landscape screens: keep the two-line wish compact */
+@media(max-height:480px) and (orientation:landscape){
+  .hero{padding-top:92px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .wm *,.wm *::before,.wm *::after,.hl-dot,.hl-dot::after{animation:none!important;transition:none!important}
+  .wm-caret,.wm-skel,.wm-scan{display:none!important}
+  .wm-foot .wall-toggle{display:none}
+}
+@media print{.wm-form,.wm-foot .wall-toggle{display:none!important}}
+[data-mode="yours"] .wm-caret{display:none!important}

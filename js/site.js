@@ -69,11 +69,15 @@ window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
     addBox(document.querySelector("#hdr .brand"),10);
     addBox(document.querySelector("#hdr nav .btn"),12,true,true);
     each(".hero-cta .btn",function(e,i){ addBox(e,12,i===0,true); });
-    addBox(document.querySelector(".hero .status"),22,false,true);
+    addBox(document.querySelector(".hero .wm"),22,false,true);
+    addBox(document.querySelector(".hero .wm-steps li.on"),100,false,true);
+    addBox(document.querySelector(".hero .wm-stage"),12);
+    addBox(document.querySelector(".hero .wm-frow input"),11);
+    addBox(document.querySelector(".hero .wm-go"),11,false,true);
     each("#hdr .nl",addText); each("#hdr nav .btn",addText);
     each(".hero .eyebrow",addText); each(".hero h1",addText); each(".hero-sub",addText);
     each(".hero-cta .btn",addText); each(".hero-meta span",addText);
-    each(".hero .status .open, .hero .status .yr, .hero .status .now, .hero .status .feed, .hero .status .st b, .hero .status .st span",addText);
+    each(".hero .wm-title, .hero .wm-steps li, .hero .wm-wlab span, .hero .wm-wlab b, .hero .wm-say span, .hero .wm-live > span:not(.vh), .hero .wm-stats .st b, .hero .wm-stats .st span, .hero .wm-flab, .hero .wm-go, .hero .wall-toggle",addText);
     svg=document.createElementNS(NS,"svg"); pen=document.createElement("i"); pen.className="pen";
     boxes.forEach(function(it,i){ var q=it.q,d=document.createElement("div"); d.className="b";
       d.style.cssText="left:"+q.left+"px;top:"+q.top+"px;width:"+(q.right-q.left)+"px;height:"+(q.bottom-q.top)+"px;border-radius:"+it.rad;
@@ -147,90 +151,6 @@ function countUp(){ if(counted)return; var els=document.querySelectorAll("[data-
     function step(t){ if(!start)start=t; var p=Math.min(1,(t-start)/1300); p=1-Math.pow(1-p,3); el.textContent=Math.round(target*p); if(p<1) requestAnimationFrame(step); }
     requestAnimationFrame(step); }); }
 window.addEventListener("scroll",countUp,{passive:true}); countUp();
-
-/* rotating status feed */
-(function(){
-  var feed=document.getElementById("feed"); if(!feed||reduced) return;
-  var items=[
-    "Teaching an AI to actually pay attention in meetings, so people don't have to",
-    "Getting five different AI models to agree on what your meeting actually decided",
-    "Turning a one hour call into a summary you can read before it ends",
-    "Keeping a meeting copilot honest across 1,100 plus commits and counting",
-    "Dropping black-and-gold pins across a whole family of restaurants",
-    "Giving a restaurant group one online home, without the brands stepping on each other",
-    "Putting every location on one map, so a new neighborhood is just one more pin",
-    "Making a hospitality group look as considered as the plating",
-    "Bottling San Diego sunshine into an all-day kitchen, before a word is read",
-    "Making a healthy menu feel like a vacation the moment the page loads",
-    "Building a kitchen's site to sell the mood first and the calories never",
-    "Turning a 1938 movie theatre into a food hall, online first",
-    "Giving an 87 year old theatre a second opening night, this one on the web",
-    "Mailing a food hall its own monthly report, no spreadsheet to open",
-    "Reopening a cinema as a food hall, the drumroll built right into the scroll",
-    "Building a DJ a site that restocks its own mixes overnight",
-    "Wiring up an artist's page that updates its own tour dates while he plays",
-    "Letting a producer ship new music without ever opening the code",
-    "Wiring up a 20,000 square foot public market at UC San Diego",
-    "Making twenty thousand square feet of food hall load like a single snack",
-    "Building a campus market that every student can use, from day one",
-    "Handing a food hall a CMS its team can run without ever calling us",
-    "Giving a Little Italy food hall the scroll it deserves",
-    "Building a food hall to the exact standard of the designer who shaped the room",
-    "Making a menu worth scrolling slowly, the way Sunday dinner is eaten",
-    "Crunching live betting math so the odds never quietly short-change you",
-    "Building a betting brain brave enough to grade its own picks each morning",
-    "Re-pricing a coupon when one leg gets voided, instead of refunding the lot",
-    "Doing the cold EV math on every wager, with feelings left at the door",
-    "Making a clay and limewash studio look like an art book",
-    "Turning a finishing studio into an art book that quietly closes the sale",
-    "Selling the feel of a Roman clay wall before anyone touches one",
-    "Putting the bar's disappearing whiskey on a scale, and on notice",
-    "Turning a bottle's weight into the exact pour, and the exact loss",
-    "Giving a bar the honest gap between what it poured and what it sold",
-    "Putting every bottle on a scale, so free pours have nowhere left to hide",
-    "Letting a buyer spin a 3D lawn before they ever ask what it costs",
-    "Turning a turf supplier's catalog into a sales floor that closes quotes",
-    "Making artificial grass look worth the drive across San Diego",
-    "Giving a sports private equity firm a site as quiet and certain as its thesis",
-    "Dressing a sports investment house in ink navy and a single line of brass",
-    "Hanging an LA interior studio's rooms online like a gallery, Scandi calm and all",
-    "Plating an all day egg kitchen on the web before the first pan is hot",
-    "Replacing an architecture office's Excel matrix with something that actually alerts",
-    "Showing a project office which job is stuck, who owns it, and for how long",
-    "Teaching factory cameras to catch the flaw tired eyes miss",
-    "Giving a production line a second set of eyes that never blink",
-    "Spotting the bad part before it ever reaches the box",
-    "Catching defects at line speed, one frame at a time",
-    "Moving a seafood kitchen off a rented menu platform, onto a site it finally owns",
-    "Serving smash burgers loud, on a site you can almost taste from the couch",
-    "Building a living memorial for the painter who made Los Angeles a dream of fire",
-    "Rebuilding a marine brand's site on spec, to show them what it could be",
-    "Giving a hood cleaning crew one screen for every customer and every job",
-    "Putting every conversation a tattoo studio has into one inbox, one phone number",
-    "Opening a merch drop store with no framework and no backend, just a cart that works",
-    "Modelling every deal four ways for a private investment club, downside first",
-    "Keeping a founder's cards, statements and credit score on one quiet screen",
-    "Helping a friend pull whole playlists down without the busywork",
-    "Teaching an affiliate video pipeline to skip the day when nothing is good enough",
-    "Running the whole studio from one board that says out loud when it's stale",
-    "Collecting the best interface details on the web, with honest provenance",
-    "Turning the studio's characters into a small 3D office"
-  ];
-  for(var j=items.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1));var t=items[j];items[j]=items[k];items[k]=t;}
-  feed.textContent=items[0];
-  var i=0,timer=null,paused=false;
-  function tick(){ i=(i+1)%items.length; feed.style.opacity=0;
-    setTimeout(function(){ feed.textContent=items[i]; feed.style.opacity=1; },420); }
-  function start(){ if(!timer) timer=setInterval(tick,3800); }
-  function stop(){ clearInterval(timer); timer=null; }
-  start();
-  var toggle=document.getElementById("feedToggle");
-  if(toggle){ toggle.addEventListener("click",function(){
-    paused=!paused;
-    if(paused){ stop(); toggle.textContent="Play"; toggle.setAttribute("aria-pressed","true"); toggle.setAttribute("aria-label","Resume rotating status text"); }
-    else{ start(); toggle.textContent="Pause"; toggle.setAttribute("aria-pressed","false"); toggle.setAttribute("aria-label","Pause rotating status text"); }
-  }); }
-})();
 
 /* touch / narrow: inject inline screenshot per row (no hover preview there) */
 (function(){
@@ -329,6 +249,14 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
   document.getElementById("emailNext").addEventListener("click",function(){ data.email=emailI.value.trim(); go(3); });
   document.getElementById("emailSkip").addEventListener("click",function(){ data.email=""; go(3); });
   emailI.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); data.email=emailI.value.trim(); go(3); } });
+  /* the hero's wish box hands its text over here (js/wish.js): it lands in the last step's "why" field,
+     where the visitor can still edit it, and step one says so. Nothing is sent from here. */
+  document.addEventListener("k13:wish",function(e){
+    var t=((e.detail&&e.detail.text)||"").replace(/\s+/g," ").trim().slice(0,200); if(!t) return;
+    var why=document.getElementById("sWhy"), note=document.getElementById("wishNote"); if(!why) return;
+    why.value=t;
+    if(note){ note.textContent="Your wish is saved for the last step: \u201C"+t+"\u201D"; note.hidden=false; }
+  });
   function compose(){
     data.why=document.getElementById("sWhy").value.trim();
     var huntSubject=""; try{ huntSubject=sessionStorage.getItem("k13Subject")||""; }catch(e){}   /* set by the hunt when all 13 are found */
@@ -457,7 +385,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var rows=st.querySelector(".wall-rows"), r0=rows&&rows.querySelector(".wall-row");
   if(r0){ var r3=r0.cloneNode(true); r3.classList.add("wall-row-far"); rows.insertBefore(r3,r0); }
   var user=false;
-  if(t) t.addEventListener("click",function(){ user=!user; st.classList.toggle("paused",user); t.setAttribute("aria-pressed",String(user)); t.textContent=user?"Play the screens":"Pause the screens"; });
+  if(t) t.addEventListener("click",function(){ user=!user; st.classList.toggle("paused",user); t.setAttribute("aria-pressed",String(user)); t.textContent=user?"Play the motion":"Pause the motion"; });
   new IntersectionObserver(function(es){ if(!user) st.classList.toggle("paused",!es[0].isIntersecting); }).observe(st);
   if(reduced) return;
   var plane=st.querySelector(".hero-plane"),px=0,py=0,cx=0,cy=0,sy=0,raf=null;

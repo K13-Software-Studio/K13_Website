@@ -134,8 +134,10 @@ so the subject and body encoding is proven for the mailto path too.
   screens to sit in the hero's background with depth: three rows on a tilted plane, the far one
   blurred, a paper veil so the copy always sits on a quiet ground, a "Pause the screens" control
   (WCAG 2.2.2). The logo wall stays where it was.
-- **2026-10-02 · The hero line is "Software with an edge."** Kazim wanted something between
-  "Software that is sharp!" and "Software that stands out!". The same day he also ruled that the
+- **2026-10-02 · The hero leads with the motto "From 'I wish' to 'it works'."** It replaced
+  "Software with an edge." the same day: it tells people right away that we get it done. The hero
+  performs it: a wish machine turns real client wishes (from the Work rows) into their live screens.
+  The same day he also ruled that the
   site stops leaning on "two people" ("I don't know why you are stuck with two people phrases"):
   headcount is not the pitch, so no "two people" lines in headings, hero, stats, footer, meta or the
   share card. The Studio still shows the portrait; the small photo frames sit beside the contact form.
