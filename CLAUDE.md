@@ -126,9 +126,14 @@ so the subject and body encoding is proven for the mailto path too.
   the real header and hero masks the page, an orange pen draws the box outlines (logo first), every
   letter is swept in and settles on the real letter's spot, and the mask lifts so nothing moves
   afterwards. Rules that came with it: **no sound** on a loading screen, **super fast** (about a
-  second), **logo first**, once per session, skipped for reduced motion, deep links and any input.
+  second), **logo first**, skipped for reduced motion, deep links and any input. It plays on **every** load,
+  reloads included (Kazim, 2026-10-01: "Cmd+R yapınca tekrar oynasın"); it was once per session until then.
   Films belong in reels and case pieces, not in front of the site. Sources of the rejected films:
   `docs/prototypes/INTRO_FILMS.md`.
+- **2026-10-01 · The wall's moving screens live behind the hero.** Kazim asked for the sliding
+  screens to sit in the hero's background with depth: three rows on a tilted plane, the far one
+  blurred, a paper veil so the copy always sits on a quiet ground, a "Pause the screens" control
+  (WCAG 2.2.2). The logo wall stays where it was.
 - **2026-10-01 · `docs/` is never deployed** (`.vercelignore`). Until that day every handoff and
   report under `docs/` was publicly reachable on k13projects.com.
 - **2026-09-26 · The client's name is written `Egg&Out`, no spaces.** Kazim: "call Egg&Out

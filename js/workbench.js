@@ -1,8 +1,8 @@
-/* K13 workbench: two playable pieces from real projects, plus the hidden layer.
+/* K13 workbench: fourteen playable pieces from real projects, plus the hidden layer.
    Contract with the page (index.html / js/site.js):
-     mounts   <div data-game="carlos|miramar">  (each becomes one card)
+     mounts   <div data-game="carlos|miramar|...">  (fourteen names, see the games map at the bottom; each becomes one card)
      hunt     window.K13.hunt.place(el): turns a small "13" on the page into a hidden mark;
-              the page calls it for its own nine marks, this file places four more in the cards
+              the page calls it for its own nine marks, this file places four more in the cards (the seven newest toys add none, the total stays 13)
      counter  [data-hunt-counter] in the footer shows "n of 13" once the first mark is found
      theme    13 clicks on a.brand toggle <html data-theme="dark"> (tokens live in css/site.css);
               a real switch appears in [data-theme-slot] once discovered
@@ -107,7 +107,7 @@ function carlos(mount){
 /* ======================= 2. Opening Night (Miramar Food Hall) ======================= */
 /* Simon, on a marquee: the sign plays a pattern, you repeat it. Each round is one bulb longer. */
 function miramar(mount){
-  var c=card(mount,{title:"Opening Night",from:"Miramar Food Hall",instr:"Watch the marquee, then repeat the pattern. Reach 13 to open the doors.",stageClass:"wb-sign"});
+  var c=card(mount,{title:"Opening Night",from:"Miramar Food Hall",instr:"Watch the marquee, then repeat the pattern. Reach 13 to open the doors.",stageClass:"wb-sign",foot:"A toy sign, not the real marquee. Best round is kept on this device."});
   var sign=el("div","wb-marquee",'<div class="wb-board"><span class="wb-board-t">MIRAMAR</span><span class="wb-board-s">Food hall · est. 1938 · reach <span class="wb-hunt" data-hunt>13</span></span></div><div class="wb-bulbs" role="group" aria-label="Marquee bulbs"></div><div class="wb-mctl"><button type="button" class="wb-start">Start the show</button><span class="wb-hunt wb-row13">Row <span data-hunt>13</span></span></div>');
   c.stage.appendChild(sign);
   var row=sign.querySelector(".wb-bulbs"), start=sign.querySelector(".wb-start"), bulbs=[], N=7;
@@ -145,7 +145,7 @@ function miramar(mount){
 /* Their wordmark spirals on without end. Grab it and spin it; flick it and it keeps turning. */
 var FONT_DISP=null;
 function egg(mount){
-  var c=card(mount,{title:"Endless Spiral",from:"Egg&Out",instr:"Grab the spiral and spin it. Flick it hard and it keeps going.",stageClass:"wb-egg"});
+  var c=card(mount,{title:"Endless Spiral",from:"Egg&Out",instr:"Grab the spiral and spin it. Flick it hard and it keeps going.",stageClass:"wb-egg",foot:"Their wordmark, spun by hand. Left and right arrows work too."});
   var cv=el("canvas","wb-eggcv"); cv.setAttribute("role","img"); cv.setAttribute("aria-label","A spiral made of the words EGG AND OUT, repeating outward. Drag in a circle to spin it, or use the left and right arrow keys."); cv.tabIndex=0; c.stage.appendChild(cv);
   var ctx=cv.getContext("2d"), W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
   if(!FONT_DISP) FONT_DISP=(getComputedStyle(document.documentElement).getPropertyValue("--disp")||"serif").trim();
@@ -211,7 +211,7 @@ function egg(mount){
 /* ======================= 4. Night Shift Deck (CENGO) ======================= */
 /* A record on a turntable. Drag a circle to scratch it, let go and it spins back up. */
 function cengo(mount){
-  var c=card(mount,{title:"Night Shift Deck",from:"CENGO",instr:"Drag the record in a circle to scratch it. Space plays or pauses. Sound stays off until you switch it on.",stageClass:"wb-deck"});
+  var c=card(mount,{title:"Night Shift Deck",from:"CENGO",instr:"Drag the record in a circle to scratch it. Space plays or pauses. Sound stays off until you switch it on.",stageClass:"wb-deck",foot:"The sound is synthesized here, not their music. Off until you switch it on."});
   c.stage.insertAdjacentHTML("beforeend",
     '<div class="wb-plat" tabindex="0" role="img" aria-label="A record on a turntable. Drag in a circle to scratch it, or use the left and right arrow keys. Space plays or pauses.">'+
       '<div class="wb-grooves"></div><div class="wb-glint"></div>'+
@@ -283,7 +283,7 @@ function cengo(mount){
 /* ======================= 5. Loose Type (K13) ======================= */
 /* The studio's own lockup as physical pieces: fling them, they bounce and settle, Tidy snaps them home. */
 function letters(mount){
-  var c=card(mount,{title:"Loose Type",from:"K13",instr:"Grab a piece and fling it. Tidy brings the lockup home.",stageClass:"wb-tray-wrap"});
+  var c=card(mount,{title:"Loose Type",from:"K13",instr:"Grab a piece and fling it. Tidy brings the lockup home.",stageClass:"wb-tray-wrap",foot:"Our own lockup, in pieces. Arrow keys nudge, Enter flings."});
   var iid=mount.querySelector(".wb-instr").id;
   c.stage.insertAdjacentHTML("beforeend",
     '<div class="wb-tray" role="group" aria-label="Loose type, four pieces">'+
@@ -385,7 +385,7 @@ function letters(mount){
    soft one and can never let the yolk escape, grease streaks smear out behind. Click jiggles,
    double click flips it with a spatula. */
 function eggcursor(mount){
-  var c=card(mount,{title:"Runny Egg",from:"Egg&Out",instr:"Move around the pan. Left click jiggles the yolk, right click flips the egg.",stageClass:"wb-pan"});
+  var c=card(mount,{title:"Runny Egg",from:"Egg&Out",instr:"Move around the pan. Left click jiggles the yolk, right click flips the egg.",stageClass:"wb-pan",foot:"Their cursor, kept in a pan. On touch, double tap flips it."});
   var stage=c.stage, layer=el("div","eg-layer"); layer.setAttribute("aria-hidden","true"); stage.appendChild(layer);
   var streaks=[];
   [[15,3.5,0],[10,3,-10],[10,3,10]].forEach(function(s){ var d=el("div","eg-streak"); d.style.width=s[0]+"px"; d.style.height=s[1]+"px"; layer.appendChild(d); streaks.push({el:d,x:0,y:0,vx:0,vy:0,lat:s[2],w:s[0]}); });
@@ -505,6 +505,240 @@ function sandwich(mount){
   render();
 }
 
+/* ======================= 8. Pin Drop (Tiger Hospitality) ======================= */
+/* Their flagship is a map where every pin is a neighborhood. Tap the map, a pin drops. Seven pins fill the family. */
+function pindrop(mount){
+  var c=card(mount,{title:"Pin Drop",from:"Tiger Hospitality",instr:"Tap the map to drop a pin. Every pin is a new neighborhood.",stageClass:"wb-map",foot:"A toy map, not a real one. The real map has every pin where it belongs."});
+  var field=el("div","wb-mapfield"); field.tabIndex=0; field.setAttribute("role","img");
+  field.setAttribute("aria-label","A toy map of San Diego. Tap to drop a pin, or use the arrow keys to move the crosshair and Enter or Space to drop one.");
+  var ghost=el("div","wb-pinwrap wb-ghostpin"); ghost.style.left="50%"; ghost.style.top="52%"; field.appendChild(ghost);
+  var NAMES=["Little Italy","Gaslamp","North Park","Hillcrest","La Jolla","Barrio Logan","Point Loma"];
+  var COLS=["#E24E1B","#4F9E92","#F0B429","#E8756A","#141D35","#2F7FA6","#8A5206"];
+  function pinSvg(col){ return '<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 31C12 31 2 19 2 11a10 10 0 0 1 20 0c0 8-10 20-10 20z" fill="'+col+'" stroke="#141D35" stroke-width="1.6"/><circle cx="12" cy="11" r="3.6" fill="#F6EEDC"/></svg>'; }
+  ghost.innerHTML=pinSvg(COLS[0]);
+  var cross=el("div","wb-cross"); cross.setAttribute("aria-hidden","true"); field.appendChild(cross);
+  c.stage.appendChild(field);
+  var pins=[], count=0, kx=.5, ky=.5, said=false;
+  function moveCross(){ cross.style.left=(kx*100)+"%"; cross.style.top=(ky*100)+"%"; }
+  function drop(x,y){
+    ghost.hidden=true; var i=count%NAMES.length; count++;
+    var p=el("div","wb-pinwrap wb-dropped",pinSvg(COLS[i])); p.style.left=(x*100)+"%"; p.style.top=(y*100)+"%"; field.appendChild(p); pins.push(p);
+    if(pins.length>NAMES.length){ pins.shift().remove(); }
+    if(count===NAMES.length&&!said){ said=true; c.read.innerHTML='<span><b>Seven pins. That is the whole family.</b> Keep going, the oldest hops off.</span>'; }
+    else c.read.innerHTML='<span>Pin '+count+': <b>'+NAMES[i]+'</b>.</span>';
+  }
+  field.addEventListener("pointerdown",function(e){ var r=field.getBoundingClientRect(); kx=clamp((e.clientX-r.left)/r.width,.03,.97); ky=clamp((e.clientY-r.top)/r.height,.06,.97); moveCross(); drop(kx,ky); });
+  field.addEventListener("keydown",function(e){
+    var st=.07;
+    if(e.key==="ArrowLeft") kx-=st; else if(e.key==="ArrowRight") kx+=st; else if(e.key==="ArrowUp") ky-=st; else if(e.key==="ArrowDown") ky+=st;
+    else if(e.key==="Enter"||e.key===" "){ e.preventDefault(); drop(kx,ky); return; } else return;
+    e.preventDefault(); kx=clamp(kx,.03,.97); ky=clamp(ky,.06,.97); moveCross();
+  });
+  moveCross();
+  c.reset.addEventListener("click",function(){ pins.forEach(function(p){ p.remove(); }); pins=[]; count=0; said=false; ghost.hidden=false; kx=.5; ky=.5; moveCross(); c.read.innerHTML=""; c.untouch(); });
+}
+
+/* ======================= 9. Golden Hour (La Vida San Diego) ======================= */
+/* A kitchen that had to feel like sunshine before you read a word. Slide the sun; the sky, the hills and the windows follow. */
+function goldenhour(mount){
+  var c=card(mount,{title:"Golden Hour",from:"La Vida San Diego",instr:"Slide the sun across the sky and watch the kitchen change with the light.",stageClass:"wb-sun",foot:"A pocket sunrise, not their site. The real one is warm from the first pixel."});
+  c.stage.insertAdjacentHTML("beforeend",
+    '<div class="wb-skyfield"><div class="wb-sunball"></div><div class="wb-hill wb-hill1"></div><div class="wb-hill wb-hill2"></div>'+
+    '<div class="wb-cafe"><span class="wb-cafe-roof"></span><span class="wb-cafe-body"><i class="wb-win"></i><i class="wb-win"></i><i class="wb-win"></i></span></div></div>'+
+    '<div class="wb-sunctl"><label class="vh" for="wb-sunrange">Sun position, from sunrise to night</label><input id="wb-sunrange" class="wb-range" type="range" min="0" max="100" value="30"></div>');
+  var field=c.stage.querySelector(".wb-skyfield"), sun=c.stage.querySelector(".wb-sunball"), cafe=c.stage.querySelector(".wb-cafe"), range=c.stage.querySelector(".wb-range");
+  var STOPS=[[0,[246,201,160],[252,233,207]],[.25,[159,211,232],[255,241,204]],[.5,[124,196,232],[255,246,216]],[.75,[244,162,89],[255,217,138]],[.9,[217,100,74],[247,178,106]],[1,[20,29,53],[42,53,84]]];
+  function mix(a,b,t){ return [Math.round(lerp(a[0],b[0],t)),Math.round(lerp(a[1],b[1],t)),Math.round(lerp(a[2],b[2],t))]; }
+  function rgb(v){ return "rgb("+v[0]+","+v[1]+","+v[2]+")"; }
+  function phase(t){ return t<.12?"Sunrise":t<.35?"Morning":t<.62?"Midday":t<.82?"Golden hour":t<.94?"Dusk":"Lights on"; }
+  function clock(t){ var m=Math.round((6+t*14)*60), h=Math.floor(m/60), mm=m%60; return ((h+11)%12+1)+":"+(mm<10?"0":"")+mm+(h<12||h>=24?" am":" pm"); }
+  var lastPhase="";
+  function paint(announce){
+    var t=range.value/100, i=0; while(i<STOPS.length-2&&t>STOPS[i+1][0]) i++;
+    var a=STOPS[i], b=STOPS[i+1], k=clamp((t-a[0])/(b[0]-a[0]),0,1), top=mix(a[1],b[1],k), bot=mix(a[2],b[2],k);
+    field.style.background="linear-gradient(180deg,"+rgb(top)+","+rgb(bot)+")";
+    sun.style.left=(8+t*84)+"%"; sun.style.bottom=(18+Math.sin(Math.PI*t)*52)+"%";
+    var warm=Math.abs(t-.45)*2; sun.style.background="radial-gradient(circle at 40% 38%,#FFF6C8,"+rgb(mix([255,214,90],[255,120,48],clamp(warm*1.2,0,1)))+")";
+    sun.style.opacity=t>.93?String(clamp((1-t)/.07,0,1)):"1";
+    cafe.classList.toggle("lit",t>.82||t<.06);
+    var p=phase(t), time=clock(t); range.setAttribute("aria-valuetext",time+", "+p);
+    if(announce&&p!==lastPhase) c.read.innerHTML="<span><b>"+p+"</b> · "+time+"</span>";
+    lastPhase=p;
+  }
+  range.addEventListener("input",function(){ c.touch(); paint(true); });
+  var drag=false;
+  function setX(e){ var r=field.getBoundingClientRect(); range.value=String(Math.round(clamp((e.clientX-r.left)/r.width,0,1)*100)); paint(true); }
+  field.addEventListener("pointerdown",function(e){ drag=true; field.setPointerCapture(e.pointerId); setX(e); });
+  field.addEventListener("pointermove",function(e){ if(drag) setX(e); });
+  function end(){ drag=false; } field.addEventListener("pointerup",end); field.addEventListener("pointercancel",end);
+  c.reset.addEventListener("click",function(){ range.value="30"; lastPhase=""; paint(false); c.read.innerHTML=""; c.untouch(); });
+  paint(false);
+}
+
+/* ======================= 10. Stall Call (Station8) ======================= */
+/* A public market that had to work for everyone from day one. Eight stalls, each a real button: open every shutter. */
+function stalls(mount){
+  var c=card(mount,{title:"Stall Call",from:"Station8",instr:"Tap a stall to roll up its shutter. Open them all.",stageClass:"wb-market",foot:"A toy market. Every stall here works from the keyboard too, like the real one."});
+  var NAMES=["Bread","Noodles","Tacos","Coffee","Fruit","Pizza","Tea","Sweets"], COLS=["#E24E1B","#4F9E92","#D9A441","#C2413A","#2F7FA6","#B94612","#3E7C59","#E8756A"];
+  var grid=el("div","wb-stalls"); grid.setAttribute("role","group"); grid.setAttribute("aria-label","Market stalls, eight");
+  var btns=NAMES.map(function(n,i){
+    var b=el("button","wb-stall",'<span class="wb-sbox" aria-hidden="true"><span class="wb-awning"></span><span class="wb-goods"></span><span class="wb-shutter"></span></span><span class="wb-sname">'+n+'</span>');
+    b.type="button"; b.setAttribute("aria-pressed","false"); b.setAttribute("aria-label",n+" stall, shutter"); b.style.setProperty("--c",COLS[i]);
+    b.addEventListener("click",function(){ var on=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",String(on)); count(); });
+    grid.appendChild(b); return b; });
+  c.stage.appendChild(grid);
+  var done=false;
+  function count(){
+    var n=btns.filter(function(b){ return b.getAttribute("aria-pressed")==="true"; }).length;
+    c.stage.classList.toggle("lit",n===btns.length);
+    if(n===btns.length){ done=true; c.read.innerHTML="<span><b>All eight open.</b> The market is awake.</span>"; }
+    else c.read.innerHTML="<span>"+n+" of 8 open.</span>";
+  }
+  c.reset.querySelector("span").textContent="Close up"; c.reset.setAttribute("aria-label","Close every stall");
+  c.reset.addEventListener("click",function(){ btns.forEach(function(b){ b.setAttribute("aria-pressed","false"); }); done=false; c.stage.classList.remove("lit"); c.read.innerHTML=""; c.untouch(); });
+}
+
+/* ======================= 11. Twirl (Global Fork) ======================= */
+/* A Little Italy food hall. Drag in circles and the pasta winds onto the fork until it is a proper forkful. */
+function twirl(mount){
+  var c=card(mount,{title:"Twirl",from:"Global Fork",instr:"Drag in circles to wind the fork. Make it a proper forkful.",stageClass:"wb-twirl",foot:"Spaghetti is our guess. The real room has more than pasta."});
+  var cv=el("canvas","wb-fill"); cv.setAttribute("role","img"); cv.setAttribute("aria-label","A plate of spaghetti with a fork in the middle. Drag in circles, or press the left and right arrow keys, to wind the pasta onto the fork."); cv.tabIndex=0; c.stage.appendChild(cv);
+  var ctx=cv.getContext("2d"), W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1), ang=0, wound=0, MAX=6, dragging=false, lastA=0, lastN=0;
+  function rnd(i){ var x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+  function size(){ var r=cv.getBoundingClientRect(); if(!r.width) return; W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); draw(); }
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle="#F3E9D2"; ctx.fillRect(0,0,W,H);
+    var cx=W/2, cy=H/2+8, R=Math.min(W,H)*.4;
+    ctx.fillStyle="#FFFDF6"; ctx.strokeStyle="#D8CFBA"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(cx,cy,R,0,6.2832); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,R*.78,0,6.2832); ctx.strokeStyle="#EDE4D0"; ctx.lineWidth=2; ctx.stroke();
+    var N=40, vis=Math.round(N*(1-wound/MAX)); ctx.lineCap="round";
+    for(var i=0;i<vis;i++){
+      var a=rnd(i)*6.2832, r0=Math.sqrt(rnd(i+60))*R*.62, x0=cx+Math.cos(a)*r0, y0=cy+Math.sin(a)*r0*.9, a2=a+(rnd(i+120)-.5)*2.4, l=R*(.22+rnd(i+180)*.3);
+      ctx.strokeStyle=i%5===0?"#C8401C":"#E8B64C"; ctx.lineWidth=i%5===0?4:3;
+      ctx.beginPath(); ctx.moveTo(x0,y0); ctx.quadraticCurveTo(x0+Math.cos(a2+1.2)*l*.7,y0+Math.sin(a2+1.2)*l*.7,x0+Math.cos(a2)*l,y0+Math.sin(a2)*l*.9); ctx.stroke();
+    }
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(ang);
+    ctx.strokeStyle="#8A929E"; ctx.lineWidth=7; ctx.beginPath(); ctx.moveTo(R*.2,0); ctx.lineTo(Math.min(R*1.02,W/2-6),0); ctx.stroke();
+    var br=5+wound*4.4; ctx.fillStyle="#E8B64C"; ctx.beginPath(); ctx.arc(0,0,br,0,6.2832); ctx.fill();
+    ctx.lineWidth=2; for(var k=0;k<Math.ceil(wound*2)+1;k++){ ctx.strokeStyle=k%3===0?"#C8401C":"#C98F1E"; ctx.beginPath(); ctx.arc(0,0,Math.max(2,br-k*2.2),k*.9,k*.9+3.6); ctx.stroke(); }
+    ctx.fillStyle="#C8D0DA"; ctx.beginPath(); ctx.arc(R*.2,0,6,0,6.2832); ctx.fill();
+    ctx.restore();
+  }
+  function turn(d){ ang+=d; wound=clamp(wound+Math.abs(d)/(2*Math.PI),0,MAX); draw(); say(); }
+  function say(){ var n=Math.floor(wound); if(n!==lastN){ lastN=n; c.read.innerHTML=wound>=MAX-.05?"<span><b>A proper forkful.</b> Buon appetito.</span>":(n>0?"<span>"+n+(n===1?" turn":" turns")+" wound.</span>":""); } }
+  function pos(e){ var r=cv.getBoundingClientRect(); return Math.atan2(e.clientY-r.top-H/2-8,e.clientX-r.left-W/2); }
+  cv.addEventListener("pointerdown",function(e){ e.preventDefault(); cv.setPointerCapture(e.pointerId); dragging=true; lastA=pos(e); });
+  cv.addEventListener("pointermove",function(e){ if(!dragging) return; var a=pos(e), d=a-lastA; if(d>Math.PI) d-=2*Math.PI; else if(d<-Math.PI) d+=2*Math.PI; lastA=a; turn(d); });
+  function up(){ dragging=false; } cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+  cv.addEventListener("keydown",function(e){ if(e.key==="ArrowLeft"){ e.preventDefault(); turn(-.3); } else if(e.key==="ArrowRight"){ e.preventDefault(); turn(.3); } });
+  c.reset.addEventListener("click",function(){ ang=0; wound=0; lastN=0; dragging=false; draw(); c.read.innerHTML=""; c.untouch(); });
+  window.addEventListener("resize",size); setTimeout(size,0);
+}
+
+/* ======================= 12. Next Morning (TrustMeBro) ======================= */
+/* A betting brain that does the cold math, then faces the scoreboard. A made-up edge, a bankroll line, no excuses. */
+function nextmorning(mount){
+  var c=card(mount,{title:"Next Morning",from:"TrustMeBro",instr:"Place a pick. The scoreboard keeps the receipt, win or lose.",stageClass:"wb-ev",foot:"Pretend units and a made-up edge. Not betting advice."});
+  c.stage.insertAdjacentHTML("beforeend",
+    '<div class="wb-evtop"><div class="wb-evstat"><span>Record</span><b class="wb-evrec">0-0</b></div><div class="wb-evstat"><span>Bankroll</span><b class="wb-evu">0.0u</b></div></div>'+
+    '<canvas class="wb-evcv" role="img" aria-label="Bankroll line. No picks yet."></canvas>'+
+    '<div class="wb-evctl"><button type="button" class="wb-evbtn wb-nudge">Place a pick</button><button type="button" class="wb-evbtn wb-evghost">Run 20 picks</button></div>');
+  var cv=c.stage.querySelector(".wb-evcv"), ctx=cv.getContext("2d"), rec=c.stage.querySelector(".wb-evrec"), un=c.stage.querySelector(".wb-evu"), one=c.stage.querySelector(".wb-evbtn"), many=c.stage.querySelector(".wb-evghost");
+  var hist=[0], w=0, l=0, bank=0, W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1), gen=0, running=false, EDGE=.56;
+  function size(){ var r=cv.getBoundingClientRect(); if(!r.width) return; W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); draw(); }
+  function draw(){
+    ctx.clearRect(0,0,W,H); var pts=hist.slice(-40), lo=Math.min(0,Math.min.apply(null,pts)), hi=Math.max(0,Math.max.apply(null,pts)), span=Math.max(4,hi-lo), pad=12;
+    function X(i){ return pad+(pts.length>1?i/(pts.length-1):0)*(W-pad*2); } function Y(v){ return H-pad-((v-lo)/span)*(H-pad*2); }
+    ctx.strokeStyle="rgba(246,238,220,.35)"; ctx.lineWidth=1; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(pad,Y(0)); ctx.lineTo(W-pad,Y(0)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.lineWidth=2.4; ctx.lineJoin="round"; ctx.lineCap="round";
+    for(var i=1;i<pts.length;i++){ ctx.strokeStyle=pts[i]>=pts[i-1]?"#5FC7B5":"#F08A7E"; ctx.beginPath(); ctx.moveTo(X(i-1),Y(pts[i-1])); ctx.lineTo(X(i),Y(pts[i])); ctx.stroke(); }
+    var lx=X(pts.length-1), ly=Y(pts[pts.length-1]); ctx.fillStyle="#F6EEDC"; ctx.beginPath(); ctx.arc(lx,ly,4,0,6.2832); ctx.fill();
+  }
+  function fmt(v){ return (v>0?"+":"")+v.toFixed(1)+"u"; }
+  function pick(quiet){
+    var win=Math.random()<EDGE; if(win){ w++; bank+=1; } else { l++; bank-=1; } hist.push(bank);
+    rec.textContent=w+"-"+l; un.textContent=fmt(bank); cv.setAttribute("aria-label","Bankroll line: "+fmt(bank)+" after "+(w+l)+" picks."); draw();
+    if(!quiet) c.read.innerHTML="<span>Pick "+(w+l)+": <b>"+(win?"won":"lost")+"</b>. "+fmt(bank)+" on the board.</span>";
+    return win;
+  }
+  function verdict(){ c.read.innerHTML=bank>0?"<span><b>"+fmt(bank)+" after "+(w+l)+".</b> The edge shows over many picks, not one.</span>":"<span><b>"+fmt(bank)+" after "+(w+l)+".</b> Short runs lie. The math is patient.</span>"; }
+  one.addEventListener("click",function(){ if(!running) pick(false); });
+  many.addEventListener("click",function(){
+    if(running) return; running=true; many.disabled=true; var g=gen, n=0;
+    (function go(){ if(g!==gen) return; pick(true); n++; if(n<20){ setTimeout(go,reduced?0:70); } else { running=false; many.disabled=false; verdict(); } })();
+  });
+  c.reset.querySelector("span").textContent="New slate"; c.reset.setAttribute("aria-label","Wipe the scoreboard");
+  c.reset.addEventListener("click",function(){ gen++; running=false; many.disabled=false; hist=[0]; w=0; l=0; bank=0; rec.textContent="0-0"; un.textContent="0.0u"; cv.setAttribute("aria-label","Bankroll line. No picks yet."); draw(); c.read.innerHTML=""; c.untouch(); });
+  window.addEventListener("resize",size); setTimeout(size,0);
+}
+
+/* ======================= 13. Count the Pours (BarFix) ======================= */
+/* Every bottle steps on a scale, so a missing pour has nowhere to hide. Pour, ring it up, and see what the scale knows. */
+function pours(mount){
+  var c=card(mount,{title:"Count the Pours",from:"BarFix",instr:"Pour a drink, then ring it up. The scale knows what you forgot.",stageClass:"wb-bar",foot:"Pretend bottle, pretend bar. The real scale is much less forgiving."});
+  c.stage.insertAdjacentHTML("beforeend",
+    '<div class="wb-barrow"><div class="wb-scalewrap" aria-hidden="true"><div class="wb-bottle"><span class="wb-neck"></span><span class="wb-bbody"><i class="wb-liq"></i></span></div><div class="wb-plate"></div></div>'+
+    '<dl class="wb-barread"><div><dt>Scale</dt><dd class="wb-bw">1178 g</dd></div><div><dt>Poured</dt><dd class="wb-bp">0</dd></div><div><dt>Rung up</dt><dd class="wb-br">0</dd></div></dl></div>'+
+    '<p class="wb-ledger"><span class="wb-ledmark" aria-hidden="true">OK</span><span class="wb-ledtxt">Every pour accounted for.</span></p>'+
+    '<div class="wb-barctl"><button type="button" class="wb-barbtn wb-pourbtn wb-nudge">Pour</button><button type="button" class="wb-barbtn wb-ringbtn" disabled>Ring it up</button></div>');
+  var liq=c.stage.querySelector(".wb-liq"), bw=c.stage.querySelector(".wb-bw"), bp=c.stage.querySelector(".wb-bp"), br=c.stage.querySelector(".wb-br"), mark=c.stage.querySelector(".wb-ledmark"), txt2=c.stage.querySelector(".wb-ledtxt"), pour=c.stage.querySelector(".wb-pourbtn"), ring=c.stage.querySelector(".wb-ringbtn"), led=c.stage.querySelector(".wb-ledger");
+  var POURS=12, poured=0, rung=0;
+  function paint(){
+    var level=1-poured/POURS; liq.style.height=(level*100)+"%"; bw.textContent=Math.round(520+658*level)+" g"; bp.textContent=String(poured); br.textContent=String(rung);
+    var miss=poured-rung; led.classList.toggle("short",miss>0); mark.textContent=miss>0?"!":"OK";
+    txt2.textContent=miss>0?(miss+(miss===1?" pour is":" pours are")+" unaccounted for."):"Every pour accounted for.";
+    pour.disabled=poured>=POURS; ring.disabled=rung>=poured;
+  }
+  pour.addEventListener("click",function(){ if(poured>=POURS) return; poured++; paint(); c.read.innerHTML=poured>=POURS?"<span><b>Empty.</b> Reset opens a fresh bottle.</span>":"<span>Poured. "+(POURS-poured)+" left in the bottle.</span>"; if(poured>=POURS&&ring.disabled) ring.focus(); });
+  ring.addEventListener("click",function(){ if(rung>=poured) return; rung++; paint(); c.read.innerHTML=poured===rung?"<span><b>Square.</b> The scale and the till agree.</span>":"<span>Rung up. Still "+(poured-rung)+" short.</span>"; });
+  c.reset.querySelector("span").textContent="New bottle"; c.reset.setAttribute("aria-label","Open a new bottle");
+  c.reset.addEventListener("click",function(){ poured=0; rung=0; paint(); c.read.innerHTML=""; c.untouch(); });
+  paint();
+}
+
+/* ======================= 14. Limewash (baa atelier) ======================= */
+/* A finishing studio in Roman clay and limewash. Drag a trowel over a raw wall; cover it all and it finishes itself. */
+function limewash(mount){
+  var c=card(mount,{title:"Limewash",from:"baa atelier",instr:"Drag to trowel the raw wall smooth. Cover all of it.",stageClass:"wb-clay",foot:"A toy wall. The real finishes take days and a steady hand."});
+  var cv=el("canvas","wb-fill"); cv.setAttribute("role","img"); cv.setAttribute("aria-label","A raw plaster wall. Drag to trowel it smooth, or use the arrow keys to move the trowel."); cv.tabIndex=0; c.stage.appendChild(cv);
+  var tw=el("div","wb-trowel"); tw.setAttribute("aria-hidden","true"); c.stage.appendChild(tw);
+  var ctx=cv.getContext("2d"), W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1), last=null, kx=.5, ky=.5, dirty=false, finished=false, GX=16, GY=10, cells=[], covered=0;
+  var TONES=["201,183,156","230,220,203","184,164,136","239,230,212"], tone=TONES[1];
+  function raw(){
+    ctx.fillStyle="#9C8F7E"; ctx.fillRect(0,0,W,H);
+    for(var i=0;i<900;i++){ var a=Math.random(); ctx.fillStyle=a<.5?"rgba(70,58,44,.25)":"rgba(230,220,200,.22)"; ctx.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*2,1+Math.random()*2); }
+  }
+  function fresh(){ cells=[]; for(var i=0;i<GX*GY;i++) cells.push(0); covered=0; finished=false; dirty=false; raw(); }
+  function size(){ var r=cv.getBoundingClientRect(); if(!r.width) return; var snap=null; if(dirty){ snap=document.createElement("canvas"); snap.width=cv.width; snap.height=cv.height; snap.getContext("2d").drawImage(cv,0,0); }
+    W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); ctx.lineCap="round"; ctx.lineJoin="round";
+    if(snap){ ctx.drawImage(snap,0,0,W,H); } else raw(); place(); }
+  function place(){ tw.style.left=(kx*100)+"%"; tw.style.top=(ky*100)+"%"; }
+  function mark(x,y){ var gx=clamp(Math.floor(x/W*GX),0,GX-1), gy=clamp(Math.floor(y/H*GY),0,GY-1); for(var dx=-1;dx<=1;dx++) for(var dy=-1;dy<=1;dy++){ var ax=gx+dx, ay=gy+dy; if(ax<0||ay<0||ax>=GX||ay>=GY) continue; var k=ay*GX+ax; if(!cells[k]){ cells[k]=1; covered++; } } }
+  function stroke(x0,y0,x1,y1){
+    var dx=x1-x0, dy=y1-y0, d=Math.hypot(dx,dy)||1, nx=-dy/d, ny=dx/d;
+    ctx.strokeStyle="rgba("+tone+",.55)"; ctx.lineWidth=36; ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+    [-10,0,11].forEach(function(o,i){ ctx.strokeStyle=i===1?"rgba(120,104,82,.16)":"rgba(255,250,240,.28)"; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(x0+nx*o,y0+ny*o); ctx.lineTo(x1+nx*o,y1+ny*o); ctx.stroke(); });
+    var n=Math.max(1,Math.ceil(d/12)); for(var q=1;q<=n;q++) mark(x0+dx*q/n,y0+dy*q/n); dirty=true;
+  }
+  function check(){
+    var pct=Math.round(covered/(GX*GY)*100);
+    if(!finished&&pct>=90){ finished=true; c.read.innerHTML="<span><b>Finished.</b> Smooth, quiet, done.</span>"; } else if(!finished) c.read.innerHTML="<span>Wall "+pct+"% covered.</span>";
+  }
+  function pos(e){ var r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+  cv.addEventListener("pointerdown",function(e){ e.preventDefault(); cv.setPointerCapture(e.pointerId); tone=TONES[Math.floor(Math.random()*TONES.length)]; last=pos(e); stroke(last.x,last.y,last.x+.1,last.y); });
+  cv.addEventListener("pointermove",function(e){ if(!last) return; var p=pos(e); stroke(last.x,last.y,p.x,p.y); last=p; });
+  function up(){ if(last){ last=null; check(); } } cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+  cv.addEventListener("focus",function(){ tw.classList.add("on"); place(); }); cv.addEventListener("blur",function(){ tw.classList.remove("on"); });
+  cv.addEventListener("keydown",function(e){
+    var st=.045, ox=kx, oy=ky;
+    if(e.key==="ArrowLeft") kx-=st; else if(e.key==="ArrowRight") kx+=st; else if(e.key==="ArrowUp") ky-=st; else if(e.key==="ArrowDown") ky+=st; else return;
+    e.preventDefault(); kx=clamp(kx,.03,.97); ky=clamp(ky,.03,.97); tone=TONES[1]; stroke(ox*W,oy*H,kx*W,ky*H); place(); check();
+  });
+  c.reset.querySelector("span").textContent="New wall"; c.reset.setAttribute("aria-label","Start again with a raw wall");
+  c.reset.addEventListener("click",function(){ kx=.5; ky=.5; fresh(); place(); c.read.innerHTML=""; c.untouch(); });
+  fresh(); window.addEventListener("resize",size); setTimeout(size,0);
+}
+
 /* ======================= The hunt: find the 13 ======================= */
 var hunt=(function(){
   var TOTAL=13, marks=[], found={}, counter=null, live=null, announced=false;
@@ -591,7 +825,8 @@ var hunt=(function(){
 
 /* ======================= boot ======================= */
 window.K13=window.K13||{}; window.K13.hunt=hunt;
-var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,letters:letters};
+var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,letters:letters,
+  pindrop:pindrop,goldenhour:goldenhour,stalls:stalls,twirl:twirl,nextmorning:nextmorning,pours:pours,limewash:limewash};
 document.querySelectorAll("[data-game]").forEach(function(m){ var g=games[m.getAttribute("data-game")]; if(g) g(m); });
 document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
 })();

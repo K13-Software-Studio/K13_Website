@@ -39,7 +39,6 @@ window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
   var root=document.documentElement,sk=document.getElementById("sk");
   if(!sk) return;
   if(!root.classList.contains("sk-on")){ sk.remove(); return; }
-  try{ sessionStorage.setItem("k13-sk","1"); }catch(e){}
   function finish(){ sk.remove(); root.classList.remove("sk-on"); }
   if((window.scrollY||0)>40){ finish(); return; }
   /* the hero takes its final state under the mask, so nothing changes after it lifts */
@@ -245,26 +244,34 @@ window.addEventListener("scroll",countUp,{passive:true}); countUp();
   });
 })();
 
-/* work index cursor preview */
+/* work index cursor preview: sits just beside the pointer (flips left near the right edge),
+   appears where the pointer is instead of flying in from the corner, and is smoothed once, here,
+   never again by a CSS transition on transform (that double smoothing made it lag and wander) */
 (function(){
   var peek=document.getElementById("peek"), vid=document.getElementById("peekVid");
   if(!peek || !vid || !window.matchMedia("(hover:hover)").matches) return;
-  var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
-  function loop(){ cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
-    peek.style.transform="translate("+cx+"px,"+cy+"px) translate(-50%,-50%) scale("+(active?1:.94)+") rotate(-2deg)";
-    var moving=Math.abs(tx-cx)>0.5||Math.abs(ty-cy)>0.5;
-    raf = (active||moving) ? requestAnimationFrame(loop) : null; }
+  var GAP=28,tx=0,ty=0,cx=0,cy=0,s=.94,mx=0,my=0,active=false,shown=false,raf=null;
+  function aim(){ var w=peek.offsetWidth,h=peek.offsetHeight;
+    tx=(mx+GAP+w>innerWidth-12)?mx-GAP-w:mx+GAP;
+    ty=Math.max(12,Math.min(innerHeight-h-12,my-h/2)); }
+  function paint(){ peek.style.transform="translate("+cx+"px,"+cy+"px) scale("+s+") rotate(-2deg)"; }
+  function loop(){ var k=reduced?1:.35; cx+=(tx-cx)*k; cy+=(ty-cy)*k; s+=((active?1:.94)-s)*.25; paint();
+    var moving=Math.abs(tx-cx)>.3||Math.abs(ty-cy)>.3||Math.abs((active?1:.94)-s)>.002;
+    raf=(active||moving)?requestAnimationFrame(loop):null; }
   function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
   document.querySelectorAll(".row[data-peek]").forEach(function(row){
-    row.addEventListener("mouseenter",function(){
+    row.addEventListener("mouseenter",function(e){
       var n=row.getAttribute("data-peek"), src="assets/shots/loops/"+n+".mp4";
       vid.poster="assets/shots/webp/"+n+"-1500.webp";
       if(vid.getAttribute("src")!==src){ vid.setAttribute("src",src); vid.load(); }
       if(!reduced){ var pr=vid.play(); if(pr&&pr.catch) pr.catch(function(){}); }
-      active=true; peek.classList.add("on"); kick(); });
+      mx=e.clientX; my=e.clientY; aim();
+      if(!shown){ cx=tx; cy=ty; s=.94; paint(); }  /* start under the pointer, not at the corner */
+      active=shown=true; peek.classList.add("on"); kick(); });
     row.addEventListener("mouseleave",function(){ active=false; peek.classList.remove("on"); vid.pause(); kick(); });
   });
-  document.addEventListener("mousemove",function(e){ tx=e.clientX+150; ty=e.clientY; if(active) kick(); },{passive:true});
+  peek.addEventListener("transitionend",function(){ if(!active) shown=false; });
+  document.addEventListener("mousemove",function(e){ mx=e.clientX; my=e.clientY; if(active){ aim(); kick(); } },{passive:true});
 })();
 
 /* about portrait: layered scroll depth (transform-only, runs only while visible) */
@@ -442,12 +449,24 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 
-/* wall of work: pause control (it moves for longer than five seconds), and it rests when off screen */
+/* hero stage: the moving screens behind the headline. A pause control (it moves for longer than
+   five seconds), a third row for depth, a slow parallax from the pointer and the scroll, and it
+   rests when off screen */
 (function(){
-  var wall=document.getElementById("wall"), t=document.getElementById("wallToggle"); if(!wall||!t) return;
+  var st=document.getElementById("heroStage"), t=document.getElementById("wallToggle"); if(!st) return;
+  var rows=st.querySelector(".wall-rows"), r0=rows&&rows.querySelector(".wall-row");
+  if(r0){ var r3=r0.cloneNode(true); r3.classList.add("wall-row-far"); rows.insertBefore(r3,r0); }
   var user=false;
-  t.addEventListener("click",function(){ user=!user; wall.classList.toggle("paused",user); t.setAttribute("aria-pressed",String(user)); t.textContent=user?"Play the wall":"Pause the wall"; });
-  new IntersectionObserver(function(es){ if(!user) wall.classList.toggle("paused",!es[0].isIntersecting); }).observe(wall);
+  if(t) t.addEventListener("click",function(){ user=!user; st.classList.toggle("paused",user); t.setAttribute("aria-pressed",String(user)); t.textContent=user?"Play the screens":"Pause the screens"; });
+  new IntersectionObserver(function(es){ if(!user) st.classList.toggle("paused",!es[0].isIntersecting); }).observe(st);
+  if(reduced) return;
+  var plane=st.querySelector(".hero-plane"),px=0,py=0,cx=0,cy=0,sy=0,raf=null;
+  function loop(){ cx+=(px-cx)*.06; cy+=(py-cy)*.06;
+    plane.style.setProperty("--px",cx.toFixed(4)); plane.style.setProperty("--py",cy.toFixed(4)); plane.style.setProperty("--sy",sy.toFixed(1));
+    raf=(Math.abs(px-cx)>.001||Math.abs(py-cy)>.001)?requestAnimationFrame(loop):null; }
+  function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
+  if(window.matchMedia("(hover:hover)").matches) addEventListener("pointermove",function(e){ if((scrollY||0)>innerHeight) return; px=e.clientX/innerWidth-.5; py=e.clientY/innerHeight-.5; kick(); },{passive:true});
+  addEventListener("scroll",function(){ var y=scrollY||0; if(y>innerHeight*1.2) return; sy=y; kick(); },{passive:true});
 })();
 
 /* drafting motifs: ruler ticks drawn once, then each layer drifts at its own depth */
@@ -475,13 +494,14 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 
 
-/* moving screens on the wall: desktop with hover only, loops load when the wall is near, never on phones */
+/* moving screens behind the hero: desktop with hover only, never on phones; the loops are fetched
+   once the page is up (after the sketch loader), and play only while the hero is on screen */
 (function(){
-  var wall=document.getElementById("wall"); if(!wall||reduced||!window.matchMedia("(hover:hover) and (min-width:920px)").matches) return;
+  var wall=document.getElementById("heroStage"); if(!wall||reduced||!window.matchMedia("(hover:hover) and (min-width:920px)").matches) return;
   var upgraded=false;
   function upgrade(){
     if(upgraded) return; upgraded=true;
-    wall.querySelectorAll(".wall-tile img").forEach(function(im){
+    wall.querySelectorAll(".wall-row:not(.wall-row-far) .wall-tile img").forEach(function(im){ /* the far row stays still pictures: it is blurred anyway */
       var n=(im.getAttribute("src").match(/webp\/(.+)-750\.webp$/)||[])[1]; if(!n) return;
       var v=document.createElement("video"); v.muted=true; v.loop=true; v.playsInline=true; v.preload="metadata"; v.setAttribute("aria-hidden","true");
       v.poster=im.getAttribute("src"); v.src="assets/shots/loops/"+n+".mp4"; v.width=750; v.height=469;
@@ -492,8 +512,10 @@ document.addEventListener("DOMContentLoaded",function(){
   function userPaused(){ return !!(t&&t.getAttribute("aria-pressed")==="true"); }
   function playAll(on){ wall.querySelectorAll("video").forEach(function(v){ if(on){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else v.pause(); }); }
   /* loops are fetched a little before the wall arrives, and play only while it is actually on screen */
-  new IntersectionObserver(function(es){ if(es[0].isIntersecting) upgrade(); },{rootMargin:"400px 0px"}).observe(wall);
-  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; playAll(inView&&!userPaused()); },{threshold:.05}).observe(wall);
+  function soon(){ setTimeout(function(){ upgrade(); playAll(inView&&!userPaused()); },400); }
+  if(document.documentElement.classList.contains("sk-on")) new MutationObserver(function(m,o){ if(!document.documentElement.classList.contains("sk-on")){ o.disconnect(); soon(); } }).observe(document.documentElement,{attributes:true,attributeFilter:["class"]});
+  else if(document.readyState==="complete") soon(); else addEventListener("load",soon);
+  new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(upgraded) playAll(inView&&!userPaused()); },{threshold:.05}).observe(wall);
   if(t) t.addEventListener("click",function(){ setTimeout(function(){ playAll(inView&&!userPaused()); },0); });
 })();
 

@@ -50,8 +50,8 @@ strong{color:var(--ink);font-weight:600}
 .wash-3{width:460px;height:380px;left:20vw;top:120vh;background:var(--wash-mint)}
 
 /* ---------- cursor preview (work index) ---------- */
-.peek{position:fixed;top:0;left:0;z-index:60;width:340px;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.94) rotate(-2deg);
-  transition:opacity .3s var(--ease),transform .3s var(--ease);will-change:transform}
+.peek{position:fixed;top:0;left:0;z-index:60;width:340px;pointer-events:none;opacity:0;transform:scale(.94) rotate(-2deg);transform-origin:0 50%;
+  transition:opacity .3s var(--ease);will-change:transform}
 .peek.on{opacity:1}
 .peek .fr{border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line-2);box-shadow:0 30px 60px -28px rgba(20,29,53,.5)}
 .peek .fr .top{height:26px;display:flex;align-items:center;gap:5px;padding:0 11px;background:var(--paper-3)}
@@ -344,7 +344,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index
 .card{transition:transform .3s var(--work),box-shadow .3s var(--work)}
 .row{transition:padding-left .3s var(--work),opacity .3s var(--work)}
 .row::after{bottom:0}
-.peek{transition:opacity .3s var(--work),transform .3s var(--work)}
+.peek{transition:opacity .3s var(--work)}
 .sent .ring{animation:pop .5s var(--pop)}
 /* the house sheen: one light sweep across a surface, on hover or once on demand */
 .sheen{position:relative;overflow:hidden;isolation:isolate}
@@ -428,6 +428,7 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 
 /* ---------- the studio: two people ---------- */
 .about .sec-head{margin-bottom:clamp(36px,4.5vw,56px)}
+.about .note{margin-bottom:28px}
 .people{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .person{border-radius:16px;background:var(--paper-2);border:1px solid var(--line);padding:22px 20px;display:flex;flex-direction:column;gap:6px}
 .person .p-init{width:52px;height:52px;border-radius:14px;background:var(--wash-peach);color:var(--ink);font-family:var(--disp);font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
@@ -495,7 +496,7 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 .wall-track{display:flex;gap:18px;width:max-content;animation:wall-slide 90s linear infinite}
 .wall-row-rev .wall-track{animation-direction:reverse;animation-duration:110s}
 @keyframes wall-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.wall.paused .wall-track{animation-play-state:paused}
+.hero-stage.paused .wall-track{animation-play-state:paused}
 .wall-tile{position:relative;flex:none;width:clamp(220px,24vw,340px);margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--line-2);background:var(--paper-3);box-shadow:0 22px 44px -30px rgba(20,29,53,.55)}
 .wall-tile img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top;display:block}
 .wall-tile figcaption{position:absolute;left:10px;bottom:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink);background:rgba(255,255,255,.88);border-radius:100px;padding:4px 10px}
@@ -587,7 +588,7 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 .row .rthumb,.wall-tile,.door-pic{background:linear-gradient(100deg,var(--paper-3) 30%,var(--paper-2) 50%,var(--paper-3) 70%);background-size:200% 100%;animation:shimmer 1.8s var(--ease) infinite}
 .row .rthumb[data-loaded],.wall-tile[data-loaded],.door-pic[data-loaded]{animation:none;background:var(--paper-3)}
 @media print{
-  header,#sk,.wall,.workbench,.peek,.draft-grid,.wash,.motifs,.stepper,.feed-toggle,.craft-tag,.showroom,.wall-ctl,.door-reset{display:none!important}
+  header,#sk,.hero-stage,.hero-stage-ctl,.wall,.workbench,.peek,.draft-grid,.wash,.motifs,.stepper,.feed-toggle,.craft-tag,.showroom,.wall-ctl,.door-reset{display:none!important}
   body{background:#fff;color:#000;font-size:11pt}
   .rv{opacity:1!important;transform:none!important}
   section{page-break-inside:avoid;padding:18pt 0!important;border-top:1px solid #ccc}
@@ -622,3 +623,33 @@ html[data-showroom] .hero .craft-tag{margin-bottom:30px}
 .cap-col h3,.cap-col p{margin-bottom:0}
 .cap-col .stk{align-self:start;margin-top:10px}
 @supports not (grid-template-rows:subgrid){.cap-col{display:block}.cap-col p{margin-bottom:18px}}
+
+/* ---------- hero stage (Kazim, 2026-10-01): the wall's moving screens, laid on a tilted plane
+   behind the headline. Three rows at three depths (the far one blurred), a slow pointer and
+   scroll parallax, and a paper veil that keeps the copy on a quiet ground: the screens only
+   show where there is no text. ---------- */
+.hero{overflow:hidden}
+.hero>.wrap{position:relative;z-index:2}
+.hero-stage{position:absolute;inset:0;z-index:0;pointer-events:none;perspective:1500px;perspective-origin:75% 30%}
+.hero-plane{--px:0;--py:0;--sy:0;position:absolute;left:40%;top:-12%;width:115%;transform-style:preserve-3d;
+  transform:translate3d(calc(var(--px)*-28px),calc(var(--py)*-18px + var(--sy)*-.18px),0) rotateX(calc(18deg + var(--py)*-3deg)) rotateY(calc(-30deg + var(--px)*4deg)) rotateZ(-4deg)}
+.hero-stage .wall-rows{transform:none;gap:26px;transform-style:preserve-3d}
+.hero-stage .wall-row{overflow:visible;-webkit-mask-image:none;mask-image:none}
+.hero-stage .wall-row-far{transform:translateZ(-320px);filter:blur(1.6px) saturate(.8);opacity:.6}
+.hero-stage .wall-row:not(.wall-row-far):not(.wall-row-rev){transform:translateZ(-110px);opacity:.85}
+.hero-stage .wall-row-rev{transform:translateZ(60px)}
+.hero-stage .wall-row-far .wall-track{animation-duration:140s}
+.hero-stage .wall-tile{width:clamp(240px,22vw,330px);box-shadow:0 30px 60px -34px rgba(20,29,53,.55)}
+.hero-stage .wall-tile figcaption{display:none}
+.hero-stage::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--paper) 0%,var(--paper) 44%,color-mix(in srgb,var(--paper) 72%,transparent) 56%,color-mix(in srgb,var(--paper) 22%,transparent) 74%,color-mix(in srgb,var(--paper) 8%,transparent) 100%),
+    linear-gradient(180deg,color-mix(in srgb,var(--paper) 55%,transparent) 0%,transparent 22%,transparent 72%,var(--paper) 100%)}
+.hero-stage-ctl{position:absolute;right:clamp(18px,4vw,56px);bottom:clamp(16px,2vw,26px);z-index:3}
+@media(max-width:920px){
+  .hero-plane{left:-10%;top:auto;bottom:-4%;width:150%;transform:rotateX(26deg) rotateZ(-6deg)}
+  .hero-stage::after{background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 62%,color-mix(in srgb,var(--paper) 55%,transparent) 80%,color-mix(in srgb,var(--paper) 30%,transparent) 100%)}
+  .hero-stage .wall-row-far{display:none}
+}
+@media(prefers-reduced-motion:reduce){.hero-stage-ctl{display:none}.hero-plane{transform:rotateX(18deg) rotateY(-30deg) rotateZ(-7deg)}}
+.hero-stage-ctl .wall-toggle{background:var(--paper-2)}
+.hero .status{background:color-mix(in srgb,var(--paper-2) 86%,transparent)}
