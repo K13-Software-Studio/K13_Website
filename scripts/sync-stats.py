@@ -19,9 +19,9 @@ not commissioned, and products still being built.
 Every address is fetched at sync time. If any fetch fails on the network (not an HTTP status), nothing is
 written: a number this script could not verify is never put on the page.
 
-WHERE THE NUMBERS LAND (index.html):  [data-stat="shipped"|"live"] tiles, the footer "Track record" line,
+WHERE THE NUMBERS LAND (index.html):  [data-stat="shipped"|"live"] tiles, the footer "Track record" line ("17 shipped, 16 live", nothing about the 13),
 the meta / Open Graph / Twitter / JSON-LD descriptions, and the date on "All 13 checked live on ..."
-(only when all 13 Work rows answered today).  The hidden-13 hunt marks are never touched.
+(only when all 13 Work rows answered today).  The hidden-13 hunt marks are never touched (the page needs exactly 13 of them).
 
   python3 scripts/sync-stats.py            sync: probe, write index.html, print the report
   python3 scripts/sync-stats.py --check    probe and report; exit 1 if index.html is out of date, write nothing
@@ -198,7 +198,7 @@ def main():
     new = page
     new = re.sub(r'(<b data-stat="shipped" data-count=")\d+(">)', r"\g<1>%d\2" % n_shipped, new)
     new = re.sub(r'(<b data-stat="live" data-count=")\d+(">)', r"\g<1>%d\2" % n_live, new)
-    new = re.sub(r'(<span class="v">)\d+ shipped, \d+ live(, <span data-hunt>13</span> on show</span>)',
+    new = re.sub(r'(<span class="v">)\d+ shipped, \d+ live(</span>)',
                  r"\g<1>%d shipped, %d live\2" % (n_shipped, n_live), new)
     new = re.sub(r"[A-Z][a-z-]+ shipped, [a-z-]+ live",
                  lambda m: "%s shipped, %s live" % (word(n_shipped).capitalize(), word(n_live)), new)

@@ -19,7 +19,8 @@ Request: Kazim, verbal, 2026-10-05 ("some photos don't show", "check these numbe
 js/img-guard.js (new), js/wish.js, js/site.js, css/site.css, index.html, scripts/sync-stats.py (new)
 
 ## Risks
-- Footer line is now "17 shipped, 16 live, 13 on show"; the hunt mark kept its 13.
+- Footer reads "17 shipped, 16 live". The hunt needs exactly 13 marks, so the footer mark moved to the Work note ("Every one of the 13 is live").
+- DJ: no photo change (Kazim, 2026-10-05; he will update photos later).
 - `All 13 of them are live` above the logo wall sits over 14 logos (NoxZipper is the 14th, behind sign-in). Left as is.
 
 ## Next
