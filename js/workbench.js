@@ -55,7 +55,7 @@ function carlos(mount){
   var c=card(mount,{title:"Fire Palette",from:"Carlos Almaraz",instr:"Paint anything. The mirror turns it into a composition.",stageClass:"wb-paint",
     foot:"A toy, not his work. Paint at your own risk."});
   c.stage.parentNode.querySelector(".wb-foot").insertAdjacentHTML("beforeend",' Plate <span data-hunt>13</span>.');
-  var colors=[["Fire","#E24E1B"],["Ink","#141D35"],["Jade","#4F9E92"],["Gold","#F0B429"],["Rose","#E8756A"],["Cream","#F6EEDC"]];
+  var colors=[["Fire","#E24E1B"],["Ink","#1F2023"],["Jade","#4F9E92"],["Gold","#F0B429"],["Rose","#E8756A"],["Cream","#F6EEDC"]];
   var bar=el("div","wb-pal"); bar.setAttribute("role","group"); bar.setAttribute("aria-label","Palette");
   var cur=colors[0][1], mode=4;
   colors.forEach(function(k,i){ var b=el("button","wb-swatch"); b.type="button"; b.style.background=k[1]; b.setAttribute("aria-label",k[0]); b.setAttribute("aria-pressed",String(i===0));
@@ -874,25 +874,6 @@ var hunt=(function(){
     at=(k===seq[at])?at+1:(k===seq[0]?1:0);
     if(at===seq.length){ at=0; if(html.hasAttribute("data-blueprint")) off(); else on(); }
   });
-})();
-
-/* ======================= Idle pencil ======================= */
-(function(){
-  if(reduced||!fine) return; var timer=null, drawn=false;
-  function arm(){ clearTimeout(timer); if(!drawn) timer=setTimeout(draw,10000); }
-  ["pointermove","keydown","scroll","pointerdown"].forEach(function(ev){ addEventListener(ev,arm,{passive:true}); });
-  function draw(){
-    if(drawn) return; var hs=document.querySelectorAll("h1, h2"), best=null, bd=1e9, mid=innerHeight/2;
-    hs.forEach(function(h){ var r=h.getBoundingClientRect(); if(r.bottom<0||r.top>innerHeight) return; var d=Math.abs((r.top+r.height/2)-mid); if(d<bd){ bd=d; best=r; } });
-    if(!best) return; drawn=true;
-    var pad=14, w=best.width+pad*2, h=best.height+pad*2, svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
-    svg.setAttribute("class","pencil"); svg.setAttribute("aria-hidden","true"); svg.setAttribute("viewBox","0 0 "+w+" "+h); svg.style.left=(best.left-pad)+"px"; svg.style.top=(best.top-pad)+"px"; svg.style.width=w+"px"; svg.style.height=h+"px";
-    var rx=w/2, ry=h/2; var d="M"+(rx*0.1)+" "+(ry*1.05)+" C "+(rx*0.05)+" "+(ry*0.2)+", "+(w*0.9)+" "+(ry*0.05)+", "+(w*0.98)+" "+(ry*0.9)+" S "+(w*0.3)+" "+(h*1.02)+", "+(rx*0.2)+" "+(ry*1.1);
-    var p=document.createElementNS("http://www.w3.org/2000/svg","path"); p.setAttribute("d",d); svg.appendChild(p); document.body.appendChild(svg);
-    var len=p.getTotalLength(); p.style.strokeDasharray=len; p.style.strokeDashoffset=len; requestAnimationFrame(function(){ p.style.strokeDashoffset=0; });
-    setTimeout(function(){ svg.classList.add("gone"); setTimeout(function(){ svg.remove(); },600); },3400);
-  }
-  arm();
 })();
 
 /* ======================= boot ======================= */

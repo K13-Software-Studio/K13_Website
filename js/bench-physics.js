@@ -196,7 +196,7 @@ function dumpling(mount){
   var cv=canvas(c,"A pachinko board of pegs over five baskets. Left and right arrows slide the steamer, Space drops a dumpling, Up shakes the table.");
   var dropB=pill(c,"Drop","Drop a dumpling"), shakeB=pill(c,"Shake","Shake the table");
   var G=1750, balls=[], pegs=[], bumps=[], r=12, binH=70, chuteX=0, chuteY=62, grab=null, stream=false, streamT=0, sprites={}, spriteKey="", W0=0,H0=0, restNow=false, lastCounts="", countT=0, kindN=0, filled=[0,0,0,0,0], won=false, winT=0;
-  var KINDS=["#4F9E92","#E8756A","#F0B429","#141D35"], BINS=5, binCol=["#EADFC2","#E2D4AE"];
+  var KINDS=["#4F9E92","#E8756A","#F0B429","#1F2023"], BINS=5, binCol=["#EADFC2","#E2D4AE"];
   function layout(W,H){
     r=clamp(W/27,10,13.5); binH=Math.min(74,Math.round(H*.22)); pegs=[]; bumps=[];
     var top=96, bot=H-binH-30, sx=Math.max(38,W/Math.floor(W/40)), rows=Math.max(2,Math.floor((bot-top)/33)+1), rowH=(bot-top)/(rows-1);
@@ -262,16 +262,16 @@ function dumpling(mount){
   }
   function draw(ctx,W,H){
     var i,j; ctx.fillStyle="#F2EAD3"; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle="rgba(20,29,53,.05)"; ctx.lineWidth=1; for(i=1;i<14;i++){ ctx.beginPath(); ctx.moveTo(0,i*30); ctx.lineTo(W,i*30); ctx.stroke(); }
+    ctx.strokeStyle="rgba(31,32,35,.05)"; ctx.lineWidth=1; for(i=1;i<14;i++){ ctx.beginPath(); ctx.moveTo(0,i*30); ctx.lineTo(W,i*30); ctx.stroke(); }
     for(i=0;i<BINS;i++){ ctx.fillStyle=filled[i]?(won&&Math.sin(winT*9+i)>0?"#FFE08A":"#F6D77A"):binCol[i%2]; ctx.fillRect(W*i/BINS,H-binH,W/BINS,binH);
       if(filled[i]){ var bx=W*(i+.5)/BINS; ctx.strokeStyle="#8A5A12"; ctx.lineWidth=2; ctx.lineCap="round"; ctx.beginPath(); ctx.moveTo(bx-6,H-binH+14); ctx.lineTo(bx-1.5,H-binH+19); ctx.lineTo(bx+7,H-binH+8); ctx.stroke(); } }
-    ctx.fillStyle="rgba(20,29,53,.18)"; ctx.fillRect(0,H-binH,W,1.5);
-    ctx.font="500 11px 'JetBrains Mono',monospace"; ctx.textAlign="center"; ctx.fillStyle="#515C78";
+    ctx.fillStyle="rgba(31,32,35,.18)"; ctx.fillRect(0,H-binH,W,1.5);
+    ctx.font="500 11px 'JetBrains Mono',monospace"; ctx.textAlign="center"; ctx.fillStyle="#5D5F65";
     var n=[0,0,0,0,0]; balls.forEach(function(b){ if(b.y>H-binH-r*.6) n[Math.min(BINS-1,Math.floor(b.x/(W/BINS)))]++; });
     for(i=0;i<BINS;i++) ctx.fillText(String(n[i]),W*(i+.5)/BINS,H-binH-8);
-    if(won){ ctx.font="600 "+Math.round(16*clamp(W/420,.8,1.2))+"px Fraunces,Georgia,serif"; ctx.fillStyle="rgba(242,234,211,.92)"; ctx.fillRect(W/2-96,H*.5-20,192,28); ctx.fillStyle="#141D35"; ctx.fillText("The market is open",W/2,H*.5); ctx.font="500 11px 'JetBrains Mono',monospace"; ctx.fillStyle="#515C78"; }
+    if(won){ ctx.font="600 "+Math.round(16*clamp(W/420,.8,1.2))+"px Fraunces,Georgia,serif"; ctx.fillStyle="rgba(242,234,211,.92)"; ctx.fillRect(W/2-96,H*.5-20,192,28); ctx.fillStyle="#1F2023"; ctx.fillText("The market is open",W/2,H*.5); ctx.font="500 11px 'JetBrains Mono',monospace"; ctx.fillStyle="#5D5F65"; }
     for(i=0;i<pegs.length;i++){ var p=pegs[i]; if(p.div){ ctx.strokeStyle="#6B4A2A"; ctx.lineWidth=p.rad*2; ctx.lineCap="round"; ctx.beginPath(); ctx.moveTo(p.ax,p.ay); ctx.lineTo(p.bx,p.by); ctx.stroke(); }
-      else { ctx.fillStyle="#141D35"; ctx.beginPath(); ctx.arc(p.ax,p.ay,p.rad,0,6.283); ctx.fill(); ctx.fillStyle="rgba(255,255,255,.55)"; ctx.beginPath(); ctx.arc(p.ax-1.3,p.ay-1.3,1.3,0,6.283); ctx.fill(); } }
+      else { ctx.fillStyle="#1F2023"; ctx.beginPath(); ctx.arc(p.ax,p.ay,p.rad,0,6.283); ctx.fill(); ctx.fillStyle="rgba(255,255,255,.55)"; ctx.beginPath(); ctx.arc(p.ax-1.3,p.ay-1.3,1.3,0,6.283); ctx.fill(); } }
     for(i=0;i<bumps.length;i++){ var m=bumps[i], s=1+m.f*.16; ctx.fillStyle="#DC4405"; ctx.beginPath(); ctx.arc(m.x,m.y,m.r*s,0,6.283); ctx.fill();
       ctx.strokeStyle=m.f>0?"#FFE08A":"#F0B429"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(m.x,m.y,m.r*s-4,0,6.283); ctx.stroke();
       ctx.fillStyle="#FFE9C8"; ctx.beginPath(); ctx.arc(m.x,m.y,3,0,6.283); ctx.fill(); }
@@ -424,7 +424,7 @@ function tide(mount){
   }
   function drawBoat(ctx){
     ctx.save(); ctx.translate(boat.x,boat.y+3*S); ctx.rotate(boat.a); ctx.scale(S,S);
-    ctx.fillStyle="#1D3557"; ctx.beginPath(); ctx.moveTo(-38,-14); ctx.lineTo(40,-14); ctx.lineTo(30,8); ctx.lineTo(-30,8); ctx.closePath(); ctx.fill();
+    ctx.fillStyle="#2A2C30"; ctx.beginPath(); ctx.moveTo(-38,-14); ctx.lineTo(40,-14); ctx.lineTo(30,8); ctx.lineTo(-30,8); ctx.closePath(); ctx.fill();
     ctx.fillStyle="#D94B3A"; ctx.fillRect(-36,-14,74,4); ctx.fillStyle="#F6EEDC"; ctx.fillRect(-14,-32,22,18); ctx.fillStyle="#9CC6D6"; ctx.fillRect(-10,-28,6,7); ctx.fillStyle="#D94B3A"; ctx.fillRect(-16,-35,26,4);
     ctx.strokeStyle="#3A2314"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(28,-14); ctx.lineTo(28,-34); ctx.lineTo(16,-34); ctx.stroke();
     ctx.fillStyle="#FE6700"; ctx.beginPath(); ctx.moveTo(-26,-14); ctx.lineTo(-26,-40); ctx.lineTo(-14,-36); ctx.lineTo(-26,-32); ctx.fill(); ctx.strokeStyle="#3A2314"; ctx.beginPath(); ctx.moveTo(-26,-14); ctx.lineTo(-26,-40); ctx.stroke();
@@ -448,12 +448,12 @@ function tide(mount){
     ctx.strokeStyle="rgba(255,255,255,.14)"; ctx.lineWidth=1; for(var g=1;g<4;g++){ ctx.beginPath(); for(i=0;i<n;i++){ var y=s[i]+g*22+Math.sin(i*.3+g)*1.5; if(i) ctx.lineTo(i*dx,y); else ctx.moveTo(0,y); } ctx.stroke(); }
     ctx.fillStyle="rgba(240,248,252,.9)"; drops.forEach(function(q){ ctx.beginPath(); ctx.arc(q.x,q.y,q.r,0,6.283); ctx.fill(); });
     /* the crate (13 slots) and the tide meter */
-    var px=14, py=58, pw=Math.min(W*.6,150), step=pw/GOAL; ctx.fillStyle="rgba(20,29,53,.5)"; ctx.fillRect(px-5,py-8,pw+10,24); 
+    var px=14, py=58, pw=Math.min(W*.6,150), step=pw/GOAL; ctx.fillStyle="rgba(31,32,35,.5)"; ctx.fillRect(px-5,py-8,pw+10,24); 
     for(i=0;i<GOAL;i++){ ctx.fillStyle=i<crate?"#FE6700":"rgba(246,238,220,.28)"; ctx.beginPath(); ctx.arc(px+step*(i+.5),py,Math.min(4.2,step*.36),0,6.283); ctx.fill(); }
     ctx.fillStyle="rgba(246,238,220,.28)"; ctx.fillRect(px,py+9,pw,3); ctx.fillStyle=tideLeft<20?"#FFD27A":"#9CC6D6"; ctx.fillRect(px,py+9,pw*(tideLeft/TIDE),3);
     if(flash>0){ ctx.fillStyle="rgba(254,103,0,"+(flash*.25)+")"; ctx.fillRect(0,0,W,H); }
-    if(st==="won"){ ctx.font="600 "+Math.round(20*S)+"px Fraunces,Georgia,serif"; ctx.textAlign="center"; ctx.fillStyle="#141D35"; ctx.fillText("Crate full. Sailing home.",W/2,R-34*S); }
-    if(st==="lost"){ ctx.font="600 "+Math.round(18*S)+"px Fraunces,Georgia,serif"; ctx.textAlign="center"; ctx.fillStyle="#141D35"; ctx.fillText("The tide is out. Tap to fish again.",W/2,R-34*S); }
+    if(st==="won"){ ctx.font="600 "+Math.round(20*S)+"px Fraunces,Georgia,serif"; ctx.textAlign="center"; ctx.fillStyle="#1F2023"; ctx.fillText("Crate full. Sailing home.",W/2,R-34*S); }
+    if(st==="lost"){ ctx.font="600 "+Math.round(18*S)+"px Fraunces,Georgia,serif"; ctx.textAlign="center"; ctx.fillStyle="#1F2023"; ctx.fillText("The tide is out. Tap to fish again.",W/2,R-34*S); }
   }
   var sim=Sim(c,cv,{resize:function(W,H){ init(W,H); },step:step,draw:draw,rest:function(){ return restNow; },
     enter:function(){ if(!calm()){ kick(sim.W()*.12,-4,60); kick(sim.W()*.12+90,3,60); } status(); }});

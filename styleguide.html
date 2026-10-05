@@ -14,11 +14,11 @@
 :root{
   /* ===== K13 canon tokens, byte-exact from index.html :root (lines 30-42) ===== */
   --paper:#F3F5FA; --paper-2:#FFFFFF; --paper-3:#E9EDF7;
-  --ink:#141D35; --ink-2:#2A3554;
-  --muted:#515C78; --faint:#646B7E;
+  --ink:#1F2023; --ink-2:#3A3C40;
+  --muted:#5D5F65; --faint:#6C6E74;
   --blue:#B94612; --blue-2:#EA5E14;
   --wash-blue:#FCE0CC; --wash-lilac:#E8E1FB; --wash-mint:#D6F0E6; --wash-peach:#FBE6DD;
-  --line:rgba(20,29,53,.12); --line-2:rgba(20,29,53,.22); --line-3:rgba(20,29,53,.52);
+  --line:rgba(31,32,35,.12); --line-2:rgba(31,32,35,.22); --line-3:rgba(31,32,35,.52);
   --glass:rgba(255,255,255,.62);
   --disp:'Fraunces',Georgia,serif;
   --body:'Inter',system-ui,sans-serif;
@@ -31,8 +31,8 @@
 
   /* ===== styleguide scaffolding only (not brand tokens: sizing/shadow slots the framework needs) ===== */
   --radius:16px;
-  --shadow-card:0 24px 50px -34px rgba(20,29,53,.5);
-  --shadow-modal:0 36px 80px -44px rgba(20,29,53,.65);
+  --shadow-card:0 24px 50px -34px rgba(31,32,35,.5);
+  --shadow-modal:0 36px 80px -44px rgba(31,32,35,.65);
   --transition:all .3s var(--ease);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -136,7 +136,7 @@ code{font-family:var(--mono);font-size:.8em;background:rgba(185,70,18,.1);color:
 .hdr-demo .lab{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 
 /* glass panel */
-.glass-demo{border-radius:18px;padding:24px 26px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(255,255,255,.8);box-shadow:0 26px 60px -34px rgba(20,29,53,.5);max-width:300px;width:100%}
+.glass-demo{border-radius:18px;padding:24px 26px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(255,255,255,.8);box-shadow:0 26px 60px -34px rgba(31,32,35,.5);max-width:300px;width:100%}
 
 /* draft-grid + wash atmosphere demo, static (real layers are position:fixed, unanimated) */
 .atmo-demo{position:relative;width:100%;height:150px;border-radius:12px;overflow:hidden;background:var(--paper);border:1px solid var(--line)}
@@ -170,7 +170,7 @@ code{font-family:var(--mono);font-size:.8em;background:rgba(185,70,18,.1);color:
 .nl-demo:hover{color:var(--ink)}
 .nl-demo::after{content:"";position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
 .nl-demo:hover::after{transform:scaleX(1)}
-.pill-demo{display:inline-flex;align-items:center;justify-content:center;padding:0 14px;min-height:24px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid var(--line-3);border-radius:100px;box-shadow:0 8px 18px -10px rgba(20,29,53,.35);transition:border-color .3s,color .3s;cursor:pointer}
+.pill-demo{display:inline-flex;align-items:center;justify-content:center;padding:0 14px;min-height:24px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid var(--line-3);border-radius:100px;box-shadow:0 8px 18px -10px rgba(31,32,35,.35);transition:border-color .3s,color .3s;cursor:pointer}
 .pill-demo:hover{border-color:var(--blue);color:var(--blue)}
 
 /* ===== forms ===== */
@@ -208,7 +208,7 @@ code{font-family:var(--mono);font-size:.8em;background:rgba(185,70,18,.1);color:
 .row-demo .rname{font-family:var(--disp);font-weight:600;font-size:1.15rem;color:var(--ink)}
 .row-demo:hover .rname{color:var(--blue)}
 .row-demo .go{font-family:var(--mono);font-size:11px;color:var(--blue)}
-.peek-demo{width:130px;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line-2);box-shadow:0 20px 40px -22px rgba(20,29,53,.5);transform:rotate(-2deg)}
+.peek-demo{width:130px;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line-2);box-shadow:0 20px 40px -22px rgba(31,32,35,.5);transform:rotate(-2deg)}
 .peek-demo .top{height:16px;display:flex;align-items:center;gap:4px;padding:0 8px;background:var(--paper-3)}
 .peek-demo .top i{width:5px;height:5px;border-radius:50%;background:var(--line-2)}
 .peek-demo .body{aspect-ratio:16/10;background:linear-gradient(135deg,var(--wash-blue),var(--wash-lilac))}
@@ -266,21 +266,21 @@ footer.sg-foot .studio{margin-top:16px;font-family:var(--mono);font-size:.72rem;
 
     <div class="sub-h">Paper / ground, light surfaces</div>
     <div class="sw-grid">
-      <div class="sw"><div class="sw-chip" style="background:#F3F5FA;color:#141D35">#F3F5FA</div><div class="sw-meta"><b>Paper</b><code>--paper</code><span>Body background, the site's one ground</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#FFFFFF;color:#141D35;border-bottom:1px solid #e9edf7">#FFFFFF</div><div class="sw-meta"><b>Paper-2</b><code>--paper-2</code><span>Cards, sent-state panel, work-index thumbnail fallback</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#E9EDF7;color:#141D35">#E9EDF7</div><div class="sw-meta"><b>Paper-3</b><code>--paper-3</code><span>Capabilities band, portrait back-panel fill</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#F3F5FA;color:#1F2023">#F3F5FA</div><div class="sw-meta"><b>Paper</b><code>--paper</code><span>Body background, the site's one ground</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#FFFFFF;color:#1F2023;border-bottom:1px solid #e9edf7">#FFFFFF</div><div class="sw-meta"><b>Paper-2</b><code>--paper-2</code><span>Cards, sent-state panel, work-index thumbnail fallback</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#E9EDF7;color:#1F2023">#E9EDF7</div><div class="sw-meta"><b>Paper-3</b><code>--paper-3</code><span>Capabilities band, portrait back-panel fill</span></div></div>
     </div>
 
     <div class="sub-h">Ink / structure</div>
     <div class="sw-grid">
-      <div class="sw"><div class="sw-chip" style="background:#141D35;color:#fff">#141D35</div><div class="sw-meta"><b>Ink</b><code>--ink</code><span>Headings, brand "K", hero gradient start, skip-link bg</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#2A3554;color:#fff">#2A3554</div><div class="sw-meta"><b>Ink-2</b><code>--ink-2</code><span>Hero gradient end, body-adjacent text</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#1F2023;color:#fff">#1F2023</div><div class="sw-meta"><b>Ink</b><code>--ink</code><span>Headings, brand "K", hero gradient start, skip-link bg</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#3A3C40;color:#fff">#3A3C40</div><div class="sw-meta"><b>Ink-2</b><code>--ink-2</code><span>Hero gradient end, body-adjacent text</span></div></div>
     </div>
 
     <div class="sub-h">Neutral text</div>
     <div class="sw-grid">
-      <div class="sw"><div class="sw-chip" style="background:#515C78;color:#fff">#515C78</div><div class="sw-meta"><b>Muted</b><code>--muted</code><span>Body copy default, card/row description text</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#646B7E;color:#fff">#646B7E</div><div class="sw-meta"><b>Faint</b><code>--faint</code><span>Meta labels, tag text, brand tagline</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#5D5F65;color:#fff">#5D5F65</div><div class="sw-meta"><b>Muted</b><code>--muted</code><span>Body copy default, card/row description text</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#6C6E74;color:#fff">#6C6E74</div><div class="sw-meta"><b>Faint</b><code>--faint</code><span>Meta labels, tag text, brand tagline</span></div></div>
     </div>
 
     <div class="sub-h">Accent, the one interactive hue (misnamed "blue")</div>
@@ -291,18 +291,18 @@ footer.sg-foot .studio{margin-top:16px;font-family:var(--mono);font-size:.72rem;
 
     <div class="sub-h">Washes, soft atmosphere blobs</div>
     <div class="sw-grid">
-      <div class="sw"><div class="sw-chip" style="background:#FCE0CC;color:#141D35">#FCE0CC</div><div class="sw-meta"><b>Wash-blue</b><code>--wash-blue</code><span>Peach-toned, not blue-toned; another naming holdover. Fixed blob, top-right</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#E8E1FB;color:#141D35">#E8E1FB</div><div class="sw-meta"><b>Wash-lilac</b><code>--wash-lilac</code><span>Fixed blob, top-left</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#D6F0E6;color:#141D35">#D6F0E6</div><div class="sw-meta"><b>Wash-mint</b><code>--wash-mint</code><span>Fixed blob, mid-page; also approach-card 02 tint</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#FBE6DD;color:#141D35">#FBE6DD</div><div class="sw-meta"><b>Wash-peach</b><code>--wash-peach</code><span>Approach-card 03 tint</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#FCE0CC;color:#1F2023">#FCE0CC</div><div class="sw-meta"><b>Wash-blue</b><code>--wash-blue</code><span>Peach-toned, not blue-toned; another naming holdover. Fixed blob, top-right</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#E8E1FB;color:#1F2023">#E8E1FB</div><div class="sw-meta"><b>Wash-lilac</b><code>--wash-lilac</code><span>Fixed blob, top-left</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#D6F0E6;color:#1F2023">#D6F0E6</div><div class="sw-meta"><b>Wash-mint</b><code>--wash-mint</code><span>Fixed blob, mid-page; also approach-card 02 tint</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#FBE6DD;color:#1F2023">#FBE6DD</div><div class="sw-meta"><b>Wash-peach</b><code>--wash-peach</code><span>Approach-card 03 tint</span></div></div>
     </div>
 
     <div class="sub-h">Lines &amp; glass</div>
     <div class="sw-grid">
-      <div class="sw"><div class="sw-chip" style="background:#fff;color:#141D35;border-bottom:3px solid rgba(20,29,53,.12)">rgba(20,29,53,.12)</div><div class="sw-meta"><b>Line</b><code>--line</code><span>The default hairline, cards, section dividers</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#fff;color:#141D35;border-bottom:3px solid rgba(20,29,53,.22)">rgba(20,29,53,.22)</div><div class="sw-meta"><b>Line-2</b><code>--line-2</code><span>Slightly stronger, peek-preview frame, portrait frame</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:#fff;color:#141D35;border-bottom:3px solid rgba(20,29,53,.52)">rgba(20,29,53,.52)</div><div class="sw-meta"><b>Line-3</b><code>--line-3</code><span>Strongest, ghost-button border, stepper field underline</span></div></div>
-      <div class="sw"><div class="sw-chip" style="background:linear-gradient(135deg,#E8E1FB,#D6F0E6);color:#141D35"><span style="background:rgba(255,255,255,.62);padding:3px 8px;border-radius:6px;backdrop-filter:blur(6px)">rgba(255,255,255,.62)</span></div><div class="sw-meta"><b>Glass</b><code>--glass</code><span>Hero status card + contact stepper background, paired with blur(16px) saturate(1.3)</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#fff;color:#1F2023;border-bottom:3px solid rgba(31,32,35,.12)">rgba(31,32,35,.12)</div><div class="sw-meta"><b>Line</b><code>--line</code><span>The default hairline, cards, section dividers</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#fff;color:#1F2023;border-bottom:3px solid rgba(31,32,35,.22)">rgba(31,32,35,.22)</div><div class="sw-meta"><b>Line-2</b><code>--line-2</code><span>Slightly stronger, peek-preview frame, portrait frame</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:#fff;color:#1F2023;border-bottom:3px solid rgba(31,32,35,.52)">rgba(31,32,35,.52)</div><div class="sw-meta"><b>Line-3</b><code>--line-3</code><span>Strongest, ghost-button border, stepper field underline</span></div></div>
+      <div class="sw"><div class="sw-chip" style="background:linear-gradient(135deg,#E8E1FB,#D6F0E6);color:#1F2023"><span style="background:rgba(255,255,255,.62);padding:3px 8px;border-radius:6px;backdrop-filter:blur(6px)">rgba(255,255,255,.62)</span></div><div class="sw-meta"><b>Glass</b><code>--glass</code><span>Hero status card + contact stepper background, paired with blur(16px) saturate(1.3)</span></div></div>
     </div>
 
     <div class="sub-h">Semantic (outside the named :root block, used once each)</div>
@@ -667,7 +667,7 @@ footer.sg-foot .studio{margin-top:16px;font-family:var(--mono);font-size:.72rem;
             <div style="font-family:var(--disp);font-style:italic;font-weight:500;font-size:1rem;color:var(--ink)">Launching a public market site for UC San Diego</div>
           </div>
         </div>
-        <div class="sg-spec"><dl><dt>Surface</dt><dd>rgba(255,255,255,.62), blur(16px) saturate(1.3), border rgba(255,255,255,.8)</dd><dt>Shadow</dt><dd>0 26px 60px -34px rgba(20,29,53,.5)</dd></dl></div>
+        <div class="sg-spec"><dl><dt>Surface</dt><dd>rgba(255,255,255,.62), blur(16px) saturate(1.3), border rgba(255,255,255,.8)</dd><dt>Shadow</dt><dd>0 26px 60px -34px rgba(31,32,35,.5)</dd></dl></div>
       </div>
     </div>
 
@@ -678,7 +678,7 @@ footer.sg-foot .studio{margin-top:16px;font-family:var(--mono);font-size:.72rem;
         <div class="sg-stage" style="background:var(--paper)">
           <div class="card-demo"><div class="num">02</div><h4>Slow where it counts</h4><p>Fast on the easy parts, careful on the ones that bite later.</p><span class="tint"></span></div>
         </div>
-        <div class="sg-spec"><dl><dt>Hover</dt><dd>translateY(-5px), shadow 0 24px 50px -34px rgba(20,29,53,.5), .4s var(--ease)</dd><dt>Tints in order</dt><dd>01 wash-blue &middot; 02 wash-mint &middot; 03 wash-peach</dd></dl></div>
+        <div class="sg-spec"><dl><dt>Hover</dt><dd>translateY(-5px), shadow 0 24px 50px -34px rgba(31,32,35,.5), .4s var(--ease)</dd><dt>Tints in order</dt><dd>01 wash-blue &middot; 02 wash-mint &middot; 03 wash-peach</dd></dl></div>
       </div>
     </div>
 
@@ -807,7 +807,7 @@ footer.sg-foot .studio{margin-top:16px;font-family:var(--mono);font-size:.72rem;
         <div class="sg-spec"><dl>
           <dt>Radii in use</dt><dd>8 skip-link &middot; 10 buttons/portrait cap &middot; 11 row thumbnail &middot; 12 peek frame &middot; 13 stepper options &middot; 16 cards &middot; 18 status card/portrait frame &middot; 20 stepper/portrait back-panel &middot; 100 pills (tags, feed toggle, "send it" button)</dd>
           <dt>Breakpoints</dt><dd>600px (nav links hide, hero-meta gap tightens) &middot; 880px (contact grid stacks) &middot; 920px (hero, cards, capabilities, about, work rows all stack)</dd>
-          <dt>Shadow family</dt><dd>large-blur, negative-spread, ink-tinted: card-hover 0 24px 50px -34px, portrait frame 0 36px 80px -44px, status/stepper glass 0 26-30px 60-70px -34/-38px, all rgba(20,29,53, .4 to .65); the one outlier is the primary button's rgba(203,77,20,.7), legacy-orange, see Colors</dd>
+          <dt>Shadow family</dt><dd>large-blur, negative-spread, ink-tinted: card-hover 0 24px 50px -34px, portrait frame 0 36px 80px -44px, status/stepper glass 0 26-30px 60-70px -34/-38px, all rgba(31,32,35, .4 to .65); the one outlier is the primary button's rgba(203,77,20,.7), legacy-orange, see Colors</dd>
           <dt>Container</dt><dd>.wrap max-width 1200px, hero-grid 1.55fr/1fr, contact-grid 1fr / minmax(380px,460px)</dd>
           <dt>Safe areas</dt><dd>no explicit env(safe-area-inset) usage found; header padding is fixed clamp values, not safe-area aware</dd>
           <dt>Focus</dt><dd>no custom global focus-ring override; native browser outline holds everywhere except the stepper's underline inputs, which remove <code>outline:none</code> and rely on <code>:focus-within</code> border-color instead, and the skip-link's own translate-into-view</dd>

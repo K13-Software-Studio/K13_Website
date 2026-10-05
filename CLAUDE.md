@@ -111,7 +111,7 @@ so the subject and body encoding is proven for the mailto path too.
   destroyed. All `brand/logo/` mark/glyph/lockup files and the mark-based `brand/print/`
   collateral (business card, letterhead, previews) were removed from the working tree that day.
   **The official K13 identity is what `index.html` ships:** the typographic nav lockup
-  (Fraunces "K" in ink `#141D35`, "13" in the orange accent, JetBrains Mono "SOFTWARE STUDIO"
+  (Fraunces "K" in ink `#1F2023`, "13" in the orange accent, JetBrains Mono "SOFTWARE STUDIO"
   tag) and the Kazim-approved typographic `favicon.svg`. Never regenerate, reference, or
   recreate the square mark in any project.
 - **2026-08-19 · Brand triage.** Kazim reviewed the full brand inventory card by card and ruled:
@@ -134,6 +134,19 @@ so the subject and body encoding is proven for the mailto path too.
   screens to sit in the hero's background with depth: three rows on a tilted plane, the far one
   blurred, a paper veil so the copy always sits on a quiet ground, a "Pause the screens" control
   (WCAG 2.2.2). The logo wall stays where it was.
+- **2026-10-02 · The hero leads with the motto "From 'I wish' to 'it works'."** It replaced
+  "Software with an edge." the same day: it tells people right away that we get it done. The hero
+  performs it: a wish machine turns real client wishes (from the Work rows) into their live screens.
+  The same day he also ruled that the
+  site stops leaning on "two people" ("I don't know why you are stuck with two people phrases"):
+  headcount is not the pitch, so no "two people" lines in headings, hero, stats, footer, meta or the
+  share card. The Studio still shows the portrait; the small photo frames sit beside the contact form.
+- **2026-10-02 · Never draw on top of text.** No pencil circles, rings, scribbled underlines or
+  strike strokes over headings or copy: not on idle, not on hover, not as an easter egg, not in a
+  loader. The Workbench's "idle pencil" (circled the nearest heading after 10 s of no input) did
+  exactly that to the hero and was removed. Kazim: "no circles on the text like this, take this as a
+  rule and lesson." Hand-drawn marks only on decoration that carries no words. QA note: leave the
+  page idle 15 s before a screenshot, so timed effects show up.
 - **2026-10-01 · `docs/` is never deployed** (`.vercelignore`). Until that day every handoff and
   report under `docs/` was publicly reachable on k13projects.com.
 - **2026-09-26 · The client's name is written `Egg&Out`, no spaces.** Kazim: "call Egg&Out

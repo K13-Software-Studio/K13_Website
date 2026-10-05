@@ -29,7 +29,7 @@ fnt=bpy.data.fonts.load(D+'/Fraunces-600.ttf')
 cu=bpy.data.curves.new('k13','FONT');cu.body='K13';cu.font=fnt;cu.size=1;cu.align_x='CENTER';cu.align_y='CENTER'
 cu.extrude=0.06;cu.bevel_depth=0.007;cu.space_character=1.07;cu.bevel_resolution=4;cu.resolution_u=24
 ob=bpy.data.objects.new('k13',cu);sc.collection.objects.link(ob)
-ob.data.materials.append(mat('ink','#141D35',0.42,0.25));ob.data.materials.append(mat('orange','#B94612',0.4,0.2))
+ob.data.materials.append(mat('ink','#1F2023',0.42,0.25));ob.data.materials.append(mat('orange','#B94612',0.4,0.2))
 for i in (1,2): cu.body_format[i].material_index=1
 ob.rotation_euler=(math.radians(90),0,math.radians(YAW))
 # camera

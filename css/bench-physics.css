@@ -7,7 +7,7 @@
 .bp-dark .bp-cv:focus-visible,.bp-tide .bp-cv:focus-visible{outline-color:#FFD27A}
 
 /* stage skins: fixed palettes, drawn behind the canvas so the card never flashes empty */
-.bp-roof{background:#16203A;border-color:#0F1629}
+.bp-roof{background:#1F2023;border-color:#1A1B1E}
 .bp-drop{background:#F2EAD3;border-color:#E2D6B8}
 .bp-tide{background:#BFE0EC;border-color:#9CC6D6}
 .bp-stack{background:#FFEFC4;border-color:#EBCD8A}
@@ -16,7 +16,7 @@
 /* action pills sit top left, mirroring the reset pill top right */
 .bp-acts{position:absolute;left:10px;top:10px;z-index:4;display:flex;gap:8px}
 .bp-btn{display:inline-flex;align-items:center;justify-content:center;height:34px;min-width:44px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 6px 14px -8px rgba(20,29,53,.35);transition:color .3s var(--work,ease),border-color .3s var(--work,ease),transform .3s var(--pop)}
+  color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 6px 14px -8px rgba(31,32,35,.35);transition:color .3s var(--work,ease),border-color .3s var(--work,ease),transform .3s var(--pop)}
 .bp-btn:hover{color:var(--blue);border-color:var(--blue)}
 .bp-btn:active{transform:scale(.96)}
 .bp-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}

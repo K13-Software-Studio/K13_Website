@@ -1,6 +1,6 @@
 import json
 B="https://k13projects.com/email/"
-INK="#141D35";MUT="#515C78";OR="#B94612";F="font-family:Arial,Helvetica,sans-serif;"
+INK="#1F2023";MUT="#5D5F65";OR="#B94612";F="font-family:Arial,Helvetica,sans-serif;"
 T='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;'
 def a(href,text,col=INK): return f'<a href="{href}" target="_blank" style="color:{col};text-decoration:none;white-space:nowrap;"><span style="color:{col};text-decoration:none;white-space:nowrap;">{text}</span></a>'
 LOGO=f'<a href="https://k13projects.com" target="_blank" style="text-decoration:none;"><img src="{B}k13-signature-logo.png" width="96" height="63" alt="K13 Software Studio" style="display:block;width:96px;height:63px;max-width:96px;border:0;outline:none;text-decoration:none;"></a>'
@@ -38,20 +38,20 @@ V.append(("K13SS mini","Close collaborators: just your name and the line.",f'''{
 # 4 text only, no image at all
 V.append(("K13SS text","Text only, no image: safe anywhere, perfect for replies and phones.",f'''{T}{F}">
 <tr><td style="{F}font-size:13px;line-height:19px;color:{INK};">Kazim An&#305;l Korkmaz<span style="color:{OR};">&nbsp;|&nbsp;</span>K13 Software Studio<br>{PH}<span style="color:{OR};">&nbsp;|&nbsp;</span>{WB}</td></tr></table>'''))
-def dark(h): return h.replace("color:"+INK,"color:#E8EAF0").replace("color:"+MUT,"color:#AEB6C8")
+def dark(h): return h.replace("color:"+INK,"color:#E8EAF0").replace("color:"+MUT,"color:#B4B5B9")
 cards=""
 for i,(name,why,h) in enumerate(V):
     cards+=f'''<section class="v"><div class="hd"><span class="n">{i if i else "Main"}</span><h2>{name}</h2><p>{why}</p><button type="button" data-i="{i}">Copy</button><span class="ok" id="ok{i}"></span></div>
 <div class="g"><div class="c l">{h}</div><div class="c d">{dark(h)}</div></div></section>'''
 page=f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>K13 Gmail Signatures</title>
-<style>body{{margin:0;background:#F3F5FA;font-family:system-ui,-apple-system,sans-serif;color:#141D35}}.w{{max-width:900px;margin:0 auto;padding:32px 20px 48px}}
-h1{{font:600 28px Georgia,serif;margin:0 0 6px}}p.s{{color:#515C78;margin:0 0 26px}}
+<style>body{{margin:0;background:#F3F5FA;font-family:system-ui,-apple-system,sans-serif;color:#1F2023}}.w{{max-width:900px;margin:0 auto;padding:32px 20px 48px}}
+h1{{font:600 28px Georgia,serif;margin:0 0 6px}}p.s{{color:#5D5F65;margin:0 0 26px}}
 .v{{background:#fff;border:1px solid #DDE3EF;border-radius:16px;padding:18px;margin-bottom:16px}}
-.hd{{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}}.hd h2{{font:600 17px system-ui;margin:0}}.hd p{{margin:0;color:#515C78;font-size:14px;flex:1;min-width:200px}}
-.n{{font:600 11px ui-monospace,monospace;letter-spacing:.1em;color:#fff;background:#141D35;border-radius:999px;padding:4px 9px}}
+.hd{{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}}.hd h2{{font:600 17px system-ui;margin:0}}.hd p{{margin:0;color:#5D5F65;font-size:14px;flex:1;min-width:200px}}
+.n{{font:600 11px ui-monospace,monospace;letter-spacing:.1em;color:#fff;background:#1F2023;border-radius:999px;padding:4px 9px}}
 button{{font:600 14px system-ui;background:#B94612;color:#fff;border:0;border-radius:9px;padding:9px 16px;cursor:pointer}}.ok{{color:#1aa66b;font-weight:600;font-size:13px}}
 .g{{display:grid;grid-template-columns:1fr 1fr;gap:12px}}.c{{border-radius:12px;padding:20px}}.c.l{{background:#fff;border:1px solid #E6EAF2}}.c.d{{background:#202124}}
-ol{{line-height:1.7;color:#2A3554}}@media(max-width:700px){{.g{{grid-template-columns:1fr}}}}</style></head><body><div class="w">
+ol{{line-height:1.7;color:#3A3C40}}@media(max-width:700px){{.g{{grid-template-columns:1fr}}}}</style></head><body><div class="w">
 <h1>K13 Gmail signatures</h1><p class="s">Five signatures, from the full one to plain text. Each shown on a light and a dark inbox; Copy puts it on your clipboard ready for Gmail.</p>
 {cards}
 <ol><li>Gmail &rarr; Settings &rarr; See all settings &rarr; General &rarr; Signature.</li><li>Create new, give it the name shown above (K13SS new, K13SS compact...), click into the box, press Cmd+V.</li>
