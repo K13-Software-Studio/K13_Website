@@ -145,7 +145,11 @@ E.hand.addEventListener("click",function(){
   E.say2.textContent="Your wish is in the contact form, ready for your name."; });
 
 /* ---------- start: after the sketch loader lifts, with a beat of the settled composition first ---------- */
-function go(){ if(started) return; started=true; sync(); }
+/* every screen is fetched once, in the background, so a swap is a cache hit and one slow or dropped request
+   cannot leave the card empty; css/site.css + js/img-guard.js still cover a request that fails anyway */
+function warm(){ if(reduced) return; W.forEach(function(w,i){ setTimeout(function(){ var im=new Image();
+  im.sizes=E.img.sizes; im.srcset="assets/shots/webp/"+w.shot+"-750.webp 750w, assets/shots/webp/"+w.shot+"-1500.webp 1500w"; im.src="assets/shots/webp/"+w.shot+"-1500.webp"; },i*400); }); }
+function go(){ if(started) return; started=true; sync(); warm(); }
 var root=document.documentElement;
 if(reduced){ /* calm static composition: the BarFix pair, already in the markup */ }
 else if(root.classList.contains("sk-on")){

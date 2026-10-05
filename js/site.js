@@ -434,6 +434,7 @@ document.addEventListener("DOMContentLoaded",function(){
       var v=document.createElement("video"); v.muted=true; v.loop=true; v.playsInline=true; v.preload="metadata"; v.setAttribute("aria-hidden","true");
       v.poster=im.getAttribute("src"); v.src="assets/shots/loops/"+n+".mp4"; v.width=750; v.height=469;
       im.replaceWith(v); v.addEventListener("loadeddata",function(){ v.parentNode.setAttribute("data-loaded",""); });
+      v.addEventListener("error",function(){ if(v.parentNode) v.replaceWith(im); }); /* a loop that will not load gives the still picture back */
     });
   }
   var t=document.getElementById("wallToggle"), inView=false;
