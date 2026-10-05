@@ -454,7 +454,7 @@ document.querySelectorAll(".row .rthumb, .wall-tile img, .door-pic img").forEach
 });
 
 /* a note for whoever opens the console */
-try{ console.log("%cK13 Software Studio","font:600 18px Fraunces,Georgia,serif;color:#141D35","\nHand-built, one page, no framework, no tracker. Thirteen small 13s are hidden on this page; the footer keeps count. Curious about the code? projects.k13@gmail.com"); }catch(e){}
+try{ console.log("%cK13 Software Studio","font:600 18px Fraunces,Georgia,serif;color:#1F2023","\nHand-built, one page, no framework, no tracker. Thirteen small 13s are hidden on this page; the footer keeps count. Curious about the code? projects.k13@gmail.com"); }catch(e){}
 
 
 /* the three stories open in place; one at a time keeps the list readable */

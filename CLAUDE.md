@@ -111,7 +111,7 @@ so the subject and body encoding is proven for the mailto path too.
   destroyed. All `brand/logo/` mark/glyph/lockup files and the mark-based `brand/print/`
   collateral (business card, letterhead, previews) were removed from the working tree that day.
   **The official K13 identity is what `index.html` ships:** the typographic nav lockup
-  (Fraunces "K" in ink `#141D35`, "13" in the orange accent, JetBrains Mono "SOFTWARE STUDIO"
+  (Fraunces "K" in ink `#1F2023`, "13" in the orange accent, JetBrains Mono "SOFTWARE STUDIO"
   tag) and the Kazim-approved typographic `favicon.svg`. Never regenerate, reference, or
   recreate the square mark in any project.
 - **2026-08-19 · Brand triage.** Kazim reviewed the full brand inventory card by card and ruled:

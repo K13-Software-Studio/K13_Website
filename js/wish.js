@@ -19,7 +19,7 @@ var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var $=function(id){ return document.getElementById(id); };
 var E={ kind:$("wmKind"), who:$("wmWho"), text:$("wmText"), say:wm.querySelector(".wm-say"), img:$("wmImg"), specs:$("wmSpecs"), chips:$("wmChips"),
   link:$("wmLink"), pend:$("wmPending"), host:$("wmHost"), name:$("wmLinkName"), say2:$("wmAnnounce"), steps:wm.querySelectorAll(".wm-steps li"),
-  dot:document.querySelector(".hl-dot"), toggle:$("wallToggle"), form:$("wmForm"), input:$("wmIn"), yours:$("wmYours"), hand:$("wmHand"), back:$("wmBack") };
+  dot:document.querySelector(".live-pill"), works:document.querySelector(".hero h1 .works"), toggle:$("wallToggle"), form:$("wmForm"), input:$("wmIn"), yours:$("wmYours"), hand:$("wmHand"), back:$("wmBack") };
 
 /* the wishes. row = the Work list row it comes from */
 var W=[
@@ -73,9 +73,24 @@ function enter(p,w){
   else if(p==="build"){ E.say.classList.remove("typing"); steps(1); }
   else if(p==="land"){ setLink(w); steps(2); }
   else if(p==="hold"){ E.say2.textContent=w.name+" is live at "+w.host+". The wish was: "+w.wish;
-    if(E.dot){ E.dot.classList.remove("ping"); void E.dot.offsetWidth; E.dot.classList.add("ping"); } }
+    liveMoment(); }
   phase(p);
 }
+/* glare across "it works", then the Live pill (css/hero.css). Never before the headline has landed. */
+var h1=document.querySelector(".hero h1"), landedAt=0;
+function liveMoment(){
+  if(!h1||!h1.classList.contains("in")) return;
+  if(!landedAt) landedAt=performance.now();
+  if(performance.now()-landedAt<1200) return;
+  [[E.works,"glare"],[E.dot,"go"]].forEach(function(x){ if(x[0]){ x[0].classList.remove(x[1]); void x[0].offsetWidth; x[0].classList.add(x[1]); } });
+}
+if(E.works) E.works.addEventListener("animationend",function(){ E.works.classList.remove("glare"); });
+if(E.dot) E.dot.addEventListener("animationend",function(e){ if(e.animationName==="livePill") E.dot.classList.remove("go"); });
+if(h1) new MutationObserver(function(){ if(h1.classList.contains("in")&&!landedAt) landedAt=performance.now(); }).observe(h1,{attributes:true,attributeFilter:["class"]});
+/* the first glare plays once the page has fully loaded and the headline has settled, not at the machine's first landing */
+function firstLive(){ var tries=0; (function wait(){ if(h1&&h1.classList.contains("in")&&landedAt&&performance.now()-landedAt>=1200){ if(!reduced) liveMoment(); return; }
+  if(++tries<60) setTimeout(wait,100); })(); }
+if(document.readyState==="complete") firstLive(); else window.addEventListener("load",firstLive,{once:true});
 function update(){
   if(T<0) return;
   var w=W[nxt], i, p=seg[seg.length-1][0];

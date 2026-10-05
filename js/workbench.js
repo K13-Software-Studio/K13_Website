@@ -55,7 +55,7 @@ function carlos(mount){
   var c=card(mount,{title:"Fire Palette",from:"Carlos Almaraz",instr:"Paint anything. The mirror turns it into a composition.",stageClass:"wb-paint",
     foot:"A toy, not his work. Paint at your own risk."});
   c.stage.parentNode.querySelector(".wb-foot").insertAdjacentHTML("beforeend",' Plate <span data-hunt>13</span>.');
-  var colors=[["Fire","#E24E1B"],["Ink","#141D35"],["Jade","#4F9E92"],["Gold","#F0B429"],["Rose","#E8756A"],["Cream","#F6EEDC"]];
+  var colors=[["Fire","#E24E1B"],["Ink","#1F2023"],["Jade","#4F9E92"],["Gold","#F0B429"],["Rose","#E8756A"],["Cream","#F6EEDC"]];
   var bar=el("div","wb-pal"); bar.setAttribute("role","group"); bar.setAttribute("aria-label","Palette");
   var cur=colors[0][1], mode=4;
   colors.forEach(function(k,i){ var b=el("button","wb-swatch"); b.type="button"; b.style.background=k[1]; b.setAttribute("aria-label",k[0]); b.setAttribute("aria-pressed",String(i===0));

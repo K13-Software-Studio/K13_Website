@@ -11,18 +11,37 @@
 /* the headline: the wish is soft and italic, the result is set solid and gets a live dot for its full stop */
 .hero h1{font-size:clamp(46px,5.9vw,88px);line-height:.98;letter-spacing:-.025em;margin-top:24px}
 .hero h1 .hl{display:block;white-space:nowrap}
-.hero h1 i{font-style:italic;font-weight:500;color:var(--muted);letter-spacing:-.015em}
+.hero h1 i{font-style:italic;font-weight:500;color:var(--blue);letter-spacing:-.015em}
 .hero h1 b{font-weight:600;color:var(--ink)}
-.hl-dot{position:relative;display:inline-block;width:.15em;height:.15em;margin-left:.07em;border-radius:50%;background:#27B584;vertical-align:baseline}
-.hl-dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #27B584;opacity:0}
-.hl-dot.ping::after{animation:wmRing 1.3s var(--ease) both}
-.hl-dot{animation:beat 2.6s infinite}
+/* "it works" + a Live pill (Kazim, 2026-10-05): each time the machine lands a project, a glare runs
+   across "it works", then a green-outlined pill writes itself in left to right, its dot pulses, and it
+   fades; the next landing triggers it again. Settled state (no JS, reduced motion): plain words, no pill. */
+.hero h1 .hl-works{position:relative;display:inline-block}
+.hero h1 .works{color:var(--ink)}
+/* the glare is only painted while it runs, so the words land solid with the rest of the headline */
+.hero h1 .works.glare{background:linear-gradient(100deg,var(--ink) 42%,#F4D9BF 50%,var(--ink) 58%);background-size:260% 100%;
+  background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:worksGlare 1.1s cubic-bezier(.4,0,.2,1) both}
+@keyframes worksGlare{from{background-position:100% 0}to{background-position:0 0}}
+.live-pill{position:absolute;left:calc(100% + .32em);top:52%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:8px;
+  font:500 13px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#1E8F66;white-space:nowrap;
+  padding:8px 13px 8px 11px;border:1.5px solid #27B584;border-radius:100px;background:rgba(39,181,132,.07);
+  opacity:0;clip-path:inset(0 100% 0 0 round 100px)}
+.live-pill::after{content:"Live"} /* in CSS, not the DOM: the headline intro splits DOM text into letters */
+.live-pill i{width:8px;height:8px;border-radius:50%;background:#27B584;box-shadow:0 0 0 0 rgba(39,181,132,.55)}
+/* after the glare (1.1 s): writes in left to right (0.45 s), stays 4 s, fades (0.5 s) */
+.live-pill.go{animation:livePill 4.95s var(--ease) 1.1s both}
+.live-pill.go i{animation:livePulse 1.1s ease-out 1.5s infinite}
+@keyframes livePill{0%{opacity:1;clip-path:inset(0 100% 0 0 round 100px)}9%{clip-path:inset(0 0 0 0 round 100px)}
+  90%{opacity:1;clip-path:inset(0 0 0 0 round 100px)}100%{opacity:0;clip-path:inset(0 0 0 0 round 100px)}}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(39,181,132,.55)}100%{box-shadow:0 0 0 9px rgba(39,181,132,0)}}
+@media (prefers-reduced-motion:reduce){.live-pill{display:none}.hero h1 .works{animation:none!important}}
 .hero-sub{max-width:520px}
 .hero-meta{gap:6px 22px}
 
 /* ---------- the machine ---------- */
 .wm{position:relative;width:100%;max-width:560px;justify-self:end;border-radius:22px;overflow:hidden;
-  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 44px 80px -46px rgba(20,29,53,.6),0 1px 0 rgba(255,255,255,.7) inset}
+  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 44px 80px -46px rgba(31,32,35,.6),0 1px 0 rgba(255,255,255,.7) inset}
 .wm-bar{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--paper-3);border-bottom:1px solid var(--line);
   font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .wm-dots{display:flex;gap:6px}
@@ -69,7 +88,7 @@
 [data-phase="land"] .wm-scan{animation:wmScan .65s var(--ease) .3s both}
 
 .wm-badge{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 9px;border-radius:100px;
-  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 8px 20px -10px rgba(20,29,53,.5);
+  background:var(--paper-2);border:1px solid var(--line-2);box-shadow:0 8px 20px -10px rgba(31,32,35,.5);
   font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:0}
 .wm-badge i{width:8px;height:8px;border-radius:50%;background:#27B584}
 [data-phase="hold"] .wm-badge{opacity:1;animation:wmPop .55s var(--pop) both}
@@ -217,7 +236,7 @@
 }
 
 @media(prefers-reduced-motion:reduce){
-  .wm *,.wm *::before,.wm *::after,.hl-dot,.hl-dot::after{animation:none!important;transition:none!important}
+  .wm *,.wm *::before,.wm *::after,.live-pill,.live-pill i{animation:none!important;transition:none!important}
   .wm-caret,.wm-skel,.wm-scan{display:none!important}
   .wm-foot .wall-toggle{display:none}
 }

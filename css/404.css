@@ -1,9 +1,9 @@
 
 :root{
-  --paper:#F3F5FA; --ink:#141D35; --ink-2:#2A3554;
-  --muted:#515C78; --faint:#646B7E;
+  --paper:#F3F5FA; --ink:#1F2023; --ink-2:#3A3C40;
+  --muted:#5D5F65; --faint:#6C6E74;
   --blue:#B94612;
-  --line:rgba(20,29,53,.12);
+  --line:rgba(31,32,35,.12);
   --disp:"Fraunces",Georgia,serif;
   --body:"Inter",system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;

@@ -18,15 +18,15 @@ The tokens `index.html` actually runs on (curated 2026-08-19):
 
 | Token | Hex | Role |
 |---|---|---|
-| `--ink` | `#141D35` | base navy |
-| `--ink-2` | `#2A3554` | elevated navy |
+| `--ink` | `#1F2023` | base graphite |
+| `--ink-2` | `#3A3C40` | elevated graphite |
 | `--paper` | `#F3F5FA` | the field |
 | `--paper-2` | `#FFFFFF` | cards |
 | `--paper-3` | `#E9EDF7` | lines |
 | `--blue` | `#B94612` | accent, deep |
 | `--blue-2` | `#EA5E14` | accent, bright |
-| `--faint` | `#646B7E` | muted labels |
-| `--muted` | `#515C78` | muted text |
+| `--faint` | `#6C6E74` | muted labels |
+| `--muted` | `#5D5F65` | muted text |
 | `--wash-blue` | `#FCE0CC` | wash |
 | `--wash-lilac` | `#E8E1FB` | wash |
 | `--wash-mint` | `#D6F0E6` | wash |
