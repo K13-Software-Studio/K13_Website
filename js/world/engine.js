@@ -209,6 +209,7 @@ helpPanel.innerHTML="<h2 class=\"kw-help-h\">How to get around</h2><ul class=\"k
   "<li><b>Walk</b> with the arrow keys or WASD, or tap or click a spot.</li>"+
   "<li><b>Use</b> what is near with E, Enter or Space, or tap it.</li>"+
   "<li><b>Machines</b> hold the games, benches hold the toys. Esc closes one.</li>"+
+  "<li><b>Go to</b> (or G) jumps to any room or place on the map, or starts a game straight away.</li>"+
   "<li><b>Crew</b> will talk if you stand next to them.</li>"+
   "<li><b>Doors</b> lead out to the street and into every shop. The <b>K13 van</b> at a bus stop takes you up and down the coast.</li>"+
   "<li><b>The map</b> in the corner shows where you are. Tap it to walk there.</li>"+
@@ -657,16 +658,24 @@ function interact(t){
 function activate(){ if(sayOpen){ advanceSay(); return; } if(target) interact(target); }
 
 /* ---------- input ---------- */
-var MOVE={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1],a:[-1,0],d:[1,0],w:[0,-1],s:[0,1],A:[-1,0],D:[1,0],W:[0,-1],S:[0,1]};
+/* held keys are tracked by the physical key (e.code), never by the character: "w" down and "W" up (Shift or Caps Lock
+   changing in between) used to leave W held forever, and the visitor walked up on their own (Kazim, 2026-10-06).
+   A modifier also clears everything, because macOS sends no keyup for keys released while Cmd is down. */
+var MOVE={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1],KeyA:[-1,0],KeyD:[1,0],KeyW:[0,-1],KeyS:[0,1]};
+function moveCode(e){ if(MOVE[e.code]) return e.code; var k=e.key; return k==="a"||k==="A"?"KeyA":k==="d"||k==="D"?"KeyD":k==="w"||k==="W"?"KeyW":k==="s"||k==="S"?"KeyS":MOVE[k]?k:""; }
 canvas.addEventListener("keydown",function(e){
-  if(e.ctrlKey||e.metaKey||e.altKey) return;
-  var k=e.key;
-  if(MOVE[k]){ keys[k]=true; e.preventDefault(); if(sayOpen) closeSay(); closeHelp(); return; }
+  if(e.ctrlKey||e.metaKey||e.altKey){ clearKeys(); return; }
+  var k=e.key, mc=moveCode(e);
+  if(mc){ keys[mc]=true; e.preventDefault(); if(sayOpen) closeSay(); closeHelp(); return; }
   if(k==="e"||k==="E"||k==="Enter"||k===" "){ e.preventDefault(); if(!e.repeat) activate(); return; }
   if(k==="Escape"){ if(sayOpen){ e.preventDefault(); closeSay(); } else if(!helpPanel.hidden){ e.preventDefault(); closeHelp(); } return; }
   if(k==="?"||k==="h"||k==="H"){ e.preventDefault(); toggleHelp(); }
+  if(k==="g"||k==="G"){ e.preventDefault(); quickToggle(); }
 });
-canvas.addEventListener("keyup",function(e){ delete keys[e.key]; });
+canvas.addEventListener("keyup",function(e){
+  if(e.key==="Meta"||e.key==="Control"||e.key==="Alt"||e.key==="OS"){ clearKeys(); return; }
+  var mc=moveCode(e); if(mc) delete keys[mc];
+});
 function clearKeys(){ keys={}; }
 canvas.addEventListener("blur",clearKeys);
 window.addEventListener("blur",clearKeys);
@@ -1320,6 +1329,55 @@ function boot(){
   if(hint) canvas.addEventListener("focus",function(){ hint.classList.add("kw-hint-on"); });
   if(doc.fonts&&doc.fonts.ready) doc.fonts.ready.then(function(){ draw.dirty=true; });
 }
+/* ---------- quick actions (Kazim, 2026-10-06): jump to a place or start a game without walking there ---------- */
+var QUICK_PLACES=[
+  ["K13 HQ",[["hq","Lobby"],["arcade","Arcade hall"],["bench-eggtoss","Workshop"],["couch","Lounge"],["whiteboard","Studio floor"],["news-stand","The K13 Daily"]]],
+  ["San Diego",[["van-hq","Downtown street"],["globalfork-littleitaly","Little Italy"],["station8-ucsd","UC San Diego"],["lobsterlab-delmar","Del Mar"],["pier","Worldwide pier"]]],
+  ["North County and Orange County",[["thg-carlsbad","Carlsbad"],["cosmos-oceanside","Oceanside"],["miramar-sc","San Clemente"]]],
+  ["Los Angeles",[["carlos-lacma","LACMA"]]]
+];
+var quickBtn=null, quickPanel=null;
+function quickClose(){ if(quickPanel&&!quickPanel.hidden){ quickPanel.hidden=true; if(quickBtn) quickBtn.setAttribute("aria-expanded","false"); } }
+function quickJump(id){ quickClose(); closeHelp(); if(!goAt(id,false)) showToast("That place is not on the map yet."); }
+function quickPlay(gameId){
+  quickClose(); closeHelp();
+  var r=hq.objById["cab-"+gameId]; if(!r) return;
+  if(!goAt("cab-"+gameId,false)) return;
+  var tries=0;
+  (function wait(){ if(busy&&tries++<60){ setTimeout(wait,60); return; } interact({kind:"obj",r:r}); })();
+}
+function quickBuild(){
+  if(quickPanel) return;
+  quickPanel=el("div","kw-quick"); quickPanel.id="kwQuickPanel"; quickPanel.hidden=true; quickPanel.setAttribute("role","dialog"); quickPanel.setAttribute("aria-label","Go to a place or play a game");
+  var cols=el("div","kw-quick-cols"), left=el("div","kw-quick-col"), right=el("div","kw-quick-col");
+  left.appendChild(el("h2","kw-quick-h","Go to"));
+  QUICK_PLACES.forEach(function(g){
+    var list=g[1].filter(function(it){ return /^(hq|arcade|pier|van-)/.test(it[0])||!hq.objById||!/^(bench-|couch|whiteboard|news-stand)/.test(it[0])||hq.objById[it[0]]; });
+    if(!list.length) return;
+    left.appendChild(el("p","kw-quick-g",g[0]));
+    var row=el("div","kw-quick-row");
+    list.forEach(function(it){ var b=el("button","kw-quick-b",it[1]); b.type="button"; b.addEventListener("click",function(){ quickJump(it[0]); }); row.appendChild(b); });
+    left.appendChild(row);
+  });
+  right.appendChild(el("h2","kw-quick-h","Play a game"));
+  var grid=el("div","kw-quick-row kw-quick-games");
+  (map.games||[]).forEach(function(g){ if(!hq.objById["cab-"+g.id]) return; var b=el("button","kw-quick-b kw-quick-play",g.title); b.type="button"; b.addEventListener("click",function(){ quickPlay(g.id); }); grid.appendChild(b); });
+  right.appendChild(grid);
+  cols.appendChild(left); cols.appendChild(right); quickPanel.appendChild(cols);
+  var x=el("button","kw-help-x","Close"); x.type="button"; x.addEventListener("click",function(){ quickClose(); focusCanvas(); }); quickPanel.appendChild(x);
+  quickPanel.addEventListener("keydown",function(e){ if(e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); quickClose(); if(quickBtn) quickBtn.focus(); } });
+  stageEl.appendChild(quickPanel);
+}
+function quickToggle(){ quickBuild(); var open=quickPanel.hidden; closeHelp(); quickPanel.hidden=!open; quickBtn.setAttribute("aria-expanded",String(open)); if(open){ var f=quickPanel.querySelector("button"); try{ f&&f.focus({preventScroll:true}); }catch(e){} } }
+(function(){
+  var bar=$("kwBar"), help=$("kwHelp"); if(!bar) return;
+  quickBtn=el("button","kw-btn kw-btn-go","Go to"); quickBtn.type="button"; quickBtn.id="kwGo";
+  quickBtn.setAttribute("aria-expanded","false"); quickBtn.setAttribute("aria-controls","kwQuickPanel");
+  var key=el("kbd","kw-kbd","G"); key.setAttribute("aria-hidden","true"); quickBtn.appendChild(key);
+  quickBtn.addEventListener("click",quickToggle);
+  if(help) bar.insertBefore(quickBtn,help); else bar.appendChild(quickBtn);
+})();
+
 boot();
 NS.engine={version:2};
 })();
