@@ -1,0 +1,92 @@
+/* K13 Bin It (js/paper13.js): the office paper toss on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css;
+   this file adds the stage (HUD chips on top, the office board in the middle, controls underneath), the toast and the panel. */
+.pt13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none}
+
+/* HUD: plain text chips above the board, so nothing covers the room; the right side leaves room for the Restart pill */
+.pt13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.pt13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px}
+.pt13-wind{color:var(--blue);border-color:var(--blue)}
+.pt13-draft{color:var(--muted)}
+
+.pt13-view{position:relative;width:100%;aspect-ratio:16/10;background:var(--paper-3)}
+.pt13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
+.pt13-cv:active{cursor:grabbing}
+.pt13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* the result line, inside the board at the top and never near the buttons */
+.pt13-toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:4;max-width:calc(100% - 24px);pointer-events:none;text-align:center;
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.03em;line-height:1.4;color:var(--ink);background:var(--paper-2);border:1.5px solid var(--line-3);border-radius:100px;padding:6px 16px;box-shadow:0 10px 24px -14px rgba(31,32,35,.5)}
+.pt13-toast[hidden]{display:none}
+.pt13-toast.good{background:var(--wash-mint);border-color:#4F9E92}
+.pt13-toast.bad{border-color:var(--blue)}
+
+/* controls: real buttons, every one labelled; thumb sized on a phone */
+.pt13-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.pt13-grp{display:inline-flex;align-items:center;gap:6px}
+.pt13-places{flex-wrap:wrap}
+.pt13-lab{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pt13-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:34px;height:36px;padding:0 12px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;white-space:nowrap;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.pt13-btn:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.pt13-btn:active:not(:disabled){transform:scale(.97)}
+.pt13-btn:disabled{opacity:.45;cursor:not-allowed}
+.pt13-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.pt13-btn:focus-visible,.pt13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.pt13-throw{height:48px;min-width:132px;padding:0 24px;font-family:var(--body);font-weight:600;font-size:15px;letter-spacing:0;color:#fff;background:var(--blue);border:1.5px solid var(--blue)}
+.pt13-throw:hover:not(:disabled){color:#fff;background:var(--ink);border-color:var(--ink)}
+:root[data-theme="dark"] .pt13-throw{color:#1A1B1E}
+:root[data-theme="dark"] .pt13-throw:hover:not(:disabled){background:var(--blue-2);border-color:var(--blue-2);color:#1A1B1E}
+
+/* the key hints show only where there is a keyboard */
+.pt13-key{display:none;font-family:var(--mono);font-size:9px;letter-spacing:.04em;line-height:1;padding:2px 5px;border-radius:4px;border:1px solid currentColor;opacity:.75}
+@media(hover:hover) and (pointer:fine){ .pt13-key{display:inline-block} }
+
+/* the place panel and the pause panel */
+.pt13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.42)}
+.pt13-over[hidden]{display:none}
+.pt13-panel{width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:20px 20px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.pt13-over-t{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.pt13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.pt13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.pt13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.pt13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.pt13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.pt13-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .pt13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .pt13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+:root[data-theme="dark"] .pt13-over{background:rgba(10,10,12,.55)}
+:root[data-theme="dark"] .pt13-toast.good{background:#1E3B36}
+
+@media(prefers-reduced-motion:no-preference){
+  .pt13-panel{animation:pt13-rise .45s var(--ease) both}
+  .pt13-toast:not([hidden]){animation:pt13-pop .35s var(--ease) both}
+}
+@keyframes pt13-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pt13-pop{from{opacity:0;transform:translate(-50%,-6px)}to{opacity:1;transform:translate(-50%,0)}}
+@media(prefers-reduced-motion:reduce){
+  .pt13-btn,.pt13-obtn{transition:none}
+  .pt13-btn:active:not(:disabled){transform:none}
+}
+
+/* on a phone the board turns tall, the chips thin out and the buttons get thumb room */
+@media(max-width:560px){
+  .pt13-top{padding:8px 104px 8px 8px;gap:4px;min-height:50px}
+  .pt13-chip{padding:2px 8px;font-size:10.5px}
+  .pt13-draft{display:none}
+  .pt13-view{aspect-ratio:5/6}
+  .pt13-toast{font-size:11.5px;padding:5px 12px}
+  .pt13-panel{padding:14px 14px 12px;gap:4px}
+  .pt13-over-t{font-size:19px}
+  .pt13-over-s{font-size:13px}
+  .pt13-obtn{min-height:40px;font-size:14px;padding:0 18px}
+  .pt13-bar{gap:8px;padding:10px}
+  .pt13-grp:not(.pt13-places){flex:1 1 calc(50% - 4px)}
+  .pt13-grp:not(.pt13-places) .pt13-btn{flex:1 1 0;height:44px;padding:0 8px}
+  .pt13-throw{flex:1 1 100%;height:52px}
+  .pt13-places{flex:1 1 100%}
+  .pt13-places .pt13-btn{flex:1 1 0;height:40px;padding:0 6px;font-size:11.5px}
+  .pt13-places .pt13-lab{flex:1 1 100%}
+}
