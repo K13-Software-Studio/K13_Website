@@ -1,0 +1,170 @@
+/* K13 Workbench World: the walkable studio on /workbench/. Prefix kw-. Tokens come from css/site.css.
+   The classic toy and arcade sections stay in the page: hidden off-screen while the world is on (so the games
+   keep their size and their scripts keep running), shown exactly as before in list mode, and shown without
+   JavaScript. A full border is allowed as a state; there are no stripes along any edge. */
+.kw-main{position:relative}
+.kw [hidden],.kw-cab [hidden]{display:none!important}
+@media(scripting:enabled){
+  /* fixed, not absolute: an absolute box off to the side still stretches the page's scroll height (13,000 px of blank
+     page under the footer, 2026-10-06); a fixed one never does */
+  .kw-main:not(.kw-list) .kw-bay{position:fixed;left:-4000px;top:0;width:1180px;height:100vh;overflow:hidden;visibility:hidden;pointer-events:none}
+}
+@media(scripting:none){ .kw{display:none} }
+
+.kw{padding:clamp(14px,2.4vw,30px) 0 clamp(16px,2.4vw,28px)}
+.kw-head{margin-bottom:clamp(12px,1.8vw,20px)}
+.kw-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-bottom:12px}
+.kw-gap{flex:1 1 0;min-width:0}
+.kw-place{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);min-height:44px;display:inline-flex;align-items:center;padding:0 2px}
+.kw-chip{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  background:#F0B429;color:#1F2023;border:2px solid #1F2023}
+.kw-chip b{font-weight:700}
+.kw-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);transition:color .3s var(--ease),border-color .3s var(--ease)}
+.kw-btn:hover{color:var(--blue);border-color:var(--blue)}
+.kw-btn:focus-visible,.kw-help-x:focus-visible,.kw-say-next:focus-visible,.kw-use:focus-visible,.kw-cab-x:focus-visible,.kw-pad button:focus-visible,.kw-say-cta:focus-visible{outline:3px solid #F0B429;outline-offset:3px}
+.kw-is-list .kw-head,.kw-is-list .kw-stage,.kw-is-list .kw-hint,.kw-is-list #kwHelp,.kw-is-list .kw-chip{display:none}
+.kw-is-list{padding-bottom:6px}
+
+.kw-stage{position:relative;height:clamp(420px,68vh,720px);border-radius:18px;overflow:hidden;background:#16181B;border:2px solid #1F2023;box-shadow:0 18px 40px -26px rgba(31,32,35,.7)}
+:root[data-theme="dark"] .kw-stage{border-color:var(--line-2)}
+.kw-canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;image-rendering:pixelated;touch-action:pan-y;outline:none;cursor:default;-webkit-tap-highlight-color:transparent}
+.kw-canvas.kw-hot{cursor:pointer}
+.kw-canvas:focus-visible{outline:3px solid #F0B429;outline-offset:-3px}
+.kw-hint{font-size:14px;line-height:1.5;color:var(--muted);margin-top:10px;max-width:70ch}
+
+/* prompt bubble over what you can use */
+.kw-prompt{position:absolute;left:0;top:0;z-index:3;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:calc(100% - 16px);padding:6px 12px 6px 6px;border-radius:12px;
+  background:#1F2023;color:#F6EEDC;border:2px solid #F0B429;font-family:var(--mono);font-size:12px;line-height:1.2;white-space:nowrap}
+.kw-key{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 6px;border-radius:6px;background:#F0B429;color:#1F2023;font-weight:700}
+.kw-ptx{overflow:hidden;text-overflow:ellipsis}
+@media(prefers-reduced-motion:no-preference){ .kw-prompt.kw-pop .kw-ptx{animation:kw-pop .22s var(--pop)} }
+@keyframes kw-pop{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* talking */
+.kw-say{position:absolute;left:50%;bottom:12px;z-index:4;transform:translateX(-50%);width:min(660px,calc(100% - 24px));display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;
+  background:#1F2023;color:#F6EEDC;border:2px solid #F6EEDC}
+.kw-say-face{width:48px;height:72px;flex:none;image-rendering:pixelated;border-radius:8px;background:#2B2C30}
+.kw-say-body{flex:1 1 auto;min-width:0}
+.kw-say-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px}
+.kw-say-name{font-family:var(--disp);font-weight:600;font-size:18px;color:#F0B429}
+.kw-say-role{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B1B2B6}
+.kw-say-text{font-size:15px;line-height:1.5;color:#F6EEDC;margin-top:4px;max-height:34vh;overflow:auto}
+.kw-say-next,.kw-say-cta{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:100px;background:#F0B429;color:#1F2023;font-weight:700;font-size:14px;border:0}
+.kw-say-cta{background:#EA5E14;text-decoration:none}
+.kw-say.kw-on{animation:none}
+@media(prefers-reduced-motion:no-preference){ .kw-say.kw-on .kw-say-text{animation:kw-pop .25s var(--ease)} }
+@media(max-width:560px){
+  .kw-say{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
+  .kw-say-face{width:36px;height:54px}
+  .kw-say-body{flex:1 1 calc(100% - 60px)}
+  .kw-say-next,.kw-say-cta{margin-left:auto}
+}
+
+.kw-use{position:absolute;right:12px;bottom:12px;z-index:3;min-height:52px;min-width:72px;padding:0 20px;border-radius:100px;background:#F0B429;color:#1F2023;font-weight:700;font-size:15px;border:2px solid #1F2023}
+
+.kw-toast{position:absolute;left:50%;top:10px;z-index:5;transform:translateX(-50%);max-width:calc(100% - 24px);padding:8px 16px;border-radius:14px;background:#F0B429;color:#1F2023;font-weight:600;font-size:14px;line-height:1.4;text-align:center;
+  opacity:0;pointer-events:none;visibility:hidden}
+.kw-toast.kw-on{opacity:1;visibility:visible}
+@media(prefers-reduced-motion:no-preference){ .kw-toast{transition:opacity .3s var(--ease),visibility .3s} }
+
+.kw-help{position:absolute;left:10px;top:10px;z-index:5;width:min(340px,calc(100% - 20px));padding:14px 16px;border-radius:14px;background:#1F2023;color:#F6EEDC;border:1px solid rgba(246,238,220,.35)}
+.kw-help-h{font-family:var(--disp);font-weight:600;font-size:18px;color:#F0B429;margin-bottom:8px}
+.kw-help-l{list-style:none;display:grid;gap:6px;font-size:14px;line-height:1.45}
+.kw-help-l b{color:#F0B429;font-weight:600}
+.kw-help-x{margin-top:12px;min-height:44px;padding:0 18px;border-radius:100px;background:#F0B429;color:#1F2023;font-weight:700;font-size:14px}
+
+.kw-pad{position:absolute;left:50%;top:50%;z-index:6;transform:translate(-50%,-50%);width:min(280px,calc(100% - 24px));padding:16px;border-radius:16px;background:#1F2023;color:#F6EEDC;border:2px solid #F6EEDC;display:grid;gap:10px}
+.kw-pad-show{font-family:var(--mono);font-weight:700;font-size:28px;letter-spacing:.32em;text-align:center;color:#F0B429;background:#0F1012;border-radius:8px;padding:8px 4px;min-height:52px}
+.kw-pad-show.kw-dim{color:#5D5F65}
+.kw-pad-keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kw-pad-k{min-height:48px;border-radius:10px;background:#414347;color:#F6EEDC;font-family:var(--mono);font-size:18px;font-weight:600;border:0}
+.kw-pad-k:hover{background:#5D5F65}
+.kw-pad-w{font-size:13px}
+.kw-pad-msg{font-size:13px;line-height:1.4;color:#D9D9DC;min-height:2.8em}
+.kw-pad-x{min-height:44px;border-radius:100px;background:transparent;color:#F6EEDC;border:1px solid rgba(246,238,220,.5);font-weight:600;font-size:14px}
+
+@media(prefers-reduced-motion:no-preference){ .kw-chip.kw-pulse{animation:kw-chip .6s var(--pop)} }
+@keyframes kw-chip{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+
+/* the machine: a cabinet screen with the real game inside */
+.kw-cab{margin:auto;padding:0;border:0;background:transparent;color:#F6EEDC;max-width:none;max-height:none;width:min(1040px,calc(100vw - 20px));overflow:visible}
+.kw-cab.kw-cab-toy{width:min(560px,calc(100vw - 20px))}
+.kw-cab::backdrop{background:rgba(15,16,18,.8)}
+.kw-cab-frame{display:flex;flex-direction:column;max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px);padding:10px;border-radius:22px;background:#1F2023;border:3px solid #414347;box-shadow:0 30px 70px -20px rgba(0,0,0,.7)}
+.kw-cab-top{display:flex;align-items:center;gap:12px;padding:2px 2px 10px}
+.kw-cab-mq{flex:none;line-height:0}
+.kw-cab-mqc{height:44px;width:auto;max-width:42vw;image-rendering:pixelated;border-radius:6px;display:block}
+.kw-cab-title{flex:1 1 auto;min-width:0;font-family:var(--disp);font-weight:600;font-size:clamp(18px,2.4vw,24px);line-height:1.15;color:#F6EEDC;letter-spacing:-.01em}
+.kw-cab-title:focus{outline:none}
+.kw-cab-x{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:100px;background:#F0B429;color:#1F2023;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:0}
+.kw-cab-x kbd{font:inherit;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid rgba(31,32,35,.5)}
+@media(pointer:coarse){ .kw-cab-x kbd{display:none} }
+.kw-cab-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;border-radius:14px;background:var(--paper)}
+.kw-slot.bench{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0;padding:8px}
+.kw-slot.bench>.bench-card{grid-column:1/-1;margin:0}
+@media(max-width:560px){ .kw-cab-frame{padding:8px;border-radius:18px} .kw-slot.bench{padding:4px} .kw-slot.bench>.bench-card{padding:14px} }
+
+/* the world heading stays compact so the room starts near the top of the screen */
+.kw-head .h2{font-size:clamp(30px,4vw,48px);line-height:1.02}
+.kw-head .sec-note{font-size:15px}
+@media(max-width:700px){ .kw-head .sec-note{display:none} .kw-head{margin-bottom:8px} }
+
+/* ---------- stage 2: the coast, the shops, the van ---------- */
+.kw-fade{position:absolute;inset:0;z-index:7;background:#16181B;opacity:0;visibility:hidden;pointer-events:none}
+.kw-fade.kw-on{opacity:1;visibility:visible}
+@media(prefers-reduced-motion:no-preference){ .kw-fade{transition:opacity .26s var(--ease),visibility .26s} }
+
+.kw-mini{position:absolute;right:10px;top:10px;z-index:3;display:block;padding:3px;border-radius:10px;background:#1F2023;border:2px solid #F6EEDC;cursor:pointer;line-height:0}
+.kw-mini:focus-visible{outline:3px solid #F0B429;outline-offset:2px}
+.kw-mini-c{display:block;border-radius:6px;image-rendering:auto}
+@media(max-width:560px){ .kw-mini{right:6px;top:6px;padding:2px} }
+
+.kw-van{position:absolute;left:50%;top:50%;z-index:6;transform:translate(-50%,-50%);width:min(380px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:hidden;padding:12px 14px;border-radius:16px;background:#1F2023;color:#F6EEDC;border:2px solid #F0B429;display:flex;flex-direction:column;gap:6px}
+.kw-van-h{font-family:var(--disp);font-weight:600;font-size:18px;color:#F0B429}
+.kw-van-p{font-size:14px;line-height:1.4;color:#D9D9DC}
+.kw-van-l{display:grid;gap:4px;overflow:auto;min-height:0;flex:1 1 auto;overscroll-behavior:contain}
+.kw-van-d{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#B1B2B6;margin-top:2px}
+.kw-van-b{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px;padding:0 14px;border-radius:12px;background:#414347;color:#F6EEDC;font-size:15px;font-weight:600;text-align:left;border:0}
+.kw-van-b:hover:not(:disabled){background:#5D5F65}
+.kw-van-b:focus-visible,.kw-van-x:focus-visible{outline:3px solid #F0B429;outline-offset:2px}
+.kw-van-b:disabled{opacity:.6;cursor:default}
+.kw-van-here{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#F0B429}
+.kw-van-x{flex:none;min-height:44px;margin-top:2px;border-radius:100px;background:#F0B429;color:#1F2023;font-weight:700;font-size:14px;border:0}
+
+.kw-info{width:min(560px,calc(100vw - 20px))}
+.kw-info-body{display:grid;gap:10px;padding:14px;color:var(--ink)}
+.kw-info-img{display:block;width:100%;height:auto;border-radius:10px;border:2px solid #1F2023;background:#26272B;aspect-ratio:1500/1000;object-fit:cover}
+.kw-info-meta{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kw-info-p{font-size:15px;line-height:1.5}
+.kw-info-l{list-style:none;display:grid;gap:8px;padding:0;margin:0}
+.kw-info-l li{font-size:15px;line-height:1.45;padding:8px 12px;border-radius:10px;background:var(--paper-2)}
+.kw-info-a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:100px;background:#EA5E14;color:#FFFFFF;font-weight:700;font-size:15px;text-decoration:none;justify-self:start}
+.kw-info-a:focus-visible{outline:3px solid #F0B429;outline-offset:2px}
+.kw-new{display:inline-flex;align-items:center;min-height:22px;padding:0 9px;border-radius:100px;background:#EA5E14;color:#FFFFFF;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;vertical-align:middle}
+
+.kw-main:not(.kw-list) .kw-places{display:none}
+.kw-places{padding:clamp(18px,3vw,36px) 0}
+.kw-places-h{margin-bottom:8px}
+.kw-places-note{color:var(--muted);margin-bottom:14px;max-width:60ch}
+.kw-places-l{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:0;margin:0}
+.kw-places-i{display:grid;gap:4px;padding:14px;border-radius:14px;background:var(--paper-2);border:1px solid var(--line-2);justify-items:start}
+.kw-places-n{font-family:var(--disp);font-weight:600;font-size:18px}
+.kw-places-c{font-size:14px;color:var(--muted)}
+.kw-places-i .kw-info-a{min-height:44px;margin-top:6px;font-size:14px;padding:0 18px}
+
+/* the world fills the screen: a slim title and bar on one row, the stage edge to edge and as tall as the window allows */
+.kw{padding-top:4px;padding-bottom:clamp(10px,1.4vw,18px)}
+.kw>.wrap{max-width:none;padding-left:clamp(10px,1.6vw,22px);padding-right:clamp(10px,1.6vw,22px);
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:clamp(14px,2vw,28px)}
+.kw .kw-head{margin:0;display:block}
+.kw .kw-head .eyebrow{display:none}
+.kw .kw-head .h2{font-size:clamp(22px,2.1vw,30px);line-height:1.1;margin:0;max-width:none}
+.kw .kw-head .sec-note{display:none}
+.kw .kw-bar{margin:0}
+.kw .kw-stage,.kw .kw-hint,.kw .vh{grid-column:1/-1}
+.kw .kw-stage{margin-top:10px;height:max(440px,calc(100vh - 150px));height:max(440px,calc(100svh - 150px));border-radius:14px}
+@media(max-width:760px){
+  .kw>.wrap{grid-template-columns:1fr}
+  .kw .kw-stage{height:max(420px,calc(100svh - 230px))}
+}

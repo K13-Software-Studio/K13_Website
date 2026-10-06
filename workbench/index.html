@@ -37,6 +37,7 @@
 <link rel="stylesheet" href="/css/goldminer13.css">
 <link rel="stylesheet" href="/css/volfied13.css">
 <link rel="stylesheet" href="/css/heli13.css">
+<link rel="stylesheet" href="/css/world.css">
 </head>
 <body class="sub-page">
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -57,37 +58,58 @@
   </nav>
 </header>
 
-<main id="main" tabindex="-1">
-<section class="workbench" id="toys">
+<main id="main" tabindex="-1" class="kw-main">
+<section class="kw" id="kw" aria-labelledby="kwTitle">
+  <div class="wrap">
+    <div class="sec-head kw-head">
+      <div>
+        <span class="eyebrow">K13 Studio, after hours</span>
+        <h1 class="h2" id="kwTitle">Walk in. <i>Poke at things.</i></h1>
+      </div>
+      <p class="sec-note">The machines hold the arcade, the benches hold the toys, and the crew are still around. Thirteen things are hiding in the details.</p>
+    </div>
+    <div class="kw-bar" id="kwBar">
+      <span class="kw-place" id="kwPlace">Lobby</span>
+      <span class="kw-chip" id="kwChip" hidden>Secrets <b id="kwSecN">0</b>/<span data-kw-total>13</span></span>
+      <span class="kw-gap"></span>
+      <button type="button" class="kw-btn" id="kwHelp" aria-expanded="false" aria-controls="kwHelpPanel">Help</button>
+      <button type="button" class="kw-btn" id="kwList" aria-pressed="false">Prefer a list</button>
+    </div>
+    <div class="kw-stage" id="kwStage"></div>
+    <p class="kw-hint" id="kwHint">Click the room, then walk with the arrow keys or WASD. E uses what is near. On a phone, tap where you want to go.</p>
+    <p class="vh" id="kwLive" aria-live="polite"></p>
+  </div>
+</section>
+<section class="workbench kw-bay" id="toys">
   <div class="wrap">
     <div class="sec-head">
       <div>
         <span class="eyebrow">The workbench</span>
-        <h1 class="h2">Things from the work, made <i>playable.</i></h1>
+        <h2 class="h2">Things from the work, made <i>playable.</i></h2>
       </div>
       <p class="sec-note">Desk toys made from the projects we ship. No rules, no reading. Further down, the arcade.</p>
     </div>
     <div class="bench">
-      <div class="bench-card rv bench-wide" data-game="eggtoss"></div>
-      <div class="bench-card rv" data-game="carlos"></div>
-      <div class="bench-card rv" data-game="miramar"></div>
-      <div class="bench-card rv" data-game="tide"></div>
-      <div class="bench-card rv" data-game="egg"></div>
-      <div class="bench-card rv" data-game="cengo"></div>
-      <div class="bench-card rv" data-game="stack"></div>
-      <div class="bench-card rv bench-wide" data-game="sandwich"></div>
-      <div class="bench-card rv" data-game="goldenhour"></div>
-      <div class="bench-card rv" data-game="roof"></div>
-      <div class="bench-card rv" data-game="eggcursor"></div>
-      <div class="bench-card rv" data-game="pours"></div>
-      <div class="bench-card rv" data-game="limewash"></div>
-      <div class="bench-card rv" data-game="dumpling"></div>
-      <div class="bench-card rv bench-wide" data-game="angry13"></div>
+      <div class="bench-card rv bench-wide" id="t-eggtoss" data-game="eggtoss"></div>
+      <div class="bench-card rv" id="t-carlos" data-game="carlos"></div>
+      <div class="bench-card rv" id="t-miramar" data-game="miramar"></div>
+      <div class="bench-card rv" id="t-tide" data-game="tide"></div>
+      <div class="bench-card rv" id="t-egg" data-game="egg"></div>
+      <div class="bench-card rv" id="t-cengo" data-game="cengo"></div>
+      <div class="bench-card rv" id="t-stack" data-game="stack"></div>
+      <div class="bench-card rv bench-wide" id="t-sandwich" data-game="sandwich"></div>
+      <div class="bench-card rv" id="t-goldenhour" data-game="goldenhour"></div>
+      <div class="bench-card rv" id="t-roof" data-game="roof"></div>
+      <div class="bench-card rv" id="t-eggcursor" data-game="eggcursor"></div>
+      <div class="bench-card rv" id="t-pours" data-game="pours"></div>
+      <div class="bench-card rv" id="t-limewash" data-game="limewash"></div>
+      <div class="bench-card rv" id="t-dumpling" data-game="dumpling"></div>
+      <div class="bench-card rv bench-wide" id="t-angry13" data-game="angry13"></div>
     </div>
   </div>
 </section>
 
-<section class="arcade" id="arcade" aria-labelledby="arcTitle">
+<section class="arcade kw-bay" id="arcade" aria-labelledby="arcTitle">
   <div class="wrap">
     <div class="arc-cab">
       <div class="arc-head">
@@ -176,5 +198,13 @@
 <script src="/js/goldminer13.js" defer></script>
 <script src="/js/volfied13.js" defer></script>
 <script src="/js/heli13.js" defer></script>
+<script src="/js/world/people.js" defer></script>
+<script src="/js/world/decor.js" defer></script>
+<script src="/js/world/secrets.js" defer></script>
+<script src="/js/world/map.js" defer></script>
+<script src="/js/world/world-data.js" defer></script>
+<script src="/js/world/town.js" defer></script>
+<script src="/js/world/region.js" defer></script>
+<script src="/js/world/engine.js" defer></script>
 </body>
 </html>
