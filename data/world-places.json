@@ -1,0 +1,204 @@
+{
+  "_why": "Hand-kept, sourced geography for the Workbench World (docs/WORKBENCH_WORLD_2.md). Public facts only: the 13 Work rows on index.html, addresses as printed on each project's own public site (checked 2026-10-06), symbolic spots where no public address exists. scripts/sync-world.py reads this file and writes js/world/world-data.js. Edit here, then re-run the script.",
+  "_coordinates": "Every lat/lng is placed by hand from the printed street address against well-known street and landmark positions (no geocoder was available), so each is good to about 300 to 500 m. One tile of the map is 650 m, so that is within a tile of the truth. Snapping to a free tile is done by the script, never here.",
+  "proj": { "west": -118.55, "east": -116.95, "north": 34.15, "south": 32.5, "refLat": 33.4, "tileKm": 0.65 },
+  "hq": {
+    "label": "K13 HQ, San Diego",
+    "lat": 32.714,
+    "lng": -117.159,
+    "district": "san-diego",
+    "symbolic": true,
+    "note": "The site says only 'K13 Software Studio, San Diego'. This is a symbolic spot in the downtown grid (Gaslamp), not a real address."
+  },
+  "pier": {
+    "label": "Worldwide pier",
+    "lat": 32.7335,
+    "lng": -117.206,
+    "district": "san-diego",
+    "symbolic": true,
+    "note": "A harbour spot on the San Diego bay shore (Harbor Island side) for remote and international work. Not an address. Berths run west to east along the shore; each berth is one project."
+  },
+  "projects": [
+    {
+      "key": "thg", "name": "Tiger Hospitality", "workRow": "w01", "url": "https://tigerhospitalitygroup.com",
+      "category": "office", "repo": "THG-Website", "agentKey": "", "warRoomKey": "TigerHospitality_Website_01",
+      "places": [
+        { "id": "thg-carlsbad", "label": "Windmill Food Hall, Carlsbad", "address": "890 Palomar Airport Rd, Carlsbad, CA 92011", "lat": 33.129, "lng": -117.284, "status": "open", "source": "https://tigerhospitalitygroup.com (JSON-LD streetAddress, first location)", "method": "Street address located on the Palomar Airport Rd corridor at El Camino Real." }
+      ]
+    },
+    {
+      "key": "lavida", "name": "La Vida San Diego", "workRow": "w02", "url": "https://lavida.fit",
+      "category": "kitchen", "repo": "LaVida/LaVida", "agentKey": "", "warRoomKey": "LaVida",
+      "places": [
+        { "id": "lavida-carlsbad", "label": "La Vida, Windmill Food Hall, Carlsbad", "address": "890 Palomar Airport Rd, Carlsbad, CA 92011", "lat": 33.129, "lng": -117.284, "status": "open", "source": "https://lavida.fit (JSON-LD streetAddress)", "method": "Same building as the Tiger flagship, snapped to its own tile." }
+      ]
+    },
+    {
+      "key": "miramar", "name": "Miramar Food Hall", "workRow": "w03", "url": "https://miramarfoodhall.com",
+      "category": "foodhall", "repo": "Miramar", "agentKey": "Miramar", "warRoomKey": "Miramar",
+      "places": [
+        { "id": "miramar-sc", "label": "Miramar Food Hall, San Clemente", "address": "150 W Avenida Pico, San Clemente, CA 92672", "lat": 33.435, "lng": -117.62, "status": "open", "source": "https://miramarfoodhall.com (JSON-LD streetAddress); the sibling Tiger sites print the same hall as 1720 North El Camino Real", "method": "The 1938 Miramar Theatre block on N El Camino Real at Avenida Pico, San Clemente (the two printed addresses name the same corner)." }
+      ]
+    },
+    {
+      "key": "cengo", "name": "CENGO", "workRow": "w04", "url": "https://cengo.party",
+      "category": "club", "repo": "CENGO", "agentKey": "", "warRoomKey": "CENGO",
+      "places": [
+        { "id": "cengo-pier", "label": "CENGO, Worldwide pier", "address": "", "pier": true, "berth": 0, "status": "open", "source": "https://cengo.party prints no street address (an artist site: Istanbul, Los Angeles, Miami, Ibiza are named only as scenes)", "method": "Worldwide pier: no public address, not a single place." }
+      ]
+    },
+    {
+      "key": "station8", "name": "Station8", "workRow": "w05", "url": "https://station8publicmarket.com",
+      "category": "market", "repo": "STATION8", "agentKey": "", "warRoomKey": "STATION8",
+      "places": [
+        { "id": "station8-ucsd", "label": "Station 8 Public Market, UC San Diego", "address": "Scholars Dr S & Revelle College Dr, La Jolla, CA 92037", "lat": 32.8742, "lng": -117.2412, "status": "open", "source": "https://station8publicmarket.com (JSON-LD streetAddress)", "method": "The printed intersection at Revelle College, UCSD." }
+      ]
+    },
+    {
+      "key": "globalfork", "name": "Global Fork", "workRow": "w06", "url": "https://globalforkfh.com",
+      "category": "foodhall", "repo": "GlobalFork", "agentKey": "", "warRoomKey": "GlobalFork",
+      "places": [
+        { "id": "globalfork-littleitaly", "label": "Global Fork Food Hall, Little Italy", "address": "550 W Date St, Suite B, San Diego, CA 92101", "lat": 32.723, "lng": -117.171, "status": "open", "source": "https://globalforkfh.com (footer 'Visit Us' and JSON-LD)", "method": "Date St between Kettner Blvd and India St, Little Italy." }
+      ]
+    },
+    {
+      "key": "egg", "name": "Egg&Out", "workRow": "w07", "url": "https://egg.k13projects.com",
+      "category": "kitchen", "repo": "Egg-Out", "agentKey": "EggOut", "warRoomKey": "EggOut",
+      "places": [
+        { "id": "egg-sc", "label": "Egg&Out, inside Miramar Food Hall", "address": "1720 North El Camino Real, San Clemente, CA 92672", "lat": 33.435, "lng": -117.62, "status": "open", "source": "https://egg.k13projects.com (Locations: 'inside Miramar Food Hall in San Clemente')", "method": "Inside the Miramar hall, so the same corner; snapped to the next tile." }
+      ]
+    },
+    {
+      "key": "tmb", "name": "TrustMeBro", "workRow": "w08", "url": "https://tmb.k13projects.com",
+      "category": "office", "repo": "TrustMeBro", "agentKey": "TrustMeBro", "warRoomKey": "TrustMeBro",
+      "places": [
+        { "id": "tmb-pier", "label": "TrustMeBro, Worldwide pier", "address": "", "pier": true, "berth": 1, "status": "open", "source": "https://tmb.k13projects.com prints no address (a data product)", "method": "Worldwide pier: no public address." }
+      ]
+    },
+    {
+      "key": "baa", "name": "baa atelier", "workRow": "w09", "url": "https://www.atelierbaa.com/",
+      "category": "studio", "repo": "baa_atelier", "agentKey": "baa_atelier", "warRoomKey": "baa_atelier",
+      "places": [
+        { "id": "baa-pier", "label": "baa atelier, Worldwide pier", "address": "", "pier": true, "berth": 2, "status": "open", "source": "https://www.atelierbaa.com names 'Istanbul, Los Angeles, San Diego' as cities served but prints no studio street address", "method": "Worldwide pier: three cities, no public address." }
+      ]
+    },
+    {
+      "key": "barfix", "name": "BarFix", "workRow": "w10", "url": "https://bfx.k13projects.com",
+      "category": "office", "repo": "BarFix", "agentKey": "BarFix", "warRoomKey": "BarFix",
+      "places": [
+        { "id": "barfix-pier", "label": "BarFix, Worldwide pier", "address": "", "pier": true, "berth": 3, "status": "open", "source": "https://bfx.k13projects.com prints no address (a SaaS built for the Turkish market)", "method": "Worldwide pier: remote and international." }
+      ]
+    },
+    {
+      "key": "lobsterlab", "name": "Lobster Lab", "workRow": "w11", "url": "https://lobsterlab.us",
+      "category": "kitchen", "repo": "LobsterLab", "agentKey": "LobsterLab", "warRoomKey": "LobsterLab",
+      "places": [
+        { "id": "lobsterlab-carlsbad", "label": "Lobster Lab, Windmill Food Hall, Carlsbad", "address": "890 Palomar Airport Rd, Carlsbad, CA 92011", "lat": 33.129, "lng": -117.284, "status": "open", "source": "https://lobsterlab.us (Locations)", "method": "Same building as the Tiger flagship." },
+        { "id": "lobsterlab-delmar", "label": "Lobster Lab, Sky Deck at Del Mar Highlands Town Center", "address": "12841 El Camino Real Ste 206, San Diego, CA 92130", "lat": 32.955, "lng": -117.23, "status": "open", "source": "https://lobsterlab.us (Locations)", "method": "Del Mar Highlands Town Center on El Camino Real, north of Del Mar Heights Rd." },
+        { "id": "lobsterlab-sc", "label": "Lobster Lab, Miramar Food Hall, San Clemente", "address": "1720 North El Camino Real, San Clemente, CA 92672", "lat": 33.435, "lng": -117.62, "status": "open", "source": "https://lobsterlab.us (Locations)", "method": "Inside the Miramar hall." },
+        { "id": "lobsterlab-littleitaly", "label": "Lobster Lab, Global Fork Food Hall, Little Italy", "address": "550 W Date St Suite B, San Diego, CA 92101", "lat": 32.723, "lng": -117.171, "status": "open", "source": "https://lobsterlab.us (Locations)", "method": "Inside the Global Fork hall." },
+        { "id": "lobsterlab-ucsd", "label": "Lobster Lab, Station 8, UC San Diego (coming soon)", "address": "Scholars Dr S & Revelle College Dr, La Jolla, CA 92037", "lat": 32.8742, "lng": -117.2412, "status": "coming-soon", "source": "https://lobsterlab.us (Locations: 'Coming Soon')", "method": "Inside Station 8; the site marks it coming soon, so the engine can draw it as a construction site." }
+      ]
+    },
+    {
+      "key": "cosmos", "name": "Cosmos Burger", "workRow": "w12", "url": "https://cosmos.k13projects.com",
+      "category": "kitchen", "repo": "Cosmos", "agentKey": "Cosmos", "warRoomKey": "Cosmos",
+      "places": [
+        { "id": "cosmos-oceanside", "label": "Cosmos Burger, Oceanside", "address": "208 N Coast Hwy, Oceanside, CA 92054", "lat": 33.1985, "lng": -117.379, "status": "open", "source": "https://cosmos.k13projects.com (JSON-LD and Locations)", "method": "North Coast Hwy a block inland of the Oceanside pier." },
+        { "id": "cosmos-carlsbad", "label": "Cosmos Burger, Windmill Food Hall, Carlsbad", "address": "890 Palomar Airport Rd, Carlsbad, CA 92011", "lat": 33.129, "lng": -117.284, "status": "open", "source": "https://cosmos.k13projects.com (Locations)", "method": "Same building as the Tiger flagship." },
+        { "id": "cosmos-sc", "label": "Cosmos Burger, Miramar Food Hall, San Clemente", "address": "1720 North El Camino Real, San Clemente, CA 92672", "lat": 33.435, "lng": -117.62, "status": "open", "source": "https://cosmos.k13projects.com (Locations)", "method": "Inside the Miramar hall." },
+        { "id": "cosmos-littleitaly", "label": "Cosmos Burger, Global Fork Food Hall, Little Italy", "address": "550 W Date St Suite B, San Diego, CA 92101", "lat": 32.723, "lng": -117.171, "status": "open", "source": "https://cosmos.k13projects.com (Locations)", "method": "Inside the Global Fork hall." },
+        { "id": "cosmos-ucsd", "label": "Cosmos Burger, Station 8, UC San Diego (coming soon)", "address": "Scholars Dr S & Revelle College Dr, La Jolla, CA 92037", "lat": 32.8742, "lng": -117.2412, "status": "coming-soon", "source": "https://cosmos.k13projects.com (Locations: 'Coming Soon')", "method": "Inside Station 8; marked coming soon on the site." }
+      ]
+    },
+    {
+      "key": "carlos", "name": "Carlos Almaraz", "workRow": "w13", "url": "https://carlos.k13projects.com",
+      "category": "gallery", "repo": "CarlosAlmaraz", "agentKey": "CarlosAlmaraz", "warRoomKey": "CarlosAlmaraz",
+      "places": [
+        { "id": "carlos-lacma", "label": "Los Angeles County Museum of Art (the Los Four exhibition)", "address": "5905 Wilshire Blvd, Los Angeles, CA 90036 (the museum's public address; the memorial has none)", "lat": 34.0639, "lng": -118.3592, "status": "open", "source": "https://carlos.k13projects.com (timeline: 'the first exhibition of Chicano artists at the Los Angeles County Museum of Art')", "method": "The memorial site itself ties him to LACMA, a public landmark, so the gallery stands there. Landmark position, not a private address." }
+      ]
+    }
+  ],
+  "geo": {
+    "_coast": "Ocean shoreline, north to south, [lat,lng]. Land is east of it. The first and last points sit outside the bbox so the script can close the land polygon. Malibu to Santa Monica, Palos Verdes, San Pedro and Long Beach breakwater, Seal Beach, Huntington, Newport, Corona del Mar, Laguna, the Dana Point headland, San Clemente, Camp Pendleton, Oceanside, Carlsbad, Encinitas, Del Mar, Torrey Pines, La Jolla, Mission Beach, Ocean Beach, Point Loma, Coronado and the Silver Strand to the border. Hand-simplified, good to a couple of km.",
+    "coast": [
+      [34.039, -118.6], [34.0395, -118.582], [34.039, -118.55], [34.038, -118.529], [34.0092, -118.4973], [33.985, -118.473], [33.964, -118.458],
+      [33.95, -118.457], [33.919, -118.43], [33.885, -118.415], [33.862, -118.4015], [33.842, -118.397], [33.812, -118.41], [33.795, -118.42],
+      [33.77, -118.422], [33.743, -118.416], [33.738, -118.39], [33.738, -118.35], [33.725, -118.32], [33.706, -118.295], [33.708, -118.278],
+      [33.703, -118.24], [33.708, -118.2], [33.72, -118.175], [33.744, -118.15], [33.752, -118.13], [33.739, -118.107], [33.7185, -118.0675],
+      [33.69, -118.04], [33.655, -118.003], [33.633, -117.965], [33.607, -117.93], [33.599, -117.883], [33.597, -117.87], [33.57, -117.84],
+      [33.542, -117.789], [33.51, -117.755], [33.479, -117.7255], [33.459, -117.716], [33.46, -117.704], [33.462, -117.69], [33.448, -117.665],
+      [33.43, -117.633], [33.419, -117.6225], [33.39, -117.595], [33.37, -117.565], [33.32, -117.51], [33.25, -117.43], [33.206, -117.396],
+      [33.1937, -117.3835], [33.158, -117.358], [33.105, -117.32], [33.037, -117.296], [32.993, -117.279], [32.959, -117.27], [32.933, -117.264],
+      [32.9, -117.256], [32.867, -117.257], [32.851, -117.273], [32.83, -117.28], [32.793, -117.256], [32.77, -117.253], [32.749, -117.253],
+      [32.712, -117.256], [32.68, -117.25], [32.665, -117.243], [32.693, -117.22], [32.681, -117.186], [32.65, -117.175], [32.62, -117.156],
+      [32.59, -117.139], [32.534, -117.1235], [32.45, -117.12]
+    ],
+    "_waters": "Water bodies inside the land polygon: San Diego Bay (the mouth is the straight line Point Loma tip to North Island), Mission Bay, the Los Angeles and Long Beach harbour basin. Subtracted from land.",
+    "waters": [
+      { "id": "san-diego-bay", "label": "San Diego Bay", "poly": [
+        [32.665, -117.243], [32.69, -117.235], [32.713, -117.23], [32.726, -117.205], [32.724, -117.179], [32.716, -117.174], [32.709, -117.171],
+        [32.7, -117.154], [32.68, -117.125], [32.665, -117.12], [32.63, -117.105], [32.59, -117.1], [32.578, -117.11], [32.595, -117.126],
+        [32.62, -117.142], [32.65, -117.162], [32.68, -117.17], [32.699, -117.169], [32.706, -117.185], [32.7, -117.205], [32.693, -117.22]
+      ] },
+      { "id": "mission-bay", "label": "Mission Bay", "poly": [
+        [32.766, -117.245], [32.765, -117.233], [32.765, -117.223], [32.78, -117.222], [32.795, -117.225], [32.799, -117.233], [32.79, -117.244], [32.774, -117.247]
+      ] },
+      { "id": "la-lb-harbor", "label": "Los Angeles and Long Beach harbor", "poly": [
+        [33.715, -118.27], [33.713, -118.24], [33.717, -118.205], [33.728, -118.185], [33.748, -118.175], [33.76, -118.19], [33.75, -118.225], [33.738, -118.25], [33.728, -118.27]
+      ] }
+    ],
+    "freeways": [
+      { "id": "i5", "label": "I-5", "line": [
+        [34.056, -118.23], [34.02, -118.17], [33.95, -118.07], [33.906, -118.083], [33.867, -117.99], [33.835, -117.91], [33.75, -117.865],
+        [33.7, -117.82], [33.636, -117.727], [33.58, -117.69], [33.55, -117.67], [33.5, -117.656], [33.46, -117.67], [33.428, -117.612],
+        [33.39, -117.575], [33.34, -117.5], [33.28, -117.44], [33.24, -117.405], [33.2, -117.37], [33.158, -117.335], [33.04, -117.28],
+        [32.99, -117.265], [32.957, -117.25], [32.93, -117.235], [32.87, -117.225], [32.8, -117.215], [32.76, -117.205], [32.755, -117.199],
+        [32.73, -117.172], [32.715, -117.156], [32.7, -117.14], [32.66, -117.112], [32.64, -117.095], [32.543, -117.029]
+      ] }
+    ],
+    "roads": [
+      { "id": "pch-101", "label": "Pacific Coast Highway / Highway 101", "line": [
+        [34.037, -118.6], [34.032, -118.55], [34.012, -118.495], [33.98, -118.465], [33.955, -118.455], [33.885, -118.405], [33.842, -118.39],
+        [33.795, -118.405], [33.76, -118.41], [33.74, -118.38], [33.71, -118.29], [33.74, -118.23], [33.77, -118.19], [33.765, -118.125],
+        [33.74, -118.09], [33.66, -117.998], [33.61, -117.925], [33.595, -117.875], [33.545, -117.786], [33.47, -117.705], [33.425, -117.623],
+        [33.38, -117.585], [33.3, -117.5], [33.2, -117.385], [33.16, -117.35], [33.04, -117.293], [32.96, -117.262], [32.935, -117.26],
+        [32.85, -117.255], [32.79, -117.25], [32.75, -117.248], [32.72, -117.247], [32.738, -117.21], [32.72, -117.185]
+      ] }
+    ],
+    "_districts": "Three district polygons in lat/lng. Their offshore edges run out to sea along the county lines, so they are bounds for labelling and for the check, not coastlines. Land east of Orange County belongs to no district (inland).",
+    "districts": [
+      { "id": "los-angeles", "label": "Los Angeles", "poly": [[34.4, -118.7], [34.4, -117.6], [33.95, -117.73], [33.744, -118.11], [33.6, -118.16], [33.5, -118.7]] },
+      { "id": "orange-county", "label": "Orange County", "poly": [[33.95, -117.73], [33.744, -118.11], [33.6, -118.16], [33.2, -117.8], [33.388, -117.595], [33.5, -117.412], [33.95, -117.412]] },
+      { "id": "san-diego", "label": "San Diego", "poly": [[33.5, -117.412], [33.388, -117.595], [33.2, -117.8], [32.4, -117.8], [32.4, -116.9], [33.45, -116.9]] }
+    ],
+    "cities": [
+      { "id": "santa-monica", "label": "Santa Monica", "lat": 34.0195, "lng": -118.4912, "size": 2 },
+      { "id": "downtown-la", "label": "Downtown Los Angeles", "lat": 34.0522, "lng": -118.2437, "size": 3 },
+      { "id": "long-beach", "label": "Long Beach", "lat": 33.7701, "lng": -118.1937, "size": 2 },
+      { "id": "huntington-beach", "label": "Huntington Beach", "lat": 33.6603, "lng": -118.002, "size": 1 },
+      { "id": "irvine", "label": "Irvine", "lat": 33.6846, "lng": -117.8265, "size": 2 },
+      { "id": "newport-beach", "label": "Newport Beach", "lat": 33.6189, "lng": -117.9289, "size": 2 },
+      { "id": "laguna-beach", "label": "Laguna Beach", "lat": 33.5427, "lng": -117.7854, "size": 1 },
+      { "id": "dana-point", "label": "Dana Point", "lat": 33.467, "lng": -117.6981, "size": 1 },
+      { "id": "san-clemente", "label": "San Clemente", "lat": 33.4269, "lng": -117.612, "size": 2 },
+      { "id": "oceanside", "label": "Oceanside", "lat": 33.1959, "lng": -117.3795, "size": 2 },
+      { "id": "carlsbad", "label": "Carlsbad", "lat": 33.1581, "lng": -117.3506, "size": 2 },
+      { "id": "encinitas", "label": "Encinitas", "lat": 33.037, "lng": -117.292, "size": 1 },
+      { "id": "del-mar", "label": "Del Mar", "lat": 32.9595, "lng": -117.2653, "size": 1 },
+      { "id": "ucsd", "label": "UC San Diego", "lat": 32.8801, "lng": -117.234, "size": 1 },
+      { "id": "la-jolla", "label": "La Jolla", "lat": 32.8328, "lng": -117.2713, "size": 1 },
+      { "id": "pacific-beach", "label": "Pacific Beach", "lat": 32.794, "lng": -117.255, "size": 1 },
+      { "id": "little-italy", "label": "Little Italy", "lat": 32.7255, "lng": -117.169, "size": 1 },
+      { "id": "downtown-sd", "label": "Downtown San Diego", "lat": 32.7157, "lng": -117.1611, "size": 3 },
+      { "id": "coronado", "label": "Coronado", "lat": 32.6859, "lng": -117.1831, "size": 1 },
+      { "id": "chula-vista", "label": "Chula Vista", "lat": 32.6401, "lng": -117.0842, "size": 1 }
+    ]
+  },
+  "skips": [
+    "La Vida: Tiger's site also lists La Vida in San Clemente and Little Italy, but lavida.fit itself prints only Carlsbad, so only Carlsbad is a building.",
+    "Tiger Hospitality: one building (its own printed flagship address). Its other concepts (Good Enough, the Egg&Out Breakfast Club suite, the La Jolla opening) are not Work rows and get no building.",
+    "Lobster Lab and Cosmos Burger: every location their own sites print is a building, including the two Station 8 counters marked coming soon.",
+    "Not guessed: CENGO, TrustMeBro, baa atelier and BarFix print no street address and go to the Worldwide pier."
+  ]
+}

@@ -91,3 +91,58 @@
 .arc-decals>:nth-child(7n+5),.wb-door-decals>:nth-child(7n+5){--r:5deg}
 .arc-decals>:nth-child(7n+6),.wb-door-decals>:nth-child(7n+6){--r:-7deg}
 .arc-decals>:nth-child(7n+7),.wb-door-decals>:nth-child(7n+7){--r:2deg}
+
+/* the door card's picture: the pixel studio itself, crisp, with four small tags under it */
+.wb-door-shot{margin:0;display:flex;flex-direction:column;gap:12px}
+.wb-door-pic{display:block;border-radius:16px;overflow:hidden;background:#1F2023;box-shadow:0 0 0 1px var(--line-2),0 24px 50px -30px rgba(31,32,35,.6)}
+.wb-door-pic img{display:block;width:100%;height:auto;image-rendering:pixelated;transition:transform .8s var(--ease)}
+.wb-door:hover .wb-door-pic img{transform:scale(1.03)}
+.wb-door-tags{display:flex;flex-wrap:wrap;gap:12px 10px;justify-content:center}
+.wb-door-tags>:nth-child(1){--r:-3deg}.wb-door-tags>:nth-child(2){--r:2deg}.wb-door-tags>:nth-child(3){--r:-2deg}.wb-door-tags>:nth-child(4){--r:3deg}
+@media(prefers-reduced-motion:reduce){ .wb-door-pic img{transition:none} .wb-door:hover .wb-door-pic img{transform:none} }
+.wb-door-tags .dc{font-size:11px;padding:6px 10px;letter-spacing:.1em}
+
+/* ---------- the homepage door: the explorable world map ---------- */
+.wb-door{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);grid-template-areas:"text map" "panel map" "tags map";align-items:start;row-gap:18px}
+.wb-door>div:first-child{grid-area:text}
+.wb-explore{display:contents}
+.wb-map{grid-area:map;border-radius:18px;overflow:hidden;background:#2B6A8C;box-shadow:0 0 0 1px var(--line-2),0 28px 60px -34px rgba(31,32,35,.6)}
+.wb-map-svg{display:block;width:100%;height:auto}
+.wb-map-svg image{image-rendering:pixelated}
+.wb-pin{cursor:pointer;outline:none}
+.wb-pin-halo{fill:rgba(234,94,20,.22);stroke:none;transform-box:fill-box;transform-origin:center}
+.wb-pin-dot{fill:#EA5E14;stroke:#FFFFFF;stroke-width:4;transform-box:fill-box;transform-origin:center;transition:transform .35s var(--pop)}
+.wb-pin-hq .wb-pin-dot{fill:#F0B429}
+.wb-pin-hq .wb-pin-halo{fill:rgba(240,180,41,.3)}
+.wb-pin-pier .wb-pin-dot{fill:#4F9E92}
+.wb-pin-pier .wb-pin-halo{fill:rgba(79,158,146,.3)}
+.wb-pin-lab{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:.04em;fill:#FFFFFF;stroke:#1F2023;stroke-width:6px;paint-order:stroke;stroke-linejoin:round}
+.wb-pin:hover .wb-pin-dot,.wb-pin.is-on .wb-pin-dot{transform:scale(1.35)}
+.wb-pin.is-on .wb-pin-dot{fill:#1F2023;stroke:#F0B429}
+.wb-pin:focus-visible .wb-pin-halo{fill:none;stroke:#F0B429;stroke-width:5}
+@media(prefers-reduced-motion:no-preference){
+  .wb-pin-halo{animation:wb-pulse 2.4s var(--ease) infinite}
+  .wb-pin.is-on .wb-pin-halo{animation-duration:1.2s}
+  .wb-map-info.is-in{animation:wb-in .45s var(--ease) both}
+}
+@keyframes wb-pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+@keyframes wb-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.wb-map-panel{grid-area:panel}
+.wb-map-info{border-radius:16px;background:var(--paper-3);padding:16px 18px;box-shadow:0 0 0 1px var(--line)}
+.wb-map-k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.wb-map-t{font-family:var(--disp);font-weight:600;font-size:21px;line-height:1.2;color:var(--ink);margin-top:4px}
+.wb-map-s{font-size:14.5px;line-height:1.5;color:var(--muted);margin-top:6px}
+.wb-map-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.wb-map-list a{display:flex;flex-direction:column;gap:1px;padding:8px 12px;border-radius:12px;background:var(--paper-2);box-shadow:0 0 0 1px var(--line);text-decoration:none;transition:box-shadow .3s var(--work,ease)}
+.wb-map-list a:hover{box-shadow:0 0 0 2px var(--blue)}
+.wb-map-list a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wb-map-list b{font-family:var(--body);font-weight:600;font-size:14.5px;color:var(--ink)}
+.wb-map-list span{font-size:13px;color:var(--muted)}
+.wb-door .wb-door-tags{grid-area:tags;justify-content:flex-start}
+@media(prefers-reduced-motion:reduce){ .wb-pin-dot,.wb-map-list a{transition:none} }
+@media(max-width:860px){
+  .wb-door{grid-template-columns:1fr;grid-template-areas:"text" "map" "panel" "tags"}
+  .wb-door .wb-door-tags{justify-content:center}
+}
+.wb-map-district{font-family:var(--body);font-weight:700;font-size:26px;letter-spacing:.06em;fill:#F6EEDC;stroke:#1F2023;stroke-width:5px;paint-order:stroke;stroke-linejoin:round;pointer-events:none}
+.wb-map-ocean{font-family:var(--disp);font-style:italic;font-size:30px;fill:rgba(246,238,220,.75);pointer-events:none}
