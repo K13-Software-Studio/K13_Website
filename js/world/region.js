@@ -287,6 +287,8 @@ function build(){
     var rec={id:p.id,key:p.key,name:p.name,url:p.url,category:p.category,city:p.city,desc:p.desc,peek:p.peek,worldwide:!!p.pier,x:bx,y:by,w:w,h:h,dx:sz.dx,dy:sz.dy,door:{x:bx+sz.dx,y:by+h},doorTile:{x:bx+sz.dx,y:by+sz.dy},obj:o,skey:skey,
       state:(p.status==="coming-soon"||p.status==="construction")?"construction":(nw?"new":"live"),isNew:nw,status:p.status,district:p.district};
     if(quay!==true){ lots.forEach(function(l){ if(bx>=l.x-1&&bx<l.x+9&&by>=l.y-1&&by<l.y+9&&l.used) l.shop={x:bx,y:by,w:w,h:h}; }); }
+    /* the city a shop really stands in, from its real coordinates, not from where its lot landed */
+    if(!p.pier&&p.lat!=null){ var rq=toT([p.lat,p.lng]), rb2=1e9; src.cities.forEach(function(c){ var cq=toT([c.lat,c.lng]), dd=(cq[0]-rq[0])*(cq[0]-rq[0])+(cq[1]-rq[1])*(cq[1]-rq[1]); if(dd<rb2){ rb2=dd; rec.realCity=c.name; } }); }
     o.rec=rec; o.title=p.name; placesOut.push(rec); posById[p.id]=rec.door; posById[String(p.id).toLowerCase()]=rec.door;
   }
   src.places.forEach(function(p){ if(!p.pier) placePlace(p,0,0,false); });
@@ -296,7 +298,7 @@ function build(){
   function cityById(id){ var r=null; cities.forEach(function(c){ if(!r&&c.id===id) r=c; }); return r; }
   STOPS.forEach(function(s){
     var anchor=s[2]?cityById(s[2]):{x:hq.x+hq.w+8,y:hq.y+2}; if(!anchor) return;
-    var lot=nearestLot(anchor.x,anchor.y,60), sx, sy;
+    var lot=nearestLot(anchor.x,anchor.y,s[0]==="van-hq"?6:12), sx, sy;
     if(lot){ lot.used=1; sx=lot.x+2; sy=lot.y+6; } else { var sp2=findSpot(anchor.x,anchor.y,4,2); sx=sp2[0]; sy=sp2[1]; carve(sx,sy,4,2); }
     markUsed(sx,sy,4,2,0);
     var so=addObj({id:s[0],kind:"stop",x:sx,y:sy,w:4,h:2,act:"van",label:"Ride the K13 van",look:"A K13 van stop.",title:"K13 van stop: "+s[1],stopName:s[1]});
@@ -393,7 +395,11 @@ function build(){
 
   var R={w:W,h:H,ter:ter,solid:solid,fl:fl,dec:dec,vm:vm,rb:rb,lots:lots,vb:vb,vlines:vlines,objects:objects,places:placesOut,stops:stops,lamps:lamps,hq:hq,pier:pier,cities:cities,posById:posById,
     news:src.news,activity:src.activity,fallback:src.fallback,cars:cars,lanes:lanes,fb:fb,districtAt:districtAt,yLO:yLO,yOS:yOS,proj:proj,dOc:dOc,dLand:dLand};
-  R.cityAt=function(tx,ty){ var best="", bd=1e9; cities.forEach(function(c){ var dx=c.x-tx, dy=c.y-ty, d=Math.sqrt(dx*dx+dy*dy); if(d<c.r*1.25&&d<bd){ bd=d; best=c.name; } });
+  R.cityAt=function(tx,ty){ var best="", bd=1e9;
+    /* around HQ it is downtown; near a shop, the town that shop really stands in (the San Clemente lot sits nearer Dana Point's centre than its own) */
+    if(R.hq){ var hx=R.hq.door.x-tx, hy=R.hq.door.y-ty; if(hx*hx+hy*hy<324) return "Downtown San Diego"; }
+    var sp=null, sd=100; placesOut.forEach(function(r){ if(!r.realCity) return; var dx=r.door.x-tx, dy=r.door.y-ty, d=dx*dx+dy*dy; if(d<sd){ sd=d; sp=r; } });
+    if(sp) return sp.realCity; cities.forEach(function(c){ var dx=c.x-tx, dy=c.y-ty, d=Math.sqrt(dx*dx+dy*dy); if(d<c.r*1.25&&d<bd){ bd=d; best=c.name; } });
     if(R.pier&&tx>=R.pier.x&&tx<R.pier.x+R.pier.w&&ty>=R.pier.y&&ty<R.pier.y+R.pier.h) return "Worldwide pier";
     return best||DNAME[districtAt(tx,ty)]; };
   R.paintChunk=paintChunk; R.animate=animate; R.paintObject=paintObject; R.drawCars=drawCars; R.paintOverview=paintOverview; R.shop=shopDef;
