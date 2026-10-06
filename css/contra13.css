@@ -1,0 +1,79 @@
+/* K13 Run & Ship (js/contra13.js): the side-scrolling run and gun on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench subgrid;
+   this file adds the stage (HUD strip on top, board in the middle, controls underneath) and the panel.
+   The controls bar is a sibling below the board, so nothing drawn on the canvas can ever sit over a button. */
+.c13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none}
+.c13-in{width:100%;max-width:880px;margin:0 auto;display:flex;flex-direction:column}
+
+/* HUD: plain text chips above the board; the right side leaves room for the Restart pill */
+.c13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px}
+.c13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px}
+.c13-chip[hidden]{display:none}
+.c13-boss{color:var(--blue);border-color:var(--blue)}
+
+/* the board keeps the world's own shape, 16 by 9 */
+.c13-view{position:relative;width:100%;aspect-ratio:16/9;background:var(--paper-3);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.c13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.c13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* controls: pad on the left, pause in the middle, Jump and Fire on the right. Every button is 44px or more. */
+.c13-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px 14px;touch-action:none}
+.c13-dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:3px;flex:none}
+.c13-pb{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;color:var(--ink);background:var(--paper-3);border:1.5px solid var(--line-2);touch-action:none;
+  transition:color .2s var(--work,ease),border-color .2s var(--work,ease),background .2s var(--work,ease)}
+.c13-pb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.c13-pb:hover{color:var(--blue);border-color:var(--blue)}
+.c13-pb.on,.c13-pb:active{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.c13-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1 1 auto;min-width:0}
+.c13-pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;min-height:44px;padding:0 16px;border-radius:100px;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-3)}
+.c13-pill:hover{color:var(--blue);border-color:var(--blue)}
+.c13-acts{display:flex;gap:10px;flex:none}
+.c13-act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:68px;height:68px;border-radius:50%;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper-3);border:1.5px solid var(--line-3);touch-action:none;transition:background .2s var(--work,ease),color .2s var(--work,ease),transform .2s var(--pop)}
+.c13-act svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.c13-fire{color:#fff;background:var(--blue);border-color:var(--blue)}
+.c13-act.on,.c13-act:active{transform:scale(.94)}
+.c13-jump.on,.c13-jump:active{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.c13-fire.on,.c13-fire:active{background:var(--blue-2);border-color:var(--blue-2)}
+:root[data-theme="dark"] .c13-fire{color:#1A1B1E}
+.c13-pb:focus-visible,.c13-act:focus-visible,.c13-pill:focus-visible,.c13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* the panel: ready, paused, lost, deployed */
+.c13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.42)}
+.c13-over[hidden]{display:none}
+.c13-panel{width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:20px 20px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.c13-over-t{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.c13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.c13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.c13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.c13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.c13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+:root[data-theme="dark"] .c13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .c13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+:root[data-theme="dark"] .c13-over{background:rgba(10,10,12,.55)}
+
+@media(prefers-reduced-motion:no-preference){
+  .c13-panel{animation:c13-rise .45s var(--ease) both}
+}
+@keyframes c13-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .c13-pb,.c13-act,.c13-obtn{transition:none}
+  .c13-act.on,.c13-act:active{transform:none}
+}
+
+/* a phone: the board is small, so the panel tucks its copy in; the pad and the two buttons stay thumb size */
+@media(max-width:560px){
+  .c13-top{padding:8px 104px 8px 8px;gap:4px;min-height:50px}
+  .c13-chip{padding:2px 8px;font-size:10.5px}
+  .c13-view{min-height:190px;border-radius:8px}
+  .c13-panel{padding:12px 12px 10px;gap:3px}
+  .c13-over-t{font-size:19px}
+  .c13-over-s{font-size:12.5px;line-height:1.4}
+  .c13-obtn{min-height:44px;font-size:14px;padding:0 18px}
+  .c13-over-row{margin-top:4px}
+  .c13-bar{padding:10px 8px 12px;gap:6px;flex-wrap:wrap}
+  .c13-mid{order:3;flex:1 0 100%}
+  .c13-acts{margin-left:auto}
+  .c13-act{width:64px;height:64px}
+}

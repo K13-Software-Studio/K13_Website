@@ -1,0 +1,63 @@
+/* K13 Turf 13 (js/worms13.js): turn-based artillery on terrain you can dig out. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench subgrid;
+   this file only adds the stage (canvas on top, controls underneath), the HUD chips and the result panel. */
+.tf-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-3);-webkit-user-select:none;user-select:none}
+.bench .wb-stage.tf-stage{min-height:470px}
+.tf-view{position:relative;flex:1;min-height:340px}
+.tf-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;-webkit-tap-highlight-color:transparent}
+.tf-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* HUD: plain text chips over the canvas, opaque so contrast never depends on the picture behind */
+.tf-hud{position:absolute;left:10px;top:10px;right:104px;z-index:3;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.tf-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px}
+.tf-chip.on{border-color:var(--blue);color:var(--blue)}
+
+/* controls: real buttons, every one labelled */
+.tf-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.tf-grp{display:inline-flex;align-items:center;gap:6px}
+.tf-lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tf-val{font-family:var(--mono);font-size:12.5px;color:var(--ink);min-width:3.4em;text-align:center}
+.tf-btn{min-width:34px;height:34px;padding:0 10px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  touch-action:manipulation;transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.tf-btn:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.tf-btn:active:not(:disabled){transform:scale(.96)}
+.tf-btn:focus-visible,.tf-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.tf-btn:disabled{opacity:.45;cursor:not-allowed}
+.tf-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.tf-fire{margin-left:auto;min-width:112px;padding:0 22px;font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:0;color:#fff;background:var(--blue);border-color:var(--blue)}
+.tf-fire:hover:not(:disabled){color:#fff;background:var(--ink);border-color:var(--ink)}
+:root[data-theme="dark"] .tf-fire,:root[data-theme="dark"] .tf-fire:hover:not(:disabled){color:#1A1B1E}
+:root[data-theme="dark"] .tf-fire:hover:not(:disabled){background:var(--blue-2);border-color:var(--blue-2)}
+
+/* the result panel: match won, match lost */
+.tf-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:14px;background:rgba(31,32,35,.5)}
+.tf-over[hidden]{display:none}
+.tf-panel{width:min(100%,360px);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:22px 20px 20px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.tf-over-t{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.tf-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.tf-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.tf-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.tf-obtn:hover{background:var(--ink);border-color:var(--ink)}
+:root[data-theme="dark"] .tf-obtn{color:#1A1B1E}
+:root[data-theme="dark"] .tf-obtn:hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+@media(prefers-reduced-motion:no-preference){
+  .tf-panel{animation:tf-rise .5s var(--ease) both}
+}
+@keyframes tf-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .tf-btn,.tf-obtn{transition:none}
+  .tf-btn:active:not(:disabled){transform:none}
+}
+
+@media(max-width:560px){
+  .bench .wb-stage.tf-stage{min-height:520px}
+  .tf-view{min-height:330px}
+  .tf-hud{left:8px;top:8px;right:92px;gap:4px}
+  .tf-chip{padding:2px 8px;font-size:10.5px}
+  .tf-rec{display:none}
+  .tf-bar{gap:8px 12px;padding:10px}
+  .tf-btn{min-width:40px;height:40px}
+  .tf-fire{flex:1 1 100%;margin-left:0}
+}

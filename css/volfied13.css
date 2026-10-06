@@ -1,0 +1,73 @@
+/* K13 Reveal 13 (js/volfied13.js): the territory-claiming game on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench subgrid;
+   this file only adds the stage (HUD row, board, result strip, controls), the status panel and the direction buttons. */
+.vf-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-3);-webkit-user-select:none;user-select:none}
+.bench .wb-stage.vf-stage{min-height:0}
+
+/* HUD: plain text chips in their own row above the board, so nothing covers the picture */
+.vf-hud{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 96px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.vf-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px;white-space:nowrap}
+
+/* the board: 48 by 30 cells, so 8 to 5, capped so it never grows taller than a laptop screen can hold */
+.vf-view{position:relative;width:100%;max-width:780px;margin:0 auto;aspect-ratio:48/30;background:var(--paper-3);box-shadow:0 0 0 1px var(--line-2)}
+.vf-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;-webkit-tap-highlight-color:transparent}
+.vf-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* status panel over the board: level start, paused, out of lives */
+.vf-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:10px;background:rgba(31,32,35,.5)}
+.vf-over[hidden]{display:none}
+.vf-panel{width:min(100%,340px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:18px 18px 16px;border-radius:16px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.vf-over-t{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.vf-over-s{font-size:14px;line-height:1.5;color:var(--muted)}
+.vf-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
+.vf-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.vf-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.vf-obtn:focus-visible,.vf-btn:focus-visible,.vf-key:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.vf-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.vf-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .vf-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .vf-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+/* the result strip sits under the board, so the revealed site stays fully visible */
+.vf-after{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 14px;background:var(--paper-2);border-top:1px solid var(--line)}
+.vf-after[hidden]{display:none}
+.vf-after-t{min-width:0;flex:1 1 240px}
+.vf-after .vf-over-t{font-size:20px}
+.vf-after .vf-over-row{margin-top:0;justify-content:flex-start}
+
+/* controls: real buttons, every one labelled */
+.vf-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.vf-grp{display:inline-flex;align-items:center;gap:6px}
+.vf-btn{min-width:34px;height:34px;padding:0 10px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.vf-btn:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.vf-btn:disabled{opacity:.45;cursor:not-allowed}
+.vf-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.vf-pad{display:inline-flex;gap:6px;margin-left:auto}
+.vf-key{width:48px;height:44px;padding:0;border-radius:12px;font-family:var(--mono);font-size:20px;line-height:1;touch-action:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.vf-key:active{background:var(--blue);border-color:var(--blue);color:#fff;transform:scale(.96)}
+:root[data-theme="dark"] .vf-key:active{color:#1A1B1E}
+
+@media(prefers-reduced-motion:no-preference){
+  .vf-panel{animation:vf-rise .5s var(--ease) both}
+  .vf-after{animation:vf-rise .5s var(--ease) both}
+}
+@keyframes vf-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .vf-btn,.vf-obtn{transition:none}
+  .vf-key:active{transform:none}
+}
+
+@media(max-width:560px){
+  .vf-hud{gap:4px;padding:8px 84px 8px 8px}
+  .vf-chip{padding:2px 8px;font-size:10.5px}
+  .vf-bar{gap:8px 12px;padding:10px}
+  .vf-pad{flex:1 1 100%;margin-left:0;gap:8px}
+  .vf-key{flex:1;width:auto;height:52px}
+  .vf-panel{padding:12px 12px 12px;gap:4px}
+  .vf-over-t{font-size:19px}
+  .vf-over-s{font-size:12.5px;line-height:1.4}
+  .vf-obtn{min-height:40px;padding:0 18px;font-size:14px}
+  .vf-over-row{margin-top:2px}
+}

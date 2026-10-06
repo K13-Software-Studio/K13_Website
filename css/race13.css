@@ -1,0 +1,71 @@
+/* K13 Fast Track 13 (js/race13.js): the road racer on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench subgrid;
+   this file adds the stage (chips on top, road in the middle, controls underneath), the result panel and the buttons. */
+.r13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-3);-webkit-user-select:none;user-select:none}
+.r13-view{position:relative;height:clamp(320px,44vw,500px)}
+.r13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.r13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* HUD chips: above the road, never on it. The right gutter is the Restart pill. */
+.r13-hud{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 108px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.r13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px;white-space:nowrap}
+.r13-speed{display:inline-flex;align-items:center;gap:5px}
+.r13-speed b{font-weight:600;min-width:2.2em;text-align:right}
+.r13-unit{color:var(--muted)}
+.r13-meter{display:inline-block;width:44px;height:6px;border-radius:6px;background:var(--line);overflow:hidden}
+.r13-meter u{display:block;height:100%;width:0;background:var(--blue-2);text-decoration:none}
+
+/* controls: real buttons, big enough for a thumb */
+.r13-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.r13-grp{display:inline-flex;gap:10px}
+.r13-btn{min-width:96px;min-height:52px;padding:0 18px;border-radius:14px;font-family:var(--body);font-weight:600;font-size:15px;letter-spacing:0;color:var(--ink);background:var(--paper-3);border:1.5px solid var(--line-3);
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  transition:color .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--pop)}
+.r13-btn:hover{color:var(--blue);border-color:var(--blue)}
+.r13-btn:focus-visible,.r13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.r13-btn.is-down,.r13-btn:active{transform:scale(.97);background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.r13-gas{color:#fff;background:var(--blue);border-color:var(--blue);min-width:120px}
+.r13-gas:hover{color:#fff;background:var(--ink);border-color:var(--ink)}
+.r13-gas.is-down,.r13-gas:active{background:var(--blue-2);border-color:var(--blue-2);color:#fff}
+:root[data-theme="dark"] .r13-gas,:root[data-theme="dark"] .r13-gas:hover,:root[data-theme="dark"] .r13-gas.is-down{color:#1A1B1E}
+:root[data-theme="dark"] .r13-gas:hover{background:var(--blue-2);border-color:var(--blue-2)}
+.r13-pause{min-width:84px;min-height:44px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;border-radius:100px}
+
+/* the status panel: ready, paused, finished */
+.r13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:14px;background:rgba(31,32,35,.5)}
+.r13-over[hidden]{display:none}
+.r13-panel{width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:22px 20px 20px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.r13-over-t{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.r13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.r13-stats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.r13-stat{display:flex;flex-direction:column;gap:2px;min-width:84px;padding:8px 12px;border-radius:12px;background:var(--wash-mint);border:1px solid var(--line)}
+.r13-stat-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.r13-stat-v{font-family:var(--mono);font-size:15px;color:var(--ink)}
+.r13-rec{font-family:var(--mono);font-size:12px;color:var(--blue)}
+.r13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.r13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--ease),transform .3s var(--pop)}
+.r13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.r13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.r13-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .r13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .r13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+@media(prefers-reduced-motion:no-preference){
+  .r13-panel{animation:r13-rise .5s var(--ease) both}
+}
+@keyframes r13-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .r13-btn,.r13-obtn{transition:none}
+  .r13-btn.is-down,.r13-btn:active{transform:none}
+}
+
+@media(max-width:560px){
+  .r13-hud{gap:4px;padding:8px 96px 8px 8px}
+  .r13-chip{padding:2px 8px;font-size:10.5px}
+  .r13-meter{width:30px}
+  .r13-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+  .r13-grp{display:contents}
+  .r13-btn{min-width:0;min-height:56px;width:100%}
+  .r13-pause{grid-column:1/-1;grid-row:3;min-height:44px}
+}

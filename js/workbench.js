@@ -464,7 +464,7 @@ function sandwich(mount){
     function sx(t){ return ((ax*t+bx)*t+cx)*t; } function sy(t){ return ((ay*t+by)*t+cy)*t; } function dx(t){ return (3*ax*t+2*bx)*t+cx; }
     return function(x){ if(x<=0) return 0; if(x>=1) return 1; var t=x,i; for(i=0;i<8;i++){ var e=sx(t)-x; if(Math.abs(e)<1e-6) return sy(t); var d=dx(t); if(Math.abs(d)<1e-6) break; t-=e/d; } var lo=0,hi=1; t=x; for(i=0;i<20;i++){ var v=sx(t); if(Math.abs(v-x)<1e-6) break; if(v<x) lo=t; else hi=t; t=(lo+hi)/2; } return sy(t); }; }
   var PREM=bez(.22,1,.36,1), PLAY=bez(.34,1.56,.64,1), WORK=bez(.4,0,.2,1);
-  var B="assets/workbench/eggout/";
+  var B="/assets/workbench/eggout/";
   var LOAF={src:"loaf",label:"Toasted brioche bun",box:[.7375,.13125,.3],win:[.04,.13]};
   var ING=[{k:"cheddar",label:"Cheddar cheese",box:[.44,.12,.36],copies:[[.46,.46,.42]],sh:[.5,.2,.5],win:[.15,.24],rz:1,z:2},
            {k:"eggs",label:"Scrambled eggs",box:[.6125,.20625,.2136],sh:[.46,.27,.34],win:[.26,.35],rz:-1,z:5},
@@ -881,5 +881,6 @@ window.K13=window.K13||{}; window.K13.hunt=hunt;
 var games={carlos:carlos,miramar:miramar,egg:egg,cengo:cengo,eggcursor:eggcursor,sandwich:sandwich,
   goldenhour:goldenhour,pours:pours,limewash:limewash};
 document.querySelectorAll("[data-game]").forEach(function(m){ var g=games[m.getAttribute("data-game")]; if(g) g(m); });
-document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
+/* the hunt lives on the homepage; the workbench page (<html data-no-hunt>) keeps its 13s as plain text */
+if(!document.documentElement.hasAttribute("data-no-hunt")) document.querySelectorAll(".wb [data-hunt]").forEach(function(n){ hunt.place(n); });
 })();
