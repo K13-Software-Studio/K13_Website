@@ -1,0 +1,96 @@
+/* K13 Debt Breaker (js/dx13.js): the brick breaker on the workbench. Tokens come from css/site.css.
+   The card, head, restart pill, status line and footnote reuse the .wb rules in css/workbench.css;
+   this file only adds the stage: stat chips on top, the board in the middle, the controls underneath, and the panel on the board.
+   Nothing sits over the board except its own panel, and nothing sits over a button. */
+.dx13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none}
+
+/* stat chips: plain text above the board; the right side leaves room for the Restart pill */
+.dx13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.dx13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px;white-space:nowrap}
+.dx13-chip[hidden]{display:none}
+.dx13-fx{color:var(--blue);border-color:var(--blue)}
+
+/* the board keeps its own shape, 30 by 26 units, and sits centred on the stage */
+.dx13-field{display:flex;justify-content:center;padding:12px 10px;background:var(--paper-3)}
+.dx13-view{position:relative;width:100%;max-width:620px;aspect-ratio:30/26;border-radius:10px;overflow:hidden;border:1px solid var(--line-2);background:var(--paper-3)}
+.dx13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:none;-webkit-tap-highlight-color:transparent}
+.dx13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+@media(hover:none){.dx13-cv{cursor:default}}
+
+/* controls: real buttons, every one labelled; the pads are 44px or more for thumbs */
+.dx13-bar{display:flex;flex-direction:column;gap:10px;padding:10px 12px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.dx13-grp{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.dx13-lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.dx13-btn{min-width:34px;height:34px;padding:0 8px;border-radius:100px;font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.dx13-btn:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.dx13-btn:active:not(:disabled){transform:scale(.96)}
+.dx13-btn.done{background:var(--wash-mint)}
+.dx13-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.dx13-btn:disabled{opacity:.4;cursor:not-allowed}
+.dx13-btn:focus-visible,.dx13-pad:focus-visible,.dx13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+.dx13-pads{display:flex;gap:8px}
+.dx13-pad{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:1 1 0;min-width:0;height:48px;padding:0 14px;border-radius:100px;font-family:var(--body);font-weight:600;font-size:15px;color:var(--ink);background:var(--paper-3);border:1.5px solid var(--line-3);touch-action:none;-webkit-tap-highlight-color:transparent;
+  transition:color .2s var(--work,ease),border-color .2s var(--work,ease),background .2s var(--work,ease),transform .2s var(--pop)}
+.dx13-pad svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dx13-pad:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.dx13-pad.on,.dx13-pad:active:not(:disabled){background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.dx13-go{flex:1.5 1 0;color:#fff;background:var(--blue);border-color:var(--blue)}
+.dx13-go:hover:not(:disabled){color:#fff;background:var(--ink);border-color:var(--ink)}
+.dx13-go.on,.dx13-go:active:not(:disabled){background:var(--ink);border-color:var(--ink);color:#fff}
+.dx13-pause{flex:.9 1 0}
+:root[data-theme="dark"] .dx13-go,:root[data-theme="dark"] .dx13-go:hover:not(:disabled){color:#1A1B1E}
+:root[data-theme="dark"] .dx13-go:hover:not(:disabled),:root[data-theme="dark"] .dx13-go.on,:root[data-theme="dark"] .dx13-go:active:not(:disabled){background:var(--blue-2);border-color:var(--blue-2);color:#1A1B1E}
+
+/* the key hint shows only where there is a keyboard and a mouse */
+.dx13-key{display:none;font-family:var(--mono);font-size:9px;letter-spacing:.04em;line-height:1;padding:2px 5px;border-radius:4px;border:1px solid currentColor;opacity:.75;font-weight:400}
+@media(hover:hover) and (pointer:fine){ .dx13-key{display:inline-block} }
+
+/* the panel: intro, paused, level clear, out of lives; it covers the board only */
+.dx13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.5);overflow:auto}
+.dx13-over[hidden]{display:none}
+.dx13-panel{width:min(100%,400px);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:20px 18px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.dx13-over-t{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.dx13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.dx13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
+.dx13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.dx13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.dx13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.dx13-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .dx13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .dx13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+/* the capsule key on the intro panel */
+.dx13-legend{display:flex;flex-direction:column;gap:6px;width:100%}
+.dx13-leg{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;line-height:1.4;color:var(--muted)}
+.dx13-leg b{font-weight:500;color:var(--ink)}
+.dx13-cap{font-family:var(--mono);font-weight:700;font-size:10.5px;line-height:1;padding:4px 8px;border-radius:100px;color:#1F2023;background:#F6EEDC;border:1.5px solid #4F9E92}
+.dx13-cap.bad{color:#F6EEDC;background:#1F2023;border-color:var(--blue-2)}
+
+@media(prefers-reduced-motion:no-preference){
+  .dx13-panel{animation:dx13-rise .5s var(--ease) both}
+}
+@keyframes dx13-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .dx13-btn,.dx13-pad,.dx13-obtn{transition:none}
+  .dx13-btn:active:not(:disabled){transform:none}
+}
+
+@media(max-width:560px){
+  .dx13-top{gap:4px;padding:8px 100px 8px 8px}
+  .dx13-chip{padding:2px 8px;font-size:10.5px}
+  .dx13-field{padding:8px 6px}
+  .dx13-bar{padding:10px 10px 12px}
+  .dx13-pads{gap:6px}
+  .dx13-pad{padding:0 8px;gap:5px;font-size:14px}
+  .dx13-pause{flex:.8 1 0}
+  .dx13-key{display:none!important}
+  .dx13-intro-s{display:none}
+  .dx13-leg{font-size:10px;gap:4px}
+  .dx13-cap{font-size:9.5px;padding:3px 6px}
+  .dx13-panel{padding:16px 14px 14px;gap:6px}
+  .dx13-over-t{font-size:23px}
+  .dx13-over-s{font-size:13.5px}
+}

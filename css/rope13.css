@@ -1,0 +1,92 @@
+/* K13 Cut the Scope (js/rope13.js): the rope-cutting game on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench subgrid;
+   this file only adds the stage (HUD strip on top, a 4:5 board in the middle, the action buttons and the level picker underneath) and the panel. */
+.rp13-stage{display:flex;flex-direction:column;width:100%;max-width:520px;min-height:0;margin-inline:auto;justify-self:center;align-self:center;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none}
+
+/* HUD: plain text chips above the board, so nothing ever covers the play field; the right side leaves room for the Restart pill */
+.rp13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.rp13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px}
+.rp13-req{display:inline-flex;gap:2px;letter-spacing:0;font-size:13px;line-height:1.2;padding:2px 10px}
+.rp13-req i{font-style:normal;color:var(--line-3)}
+.rp13-req i.on{color:#F0B429}
+
+/* the board is always 4 by 5 */
+.rp13-view{position:relative;width:100%;aspect-ratio:4/5;background:var(--paper-3)}
+.rp13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;-webkit-tap-highlight-color:transparent}
+.rp13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* actions under the board: one button per rope, then pop and puff when the level has them */
+.rp13-ctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.rp13-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),box-shadow .3s var(--work,ease),transform .3s var(--pop)}
+.rp13-bl{white-space:nowrap}
+.rp13-act svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.rp13-act:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.rp13-act:active:not(:disabled){transform:scale(.96)}
+.rp13-act:disabled{opacity:.4;cursor:not-allowed}
+.rp13-hot:not(:disabled){color:var(--blue);border-color:var(--blue);box-shadow:0 0 0 2px var(--blue)}
+.rp13-key{display:none;font-family:var(--mono);font-size:9px;letter-spacing:.04em;line-height:1;padding:2px 5px;border-radius:4px;border:1px solid currentColor;opacity:.75;text-transform:none}
+@media(hover:hover) and (pointer:fine){ .rp13-key{display:inline-block} }
+
+/* four or more buttons sit in two even columns, and a lone last one spans both */
+.rp13-many{display:grid;grid-template-columns:1fr 1fr}
+.rp13-many .rp13-act:last-child:nth-child(odd){grid-column:1/-1}
+
+/* level picker: twelve real buttons, the stars you saved sit under each number */
+.rp13-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.rp13-lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.rp13-lv{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:38px;height:44px;padding:0 6px;border-radius:14px;font-family:var(--mono);font-size:12px;line-height:1;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.rp13-lv:hover:not(:disabled){color:var(--blue);border-color:var(--blue)}
+.rp13-lv:active:not(:disabled){transform:scale(.96)}
+.rp13-lv.done{background:var(--wash-mint)}
+.rp13-lv[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.rp13-lv:disabled{opacity:.4;cursor:not-allowed}
+.rp13-pips{display:flex;gap:3px}
+.rp13-pips i{width:5px;height:5px;border-radius:50%;background:var(--line-3)}
+.rp13-pips i.on{background:#F0B429}
+.rp13-lv:focus-visible,.rp13-act:focus-visible,.rp13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* the panel: level intro, paused, fed, spiked, all twelve fed */
+.rp13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.42)}
+.rp13-over[hidden]{display:none}
+.rp13-panel{width:min(100%,340px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:20px 20px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.rp13-over-t{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.rp13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.rp13-over-stars{display:flex;gap:6px;font-size:26px;line-height:1;color:var(--line-3)}
+.rp13-over-stars .on{color:#F0B429}
+.rp13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.rp13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.rp13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.rp13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.rp13-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .rp13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .rp13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+:root[data-theme="dark"] .rp13-over{background:rgba(10,10,12,.55)}
+
+@media(prefers-reduced-motion:no-preference){
+  .rp13-panel{animation:rp13-rise .45s var(--ease) both}
+}
+@keyframes rp13-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .rp13-lv,.rp13-act,.rp13-obtn{transition:none}
+  .rp13-lv:active:not(:disabled),.rp13-act:active:not(:disabled){transform:none}
+}
+
+/* on a phone the board is about 300px wide: the panel tucks its copy in and every button keeps a 44px target */
+@media(max-width:560px){
+  .rp13-nm{display:none}
+  .rp13-top{padding:8px 104px 8px 8px;gap:4px;min-height:50px}
+  .rp13-chip{padding:2px 8px;font-size:10.5px}
+  .rp13-ctl{display:grid;grid-template-columns:1fr 1fr;padding:8px;gap:6px}
+  .rp13-ctl .rp13-act:last-child:nth-child(odd){grid-column:1/-1}
+  .rp13-act{padding:0 10px;font-size:11px}
+  .rp13-act svg{display:none}
+  .rp13-panel{padding:14px 14px 12px;gap:4px}
+  .rp13-over-t{font-size:20px}
+  .rp13-over-s{font-size:13px}
+  .rp13-over-stars{font-size:22px}
+  .rp13-obtn{min-height:44px;font-size:14px;padding:0 18px}
+  .rp13-bar{padding:8px;gap:5px}
+}
