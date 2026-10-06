@@ -1,0 +1,59 @@
+/* K13 Deadline Run (js/heli13.js): the one-button cave flyer on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css; this file adds the stage
+   (HUD chips on top, a 4:3 board in the middle, the big hold button underneath) and the result panel. */
+.hl13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none;flex:0 0 auto}
+
+/* HUD: plain chips above the board, so nothing ever covers the tunnel; the right side leaves room for the Restart pill */
+.hl13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.hl13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px}
+.hl13-best{color:var(--blue);border-color:var(--blue)}
+
+/* the board: 400 by 300 units */
+.hl13-view{position:relative;width:100%;aspect-ratio:4/3;background:var(--paper-2);overflow:hidden}
+.hl13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hl13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* the control bar sits below the board in normal flow, never over it */
+.hl13-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.hl13-hold{flex:1;min-height:56px;border-radius:100px;font-family:var(--body);font-weight:700;font-size:17px;letter-spacing:.01em;color:#fff;background:var(--blue);border:1.5px solid var(--blue);
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:background .2s var(--work,ease),transform .2s var(--pop)}
+.hl13-hold:hover{background:var(--ink);border-color:var(--ink)}
+.hl13-hold.on,.hl13-hold:active{background:var(--blue-2);border-color:var(--blue-2);transform:scale(.985)}
+.hl13-hold:focus-visible,.hl13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+:root[data-theme="dark"] .hl13-hold,:root[data-theme="dark"] .hl13-obtn{color:#1A1B1E}
+:root[data-theme="dark"] .hl13-hold:hover,:root[data-theme="dark"] .hl13-obtn:hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+/* the panel: paused, crashed */
+.hl13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.42)}
+.hl13-over[hidden]{display:none}
+.hl13-panel{width:min(100%,340px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:20px 20px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.hl13-over-t{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.hl13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.hl13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.hl13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.hl13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+:root[data-theme="dark"] .hl13-over{background:rgba(10,10,12,.55)}
+
+@media(prefers-reduced-motion:no-preference){
+  .hl13-panel{animation:hl13-rise .45s var(--ease) both}
+}
+@keyframes hl13-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .hl13-hold,.hl13-obtn{transition:none}
+  .hl13-hold.on,.hl13-hold:active{transform:none}
+}
+
+@media(max-width:560px){
+  .hl13-top{padding:8px 104px 8px 8px;gap:4px;min-height:50px}
+  .hl13-chip{padding:2px 8px;font-size:10.5px}
+  .hl13-panel{padding:14px 14px 12px;gap:4px}
+  .hl13-over-t{font-size:22px}
+  .hl13-over-s{font-size:13px}
+  .hl13-obtn{min-height:40px;font-size:14px;padding:0 18px}
+  .hl13-bar{padding:8px}
+}
+
+/* on the full-width row the board keeps a sensible size and sits centred */
+.bench-wide .hl13-view{max-width:620px;margin:0 auto}

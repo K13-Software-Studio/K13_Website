@@ -1,0 +1,93 @@
+/* K13 workbench page + arcade: the /workbench/ page, its arcade cabinet and decals, and the homepage card that leads there.
+   Tokens come from css/site.css; the toys and games reuse the .bench and .wb rules. Decals are free-standing stickers:
+   a full border all round, a hard offset shadow, a small tilt; never a band along an edge. */
+
+/* ---------- the page ---------- */
+.sub-page main{padding-top:clamp(72px,9vw,96px)}
+.sub-page .workbench{border-top:0;padding-top:clamp(20px,3vw,36px)}
+.sub-page .bench-card{scroll-margin-top:90px}
+
+/* ---------- decals ---------- */
+.dc{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;line-height:1;
+  padding:8px 12px;border-radius:8px;border:2px solid #1F2023;box-shadow:3px 3px 0 #1F2023;color:#1F2023;background:#FFFFFF;transform:rotate(var(--r,0deg));white-space:nowrap}
+.dc-or{background:#EA5E14}
+.dc-gold{background:#F0B429}
+.dc-jade{background:#4F9E92}
+.dc-ink{background:#1F2023;color:#F3F5FA;border-color:#F3F5FA;box-shadow:3px 3px 0 #EA5E14}
+.dc-round{border-radius:100px;padding:8px 14px}
+.dc-px{font-size:15px;letter-spacing:.06em;padding:6px 10px}
+.dc svg{width:18px;height:18px;flex:none}
+.dc .hunt-mark{color:inherit;margin:-6px -2px;min-width:22px;min-height:22px}
+@media(prefers-reduced-motion:no-preference){
+  .dc-blink b{animation:dc-blink 1.2s steps(1) infinite}
+}
+@keyframes dc-blink{50%{opacity:.3}}
+
+/* ---------- the homepage card that opens the workbench ---------- */
+.bench-card.wb-door{min-height:0}
+.wb-door{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px 32px;align-items:center;padding:clamp(22px,3vw,34px)}
+.wb-door .wb-title{font-size:clamp(24px,2.6vw,30px)}
+.wb-door p{font-size:15.5px;line-height:1.55;color:var(--muted);margin-top:10px;max-width:54ch}
+.wb-door-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.wb-door-stats b{color:var(--ink);font-weight:600}
+.wb-door-decals{display:flex;flex-wrap:wrap;gap:16px 14px;justify-content:center;align-content:center;padding:18px;border-radius:18px;background:#1F2023}
+:root[data-theme="dark"] .wb-door-decals{background:#141518;box-shadow:0 0 0 1px var(--line)}
+.wb-go{display:inline-flex;align-items:center;gap:10px;margin-top:18px;min-height:46px;padding:0 24px;border-radius:100px;font-family:var(--body);font-weight:600;font-size:15px;
+  color:#fff;background:var(--blue);border:1.5px solid var(--blue);text-decoration:none;transition:background .3s var(--work,ease)}
+.wb-go:hover{background:var(--ink);border-color:var(--ink)}
+.wb-go:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wb-go svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s var(--ease)}
+.wb-go:hover svg{transform:translateX(4px)}
+:root[data-theme="dark"] .wb-go{color:#1A1B1E}
+:root[data-theme="dark"] .wb-go:hover{background:var(--blue-2);border-color:var(--blue-2)}
+
+/* ---------- the arcade cabinet: a graphite room inside the page, the games are lit screens in it ---------- */
+.arcade{padding:clamp(40px,6vw,80px) 0 clamp(60px,8vw,110px)}
+.arc-cab{position:relative;border-radius:28px;background:#1F2023;padding:clamp(22px,4vw,48px) clamp(16px,3vw,40px) clamp(22px,3.5vw,40px);
+  background-image:radial-gradient(rgba(243,245,250,.07) 1px,transparent 1.4px);background-size:14px 14px}
+:root[data-theme="dark"] .arc-cab{background-color:#141518;box-shadow:0 0 0 1px var(--line)}
+.arc-head{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px 40px;align-items:center}
+.arc-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#F0B429}
+.arc-title{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6.4vw,84px);line-height:.95;letter-spacing:-.02em;color:#F3F5FA;margin-top:12px}
+.arc-title i{font-style:italic;color:#EA5E14}
+.arc-sub{font-size:15.5px;line-height:1.55;color:#B1B2B6;margin-top:16px;max-width:52ch}
+.arc-decals{position:relative;display:flex;flex-wrap:wrap;gap:18px 14px;justify-content:center;align-content:center;min-height:180px}
+.arc-coin{width:64px;height:64px;transform:rotate(var(--r,0deg))}
+
+/* the game index, lit for the dark cabinet */
+.arc-index{list-style:none;margin:clamp(26px,3.5vw,38px) 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.arc-index a{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;border-radius:100px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;
+  color:#F3F5FA;background:rgba(243,245,250,.06);border:1px solid rgba(243,245,250,.22);text-decoration:none;transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease)}
+.arc-index a:hover{color:#1F2023;background:#F0B429;border-color:#F0B429}
+.arc-index a:focus-visible{outline:2px solid #F0B429;outline-offset:3px}
+.arc-index a span{color:#999A9E;transition:color .3s var(--work,ease)}
+.arc-index a:hover span{color:#1F2023}
+.arc-cab .bench{margin-top:clamp(26px,3.5vw,40px)}
+
+/* a picked game says hello: a whole-border ring that fades, so the eye lands on the right card */
+.bench-card.arc-hi{animation:arc-hi 1.4s var(--ease) both}
+@keyframes arc-hi{0%{box-shadow:0 0 0 0 rgba(240,180,41,0)}20%{box-shadow:0 0 0 4px rgba(240,180,41,.75)}100%{box-shadow:0 0 0 4px rgba(240,180,41,0)}}
+
+@media(prefers-reduced-motion:reduce){
+  .bench-card.arc-hi{animation:none}
+  .wb-go,.wb-go svg,.arc-index a,.arc-index a span{transition:none}
+  .wb-go:hover svg{transform:none}
+}
+@media(max-width:860px){
+  .wb-door,.arc-head{grid-template-columns:1fr}
+  .arc-decals{min-height:0;justify-content:flex-start}
+}
+@media(max-width:560px){
+  .arc-cab{border-radius:20px}
+  .dc{font-size:11px;padding:7px 10px}
+  .arc-coin{width:52px;height:52px}
+}
+
+/* each decal sits at its own small tilt (set here: the site's CSP blocks inline style attributes) */
+.arc-decals>:nth-child(7n+1),.wb-door-decals>:nth-child(7n+1){--r:-6deg}
+.arc-decals>:nth-child(7n+2),.wb-door-decals>:nth-child(7n+2){--r:8deg}
+.arc-decals>:nth-child(7n+3),.wb-door-decals>:nth-child(7n+3){--r:4deg}
+.arc-decals>:nth-child(7n+4),.wb-door-decals>:nth-child(7n+4){--r:-3deg}
+.arc-decals>:nth-child(7n+5),.wb-door-decals>:nth-child(7n+5){--r:5deg}
+.arc-decals>:nth-child(7n+6),.wb-door-decals>:nth-child(7n+6){--r:-7deg}
+.arc-decals>:nth-child(7n+7),.wb-door-decals>:nth-child(7n+7){--r:2deg}

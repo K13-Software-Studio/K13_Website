@@ -1,0 +1,83 @@
+/* K13 Ship Run (js/platform13.js): the side-scrolling platformer on the workbench. Tokens come from css/site.css.
+   The card, head, reset pill, status line and footnote reuse the .wb rules in css/workbench.css and the bench grid;
+   this file only adds the stage (HUD strip on top, board in the middle, controls and level row underneath) and the panel. */
+.p13-stage{display:flex;flex-direction:column;padding:0;background:var(--paper-2);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+
+/* HUD: plain text chips above the board, so nothing ever covers the game; the right side leaves room for the Restart pill */
+.p13-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:54px;padding:10px 120px 10px 10px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.p13-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.4;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);border-radius:100px;padding:3px 10px;white-space:nowrap}
+.p13-chip[hidden]{display:none}
+.p13-deaths{color:var(--blue);border-color:var(--blue)}
+
+/* the board keeps the 320 by 176 pixel frame, drawn at a whole-number scale and stretched crisp */
+.p13-view{position:relative;width:100%;aspect-ratio:20/11;background:var(--paper-3)}
+.p13-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent;image-rendering:pixelated;image-rendering:crisp-edges;image-rendering:pixelated}
+.p13-cv:focus-visible{outline:3px solid var(--blue);outline-offset:-4px}
+
+/* controls: a real row under the board, never over it */
+.p13-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.p13-pad{display:flex;gap:10px}
+.p13-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:96px;min-height:52px;padding:0 16px;border-radius:14px;font-family:var(--body);font-weight:600;font-size:15px;color:var(--ink);
+  background:var(--paper-3);border:1.5px solid var(--line-3);touch-action:none;-webkit-tap-highlight-color:transparent;
+  transition:background .2s var(--work,ease),border-color .2s var(--work,ease),transform .2s var(--pop)}
+.p13-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.p13-btn:hover{border-color:var(--blue);color:var(--blue)}
+.p13-btn.on{background:var(--wash-blue);border-color:var(--blue);color:var(--blue);transform:scale(.97)}
+.p13-jump{min-width:128px;color:#fff;background:var(--blue);border-color:var(--blue)}
+.p13-jump:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.p13-jump.on{background:var(--ink);border-color:var(--ink);color:#fff}
+:root[data-theme="dark"] .p13-jump{color:#1A1B1E}
+:root[data-theme="dark"] .p13-jump:hover,:root[data-theme="dark"] .p13-jump.on{background:var(--blue-2);border-color:var(--blue-2);color:#1A1B1E}
+.p13-btn:focus-visible,.p13-lv:focus-visible,.p13-obtn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* level row: two level buttons and a pause button */
+.p13-lvrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:var(--paper-2);border-top:1px solid var(--line)}
+.p13-lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.p13-lv{min-width:34px;height:34px;padding:0 10px;border-radius:100px;font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--paper-3);border:1px solid var(--line-2);
+  transition:color .3s var(--work,ease),border-color .3s var(--work,ease),background .3s var(--work,ease),transform .3s var(--pop)}
+.p13-lv:hover{color:var(--blue);border-color:var(--blue)}
+.p13-lv:active{transform:scale(.96)}
+.p13-lv.done{background:var(--wash-mint)}
+.p13-lv[aria-pressed="true"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.p13-pause{margin-left:auto;min-width:64px}
+
+/* the panel: level intro, paused, shipped */
+.p13-over{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:12px;background:rgba(31,32,35,.42)}
+.p13-over[hidden]{display:none}
+.p13-panel{width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:20px 20px 18px;border-radius:18px;
+  background:var(--paper-2);color:var(--ink);border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(31,32,35,.6)}
+.p13-over-t{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.p13-over-s{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.p13-over-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.p13-obtn{font-family:var(--body);font-weight:600;font-size:15px;min-height:44px;padding:0 22px;border-radius:100px;color:#fff;background:var(--blue);border:1.5px solid var(--blue);transition:background .3s var(--work,ease),transform .3s var(--pop)}
+.p13-obtn:hover{background:var(--ink);border-color:var(--ink)}
+.p13-obtn.ghost{color:var(--ink);background:transparent;border-color:var(--line-3)}
+.p13-obtn.ghost:hover{color:var(--blue);background:transparent;border-color:var(--blue)}
+:root[data-theme="dark"] .p13-obtn:not(.ghost){color:#1A1B1E}
+:root[data-theme="dark"] .p13-obtn:not(.ghost):hover{background:var(--blue-2);border-color:var(--blue-2)}
+:root[data-theme="dark"] .p13-over{background:rgba(10,10,12,.55)}
+
+@media(prefers-reduced-motion:no-preference){
+  .p13-panel{animation:p13-rise .45s var(--ease) both}
+}
+@keyframes p13-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .p13-btn,.p13-lv,.p13-obtn{transition:none}
+  .p13-btn.on,.p13-lv:active{transform:none}
+}
+
+/* on a phone the board is small: tighter HUD and panel, thumb-size buttons that still fit one row */
+@media(max-width:560px){
+  .p13-top{padding:8px 104px 8px 8px;gap:4px;min-height:50px}
+  .p13-chip{padding:2px 8px;font-size:10.5px}
+  .p13-bar{padding:8px;gap:8px}
+  .p13-pad{gap:8px}
+  .p13-btn{min-width:72px;min-height:52px;padding:0 10px;gap:5px;font-size:14px}
+  .p13-jump{min-width:96px}
+  .p13-panel{padding:12px 14px 10px;gap:3px}
+  .p13-over-t{font-size:18px}
+  .p13-over-s{font-size:12.5px;line-height:1.4}
+  .p13-obtn{min-height:40px;font-size:14px;padding:0 18px}
+  .p13-over-row{margin-top:4px}
+  .p13-lvrow{padding:8px}
+}
