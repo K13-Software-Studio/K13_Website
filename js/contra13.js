@@ -37,7 +37,7 @@ var stage=el("div","wb-stage c13-stage"); stage.setAttribute("aria-describedby",
 var reset=el("button","wb-reset",'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg><span>Restart</span>');
 reset.type="button"; reset.setAttribute("aria-label","Restart the run"); stage.appendChild(reset);
 var read=el("div","wb-read"); read.setAttribute("role","status"); read.setAttribute("aria-live","polite"); mount.appendChild(read);
-mount.appendChild(txt("p","wb-foot","Arrows or WASD move and aim, Space or Z jumps, X or F fires, down ducks, down plus jump drops through a platform, Esc pauses, R restarts. On a phone, use the pad and the two big buttons. Your best score is kept on this device."));
+mount.appendChild(txt("p","wb-foot","Arrows or WASD move and aim, Space or Z jumps, X or F fires (or press on the board), down ducks, down plus jump drops through a platform, Esc pauses, R restarts. On a phone, use the pad and the two big buttons. Your best score is kept on this device."));
 function say(t){ read.innerHTML=""; if(t) read.appendChild(txt("span","",t)); }
 
 var inner=el("div","c13-in"); stage.appendChild(inner);
@@ -92,9 +92,9 @@ pauseBtn.addEventListener("click",function(){ if(mode==="play") pause(); else if
 pauseBtn.addEventListener("mousedown",function(e){ e.preventDefault(); });
 mid.appendChild(pauseBtn);
 var acts=el("div","c13-acts"); bar.appendChild(acts);
-var jumpBtn=el("button","c13-act c13-jump",'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg><span>Jump</span>');
+var jumpBtn=el("button","c13-act c13-jump",'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg><span>Jump</span><kbd class="c13-key" aria-hidden="true">Space</kbd>');
 jumpBtn.type="button"; jumpBtn.setAttribute("aria-label","Jump");
-var fireBtn=el("button","c13-act c13-fire",'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><span>Fire</span>');
+var fireBtn=el("button","c13-act c13-fire",'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><span>Fire</span><kbd class="c13-key" aria-hidden="true">X</kbd>');
 fireBtn.type="button"; fireBtn.setAttribute("aria-label","Fire");
 acts.appendChild(jumpBtn); acts.appendChild(fireBtn);
 bindHold(jumpBtn,"jump",function(){ if(G) G.jumpPress=true; });
@@ -135,7 +135,7 @@ function panel(title,sub,buttons){
 function showReady(){
   mode="ready"; clearInput();
   panel("Run & Ship","Clear the bugs and template bots on the way to the deploy. A legacy server is waiting at the end. Three lives.",[{label:"Start",go:function(){ begin(); }}]);
-  say("Ready. Press Start, then run right. Space jumps, X fires, hold up or down to aim.");
+  say("Ready. Press Start, then run right. Space jumps, X fires (or press on the board), hold up or down to aim.");
 }
 function newRun(){ G=newGame(); sig=""; fitNow(); showReady(); hud(); wake(); }
 function restart(){ G=newGame(); sig=""; mode="ready"; begin(); say("New run. Go right."); }
@@ -174,7 +174,12 @@ mount.addEventListener("keydown",function(e){
   if(e.ctrlKey||e.metaKey||e.altKey) return;
   if((e.key==="r"||e.key==="R")&&(e.target===cv||over.contains(e.target))){ e.preventDefault(); restart(); }
 });
-cv.addEventListener("pointerdown",function(){ focusBoard(); });
+/* pressing on the board fires too, held for autofire: the obvious thing to try with a mouse or a thumb */
+cv.addEventListener("pointerdown",function(e){
+  focusBoard(); if(e.button>0||mode!=="play"||!G) return;
+  e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} held.board=1; G.firePress=true;
+});
+["pointerup","pointercancel","lostpointercapture"].forEach(function(n){ cv.addEventListener(n,function(){ held.board=0; }); });
 cv.addEventListener("blur",function(){
   clearInput();
   if(mode!=="play") return;
@@ -184,7 +189,7 @@ reset.addEventListener("click",function(){ restart(); });
 function input(){
   var l=kb.l,r=kb.r,u=kb.u,d=kb.d,j=kb.jump,f=kb.fire;
   for(var id in dirBtn){ if(held[id]){ var q=dirBtn[id]; l|=q[2]; r|=q[3]; u|=q[4]; d|=q[5]; } }
-  return {l:l,r:r,u:u,d:d,jump:j||held.jump,fire:f||held.fire};
+  return {l:l,r:r,u:u,d:d,jump:j||held.jump,fire:f||held.fire||held.board};
 }
 
 /* ---------- the game step ---------- */
