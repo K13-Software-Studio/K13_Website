@@ -158,6 +158,15 @@ delete posts.gangaa;   /* one id for Tony; people.js may call him tony */
 var postsOut={};
 Object.keys(posts).forEach(function(k){ var p=posts[k]; postsOut[k]={x:p.x,y:p.y,room:p.room,wander:p.wander,name:p.name}; });
 
+/* ---------- spots: where the day's routines happen (tiles; the engine snaps each to the nearest free tile) ---------- */
+var spots={
+  coffee:[[20,14],[21,14],[19,14],[22,14],[20,15],[21,15],[19,15],[22,15]],          /* in front of the coffee machine */
+  standup:[[20,2],[21,2],[22,2],[23,2],[24,2],[21,3],[22,3],[23,3],[20,3],[24,3]],   /* in front of the whiteboard */
+  couchFront:[20,18], couch:[20.5,17.1],                                           /* Pixel's couch: the tile in front, and where she sits on it (feet, in tiles) */
+  sunny:[30,4],                                                                   /* the patch the studio windows light up by day */
+  cat:[[22,17],[24,16],[18,24],[30,24],[33,29],[26,9],[20,8],[31,9],[8,10],[41,16],[44,20],[30,19]]
+};
+
 /* ---------- lamps (the engine glows them at night) ---------- */
 var lights=[
   {x:26,y:6,r:9,c:"warm"},{x:20,y:6,r:6,c:"warm"},{x:32,y:6,r:6,c:"warm"},
@@ -177,6 +186,7 @@ var map={
   objects:objects,
   posts:postsOut,
   lights:lights,
+  spots:spots,
   games:games.map(function(a){ return {id:a[0],title:a[1]}; }),
   toys:toys,
   backDoor:BACKDOOR
