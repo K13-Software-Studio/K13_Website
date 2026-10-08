@@ -140,6 +140,52 @@
      gasstation 5x4 (corner station, orange canopy, two pumps, store, glows at night), school 7x4 (brick, flag, SCHOOL),
      church 4x5 (stucco, tile roof, bell tower), park-small 5x5 (fountain, paths, benches, trees, flowers; floor layer),
      median-h 4x3 and median-v 1x4 (tree-lined median strip with palms and shrubs; tile it along a boulevard).
+   ROUND 4: THE PLACE'S OWN THINGS  (2026-10-06; docs/WORKBENCH_WORLD_4.md)  every object takes obj.palette = ['#hex', ...]
+     (the live site's colours; anything purple or indigo is refused and the object's own colour is used) and passes it through
+     the light like every other object. Text is drawn in the pixel font: capitals, digits and . , : ! ? - + / ' ( ) $ # = _ ;
+     accents are folded (Ç Ğ İ Ö Ş Ü), '&' is a real 5-wide ampersand (extra air beside it), anything else is dropped. All animation is still under reduced motion.
+   SIGNATURE OBJECTS  objectAt(ctx, {id: kind, palette, label?}, ...) or town.signature(ctx, kind, palette, px, py, s, t, light, label)
+     kind     size  stands for              palette[0..]                      anchors / motion
+     stage    4x3   Miramar                 curtains, gold trim               theatre stage, curtains, footlights chase, projector beam + film frame
+     stalls   4x3   Station8                awning, cream, produce green      two market stalls with produce, signs FARM and FISH, swinging lamp
+     aquarium 3x3   Lobster Lab             water tint, lobster red           tank on a stand, a lobster walks, bubbles rise (label on the stand)
+     griddle  3x2   Cosmos Burger           red, orange, cream (never purple) flat-top with four smash burgers, steam, ticket rail, hood sign (label)
+     greenery 4x3   La Vida                 flower accent                     living plant wall (sways) + juice bar with blender and glasses (label = board)
+     brandwall 4x3  Tiger Hospitality       one badge colour each (10)        wall of brand badges (obj.badges = ['MM','LV',...]), a light walks along them
+     djbooth  4x3   CENGO                   neon colour                       speaker stacks, two decks (platters spin), mixer, neon sign flickers. At h=2 (4x2) it is the old compact club booth
+     ticker   4x3   TrustMeBro              (fixed screens)                   bar chart, line, scrolling ticker band, obj.stats = ['+312','4.2X',...] , LIVE dot
+     plaster  3x3   baa atelier             up to four sample colours         limewash, Roman clay and stucco panels, swatch strip, bucket and trowel (still)
+     scalebar 4x3   BarFix                  accent bottle                     bottle shelf, bar, brass scale with a live readout (523G +-2)
+     mural    4x3   Carlos Almaraz          fire: red, orange, gold, deep red mural wall, easel with a canvas, paint pots, a light sweeps across
+     eggbar   4x2   Egg&Out                 egg-yellow counter                yolk counter, two pans with sunny-side-up eggs, steam, egg basket
+     town.signatureKinds lists them; town.signatureInfo(kind) -> {kind,w,h,layer}. Anchor = top-left tile; the object stands on its bottom row.
+   MENU BOARD   town.menuBoard(ctx, items, x, y, w, h, s, palette, t, light, title)  x,y = destination pixels, w,h in tiles (3x2 shows 3 lines,
+     4x2 shows 3 lines of 10 characters). items = [{item, price?}] or strings; prices in the gold column, a name that does not fit
+     scrolls back and forth (first letters still under reduced motion, ending with a dot), more items than lines page every 4 s.
+     As an object: {id:'menuboard', w, h, items, palette, title, style:'chalk'|'light', empty:'text shown when items is empty'} (layer wall).
+   BRAND COUNTER   town.counter(ctx, key, name, palette, px, py, s, t, light, state)  px,py = top-left of the 4x2 counter, the 4x1 hanging sign
+     is drawn one tile above it. state 'soon' (or key 'coming-soon') covers it with a sheet and a COMING SOON card. Objects: 'brandcounter'
+     4x2 {brand:key, name, palette, state} (little brand props by key: egg, cosmos/burger, lobster, vida, tiger, station) and 'brandsign' 4x1
+     (layer wall) {text, palette}; a name too long for one line splits in two (TIGER / HOSPITALITY).
+   KIOSK   town.kiosk(ctx, px, py, s, t, light)  1x2: a tall screen on a stand with a soft scrolling page and a glow. Object id 'kiosk'.
+   MOTIF DECOR   town.motif(ctx, word, x, y, s, palette, variant, t, light) draws piece (variant mod n) of the word's set and returns
+     {id,w,h,layer}; town.motifPieces(word) lists the set so the world can place them. Words (and aliases such as beach, lobster, egg, burger,
+     stage, farm, dj, records, limewash, juice, plant, steel): coastal nautical sunshine fire theatre market neon vinyl plaster citrus
+     botanical industrial; an unknown word gets posters and frames that spell it. Objects, all {motif:'<theme>', palette, v}:
+     poster 1x2 wall, picture 2x1 wall, planter 1x2 (v 0,1,2), cratestack 1x1, stringlights 4x1 wall (resize w, twinkles, glows), tilepatch 2x2 floor,
+     buoy 1x2, ropecoil 1x1. town.motifThemes lists the twelve.
+   HALL FURNITURE   communal 6x3 (long table, stools both sides, palette[0..3] = stool colours), sharedseat 3x2 (bench + two stools),
+     hallsign 6x2 wall {text, sub, palette}.
+   HALL INTERIOR  town.hallInterior(counters, opts) counters = ['EggOut', {key, name?, palette?, menu?:[{item,price}], state?:'soon', toy?:false}, ...],
+     opts = {name:'MIRAMAR FOOD HALL', sub:'SAN CLEMENTE', palette}. Width max(16, 5N+3) x 15 tiles, four wall rows (sign on row 0, menu board rows 1-2),
+     the counters stand at y=5 with a staff aisle at row 4. Returns {id,category:'foodhall',name,w,h,tiles,legend,objects,spawn,door,host,hosts,counters,toys,kiosk,slots}:
+       hosts[i] = {key,x,y,counter}  feet position behind counter i (the counter object also has slot:'host' and counter:key)
+       toys[i]  = {key,x,y,w:2,h:2} or null  (a toybench object, slot:'toy', counter:key)         kiosk = {x,y,w:1,h:2} (slot:'kiosk')
+       slots = {toy, toys, host, hosts, kiosk}.  Communal tables and shared seating fill the middle, a hall sign hangs over the door (wall layer).
+       There is no slot:'frame': the kiosk is the site screen now.
+   SHOP INTERIOR  town.shopInterior(key, palette, signatureKind, opts) opts = {name, menu, title, motif, state, label, stats, badges}. 16+ x 12 tiles, same
+     contract: sign + menu board on the back wall, brand counter with host at (3.5, 5), the signature object at the right of the back wall (slot-less,
+     returned as signature = {kind,x,y,w,h}), kiosk (slot 'kiosk'), toy bench (slot 'toy'), rug, two tables. Floors and walls follow the shop's category.
    NOTE  the pixel font has capitals only, so signs read in capitals ("BAA ATELIER"). Distances on the Worldwide
      pier are miles from San Diego, rounded. */
 (function () {
@@ -170,7 +216,8 @@
     stucco: "#EFE4CC", stuccoD: "#D8C9A6", terra: "#C8623A", terraD: "#A04A29", terraL: "#DE7C4E",
     mail: "#2A5C8A", mailD: "#1F4668", silver: "#B9BEC8", silverD: "#8E939D", blue: "#2E6FA8", blueD: "#245A89",
     olive: "#8C9A3A", oliveD: "#6E7B2A", pink: "#F4B6BE", greenD: "#0F5A4A", green: "#17705C", tan: "#D9C99A", brownD: "#4A3326",
-    brick: "#B2653F", brickD: "#8F4E2E", brickL: "#C77E54", yolk: "#F6C945", yolkD: "#D9A82A", lime: "#E9E1CF", limeD: "#D3C8AF", limeL: "#F4EEDF"
+    brick: "#B2653F", brickD: "#8F4E2E", brickL: "#C77E54", yolk: "#F6C945", yolkD: "#D9A82A", lime: "#E9E1CF", limeD: "#D3C8AF", limeL: "#F4EEDF",
+    sheet: "#D9D2C2", sheetS: "#B8B09E"
   };
   var LIT = { orange: "#FF8A3D", gold: "#FFC83D", jade: "#5FD1BE", plant: "#6BD08A", cream: "#FFF3D6", white: "#FFFFFF", red: "#FF5A3C", yellow: "#FFD93D", amber: "#FFB347" };
   var NF = [0.5, 0.56, 0.68];
@@ -233,10 +280,12 @@
       for (j = -ry; j <= ry; j++) { w = Math.round(rx * Math.sqrt(Math.max(0, 1 - (j * j) / ((ry + 0.5) * (ry + 0.5))))); p.r(cx - w, cy + j, w * 2 + 1, 1, col, a); }
     };
     p.txt = function (str, x, y, col, sz, gap) {
-      var i, r, c, g; sz = sz || 1; gap = (gap === undefined) ? 1 : gap;
+      var i, r, c, g, gw, cx = 0, ch; sz = sz || 1; gap = (gap === undefined) ? 1 : gap;
       for (i = 0; i < str.length; i++) {
-        g = FONT[str.charAt(i)]; if (!g) { continue; }
-        for (r = 0; r < 5; r++) { for (c = 0; c < 3; c++) { if (g.charAt(r * 3 + c) === "1") { p.r(x + (i * (3 + gap) + c) * sz, y + r * sz, sz, sz, col); } } }
+        ch = str.charAt(i); g = FONT[ch]; if (!g) { continue; }
+        gw = g.length / 5; if (ch === "&" && i > 0 && str.charAt(i - 1) !== " ") { cx += 1; }
+        for (r = 0; r < 5; r++) { for (c = 0; c < gw; c++) { if (g.charAt(r * gw + c) === "1") { p.r(x + (cx + c) * sz, y + r * sz, sz, sz, col); } } }
+        cx += gw + gap; if (ch === "&" && i < str.length - 1 && str.charAt(i + 1) !== " ") { cx += 1; }
       }
     };
     return p;
@@ -253,7 +302,16 @@
     "-": "000000111000000", ",": "000000000010100", ":": "000010000010000", "/": "001001010100100", "'": "010010000000000",
     "+": "000010111010000", "%": "101001010100101", "~": "000011110000000", " ": "000000000000000"
   };
-  function textW(str, sz, gap) { gap = (gap === undefined) ? 1 : gap; sz = sz || 1; return str.length ? (str.length * (3 + gap) - gap) * sz : 0; }
+  /* glyphs are 3 wide; "&" is 5 wide (FONT string of 25) with one extra pixel of air beside it unless a space is next to it */
+  function textW(str, sz, gap) {
+    var i, w = 0, g, ch; gap = (gap === undefined) ? 1 : gap; sz = sz || 1;
+    for (i = 0; i < str.length; i++) {
+      ch = str.charAt(i); g = FONT[ch]; if (!g) { continue; }
+      w += g.length / 5 + gap;
+      if (ch === "&") { if (i > 0 && str.charAt(i - 1) !== " ") { w += 1; } if (i < str.length - 1 && str.charAt(i + 1) !== " ") { w += 1; } }
+    }
+    return w ? (w - gap) * sz : 0;
+  }
   /* centred text that picks the biggest size (2 or 1) that fits maxW */
   function fit(p, str, cx, y, maxW, col, maxSz) {
     var sz = maxSz || 2;
@@ -2195,6 +2253,685 @@
   var FRAME_INNER = { dx: 0.2, dy: 0.2, w: 2.6, h: 1.6 };
 
   /* =====================================================================================
+     ROUND 4: PLACE-OWN OBJECTS (signature objects, menu board, brand counter, kiosk, motif decor, hall furniture)
+     Palette-aware: obj.palette = ['#hex', ...] from the live site. Anything purple/indigo is refused and the
+     object's own default colour is used instead. Colours pass through the light mode like every other object.
+     ===================================================================================== */
+  function hueSat(h) {
+    var c = hex2rgb(h), r = c[0] / 255, g = c[1] / 255, b = c[2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, hh = 0;
+    if (d > 0) { if (mx === r) { hh = ((g - b) / d) % 6; } else if (mx === g) { hh = (b - r) / d + 2; } else { hh = (r - g) / d + 4; } hh *= 60; if (hh < 0) { hh += 360; } }
+    return { h: hh, s: mx === 0 ? 0 : d / mx, v: mx };
+  }
+  function isPurple(h) { var q = hueSat(h); return q.s > 0.12 && q.h >= 245 && q.h <= 335; }
+  function okHex(h) { return typeof h === "string" && /^#[0-9a-fA-F]{6}$/.test(h) && !isPurple(h); }
+  /* palette colour i of the object (day colours pushed through the current light), else the fallback */
+  function PC(o, c, i, fb) {
+    var a = o && o.palette, h;
+    if (!a || !a.length) { return fb; }
+    h = a[i % a.length];
+    return okHex(h) ? mixPal(c, h) : fb;
+  }
+  function lite(h, t) { return mix(h, "#FFFFFF", t); }
+  function drk(h, t) { return mix(h, "#000000", t); }
+  function fz(t) { return still() ? 0 : Math.floor((t || 0) * 4); }
+  function tm(t) { return still() ? STILL_T : (t || 0); }
+  /* pixel-font text: capitals, digits and a few marks; accents folded, anything else dropped */
+  var FOLD = { "\u00C7": "C", "\u011E": "G", "\u0130": "I", "\u00D6": "O", "\u015E": "S", "\u00DC": "U", "\u00C0": "A", "\u00C1": "A", "\u00C2": "A", "\u00C4": "A", "\u00C8": "E", "\u00C9": "E", "\u00CA": "E", "\u00CB": "E", "\u00CE": "I", "\u00CF": "I", "\u00D4": "O", "\u00D9": "U", "\u00DB": "U", "\u00D1": "N", "\u00E7": "C", "\u011F": "G", "\u0131": "I", "\u00F6": "O", "\u015F": "S", "\u00FC": "U", "\u2019": "'", "\u2013": "-", "\u2014": "-", "\u00D7": "X" };
+  FONT["&"] = "0110010010011001001101101"; FONT["$"] = "011110010011110"; FONT["("] = "010100100100010"; FONT[")"] = "010001001001010"; FONT["#"] = "101111101111101"; FONT["="] = "000111000111000"; FONT["_"] = "000000000000111"; FONT["\""] = "101101000000000";
+  function up(str) {
+    var s = String(str === undefined || str === null ? "" : str), out = "", i, ch, u;
+    for (i = 0; i < s.length; i++) { ch = s.charAt(i); u = FOLD[ch] || ch.toUpperCase(); u = FOLD[u] || u; if (u.length === 1 && FONT[u]) { out += u; } else if (u === "•" || u === "·") { out += "."; } }
+    return out.replace(/\s+/g, " ").replace(/^ | $/g, "");
+  }
+  function clip(str, maxW, sz) { var n = str.length; while (n > 0 && textW(str.slice(0, n), sz || 1) > maxW) { n--; } return n < str.length ? str.slice(0, n).replace(/ $/, "") : str; }
+  function itemName(it) { return up(typeof it === "string" ? it : (it && (it.item || it.name || it.text)) || ""); }
+  function itemPrice(it) { return (it && typeof it === "object" && it.price !== undefined && it.price !== null) ? up(String(it.price)) : ""; }
+  function okey(o) {
+    var k = "", i;
+    if (o.palette && o.palette.length) { k += "P" + o.palette.join(","); }
+    if (o.items) { k += "I"; for (i = 0; i < o.items.length && i < 12; i++) { k += itemName(o.items[i]) + "~" + itemPrice(o.items[i]) + ";"; } }
+    if (o.label !== undefined) { k += "L" + o.label; }
+    if (o.title !== undefined) { k += "T" + o.title; }
+    if (o.state) { k += "S" + o.state; }
+    if (o.motif) { k += "M" + o.motif; }
+    if (o.v !== undefined) { k += "V" + o.v; }
+    if (o.badges) { k += "B" + o.badges.join(","); }
+    if (o.stats) { k += "N" + o.stats.join(","); }
+    if (o.brand) { k += "K" + o.brand; }
+    return k;
+  }
+  function clipTo(p, x, y, w, h) { p.ctx.save(); p.ctx.beginPath(); p.ctx.rect(p.ox + x * p.s, p.oy + y * p.s, w * p.s, h * p.s); p.ctx.clip(); }
+  function unclip(p) { p.ctx.restore(); }
+  function leaf(p, x, y, col, hi, big) { p.ell(x, y, big ? 3 : 2, big ? 2 : 1, col); p.px(x - 1, y - 1, hi); }
+  function eggAt(p, x, y, c, yolk) { p.ell(x, y, 4, 3, c.white); p.ell(x + 1, y + 1, 3, 2, c.white); p.ell(x, y, 1, 1, yolk || c.yolk); p.px(x - 1, y - 1, lite(yolk || c.yolk, 0.5)); p.px(x - 3, y, c.paper, 0.0); }
+  function bottleAt(p, x, y, h, col, c) { p.r(x, y + 3, 3, h - 3, col); p.r(x + 1, y, 1, 4, col); p.r(x, y + 3, 1, h - 3, lite(col, 0.35)); p.px(x + 1, y - 1, c.brass); }
+
+  /* ---- stage (Miramar), 4x3 ---- */
+  function stageDraw(p, W, H, c, o) {
+    var A = PC(o, c, 0, c.red), B = PC(o, c, 1, c.gold), i, y, wl, wr, col, label = up(o.label || "");
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, W, 38, c.dwood); p.r(1, 1, W - 2, 1, c.lwood, 0.6);
+    p.r(5, 5, 54, 28, mix(c.ink, A, 0.12));
+    for (i = 0; i < 54; i += 6) { p.r(5 + i, 5, 1, 28, "#FFFFFF", 0.04); }
+    p.r(20, 8, 24, 14, c.cream); p.ol(19, 7, 26, 16, c.graphite); p.r(19, 7, 26, 1, c.steel);
+    for (y = 0; y < 28; y++) {
+      wl = y < 3 ? 12 : (y < 14 ? 12 - (y - 3) * 0.55 : (y < 17 ? 6 : 6 + (y - 17) * 0.4)); wl = Math.round(wl);
+      for (i = 0; i < wl; i++) { col = ((i + (y > 15 ? 1 : 0)) % 3 === 0) ? drk(A, 0.25) : ((i % 3 === 1) ? lite(A, 0.12) : A); p.r(5 + i, 5 + y, 1, 1, col); p.r(58 - i, 5 + y, 1, 1, col); }
+    }
+    p.r(5, 5, 54, 5, A); for (i = 0; i < 54; i += 6) { p.ell(8 + i, 10, 3, 2, A); p.ell(8 + i, 10, 3, 1, lite(A, 0.18)); p.px(8 + i, 12, B); }
+    p.r(5, 5, 54, 1, lite(A, 0.3)); p.r(5, 9, 54, 1, B, 0.9);
+    p.r(5, 21, 8, 2, B); p.r(5, 21, 8, 1, lite(B, 0.4)); p.r(51, 21, 8, 2, B); p.r(51, 21, 8, 1, lite(B, 0.4)); p.px(13, 23, B); p.px(51, 23, B); p.r(13, 22, 1, 4, B); p.r(50, 22, 1, 4, B);
+    p.r(5, 33, 54, 7, c.lwood); for (i = 0; i < 54; i += 9) { p.r(5 + i, 33, 1, 7, c.wood, 0.7); } p.r(5, 33, 54, 1, lite(c.lwood, 0.3)); p.r(5, 39, 54, 1, c.dwood);
+    p.r(1, 40, W - 2, 8, c.dwood); p.r(1, 40, W - 2, 1, c.wood); p.r(1, 44, W - 2, 1, c.ol, 0.5);
+    for (i = 0; i < 8; i++) { p.r(9 + i * 6, 38, 4, 2, c.graphite); p.r(10 + i * 6, 37, 2, 1, c.brass); }
+    label = label || "SHOWTIME"; p.r(W / 2 - 18, 41, 36, 6, c.graphite); p.ol(W / 2 - 18, 41, 36, 6, c.brass); fit(p, label, W >> 1, 42, 32, B, 1);
+    p.r(2, 28, 9, 9, c.graphite); p.r(2, 28, 9, 1, c.steel); p.ell(8, 31, 3, 3, c.dark); p.ell(8, 31, 1, 1, B, 0.7); p.r(4, 37, 5, 1, c.steel);
+  }
+  function stageAnim(p, W, H, c, o, t, mode) {
+    var A = PC(o, c, 0, c.red), B = PC(o, c, 1, c.gold), tt = tm(t), f = fz(t), i, x, y0, y1, a = 0.10 + 0.05 * Math.sin(tt * 3), cols = [c.fo, c.palmL, c.glass, c.gold, c.fr, c.cream], k = still() ? 2 : Math.floor(tt * 1.2) % 6;
+    p.r(21, 9, 22, 12, cols[k], 0.55); p.r(21, 9 + ((f * 2) % 12), 22, 1, c.white, 0.35); p.r(24, 12, 5, 7, drk(cols[(k + 1) % 6], 0.2), 0.7); p.r(31, 14, 8, 4, drk(cols[(k + 2) % 6], 0.2), 0.7);
+    for (x = 9; x <= 20; x++) { y0 = 32 - (x - 9) * 2.1; y1 = 33 - (x - 9) * 0.9; p.r(x, Math.round(y0), 1, Math.max(1, Math.round(y1 - y0)), c.white, a); }
+    if (!still()) { p.px(14 + ((f * 3) % 7), 26 - ((f * 5) % 10), c.white, 0.5); p.px(10 + ((f * 5) % 8), 29 - ((f * 3) % 12), c.white, 0.4); }
+    for (i = 0; i < 8; i++) { p.r(9 + i * 6, 36, 4, 1, ((i + f) % 3 === 0) ? LIT.white : LIT.gold, lampsOn(mode) ? 0.95 : 0.7); }
+    if (lampsOn(mode)) { for (i = 0; i < 8; i++) { glowAt(p.ctx, p.ox + (11 + i * 6) * p.s, p.oy + 36 * p.s, 5 * p.s, LIT.gold, 0.22); } glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 15 * p.s, 22 * p.s, cols[k], 0.1); }
+  }
+
+  /* ---- stalls (Station8), 4x3 ---- */
+  function stallsDraw(p, W, H, c, o) {
+    var A = PC(o, c, 0, c.terra), B = PC(o, c, 1, c.cream), G = PC(o, c, 2, c.palmG), n, x0, i, j, produce = [c.fo, c.fr, c.palmL, c.yolk, c.coralL, c.plant];
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    for (n = 0; n < 2; n++) {
+      x0 = 2 + n * 31;
+      p.r(x0 + 1, 8, 2, 38, c.dwood); p.r(x0 + 27, 8, 2, 38, c.dwood);
+      p.r(x0 + 3, 22, 24, 22, c.dwood, 0.55);
+      p.r(x0 + 1, 31, 28, 3, c.lwood); p.r(x0 + 1, 31, 28, 1, lite(c.lwood, 0.3)); p.r(x0 + 1, 34, 28, 10, c.wood); p.r(x0 + 1, 43, 28, 1, c.dwood); p.r(x0 + 3, 36, 24, 1, c.dwood, 0.5);
+      for (i = 0; i < 28; i++) { p.r(x0 + 1 + i, 2, 1, 9 + ((i % 7 < 3) ? 0 : 1), (Math.floor(i / 4) % 2 === 0) ? A : B); }
+      p.r(x0 + 1, 2, 28, 1, lite(A, 0.35)); p.r(x0 + 1, 10, 28, 2, "#000000", 0.18);
+      for (j = 0; j < 3; j++) { for (i = 0; i < 6; i++) { if (n === 0 || i % 2 === 0 || j > 0) { p.ell(x0 + 5 + i * 4, 29 - j * 2 + ((i + j) % 2), 2, 2, produce[(i + j * 2 + n * 3) % 6]); p.px(x0 + 4 + i * 4, 28 - j * 2 + ((i + j) % 2), lite(produce[(i + j * 2 + n * 3) % 6], 0.5)); } } }
+      p.r(x0 + 4, 24, 6, 6, c.lwood); p.ol(x0 + 4, 24, 6, 6, c.dwood); p.ell(x0 + 7, 25, 3, 1, G); p.px(x0 + 6, 24, lite(G, 0.4));
+      p.r(x0 + 10, 12, 18, 7, c.graphite); p.ol(x0 + 10, 12, 18, 7, c.dwood); fit(p, n ? "FISH" : "FARM", x0 + 19, 14, 16, c.cream, 1);
+      p.ell(x0 + 14, H - 5, 5, 2, c.dwood); p.r(x0 + 12, 38, 6, 4, c.lwood); p.r(x0 + 12, 38, 6, 1, c.dwood);
+    }
+    p.r(31, 12, 2, 2, c.brass); p.r(30, 13, 4, 1, c.brass);
+  }
+  function stallsAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), sw = still() ? 0 : Math.round(Math.sin(tt * 2.2)), A = PC(o, c, 0, c.terra), i, n;
+    for (n = 0; n < 2; n++) { for (i = 0; i < 28; i += 4) { p.px(3 + n * 31 + i + sw, 12 + (i % 8 ? 1 : 0), (Math.floor(i / 4) % 2 === 0) ? A : c.cream); } }
+    if (lampsOn(mode)) { p.r(31, 14, 2, 2, LIT.gold); glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 15 * p.s, 14 * p.s, LIT.gold, 0.22); }
+  }
+
+  /* ---- aquarium (Lobster Lab), 3x3 ---- */
+  function lobster(p, x, y, f, c, col, dir) {
+    var d = dir || 1, dk = drk(col, 0.25), i;
+    p.ell(x, y, 5, 2, col); p.r(x - 4 * d, y - 1, 2, 3, dk); p.px(x - 7 * d, y, dk); p.r(x - 7 * d, y - 1, 3, 3, col); p.px(x - 9 * d, y - 1, dk); p.px(x - 9 * d, y + 1, dk);
+    p.r(x + 4 * d, y - 3, 2, 2, col); p.r(x + 6 * d, y - 5 - (f % 2), 3, 3, col); p.px(x + 7 * d, y - 4, dk); p.r(x + 4 * d, y + 1, 2, 2, col); p.r(x + 6 * d, y + 2 + (f % 2), 3, 3, col); p.px(x + 7 * d, y + 3, dk);
+    p.px(x + 5 * d, y - 1, c.white); p.px(x + 5 * d, y - 1, c.graphite);
+    for (i = 0; i < 3; i++) { p.px(x - 1 * d + i * 2 * d, y + 3 + ((i + f) % 2), dk); }
+    p.px(x + 2 * d, y - 2, lite(col, 0.4));
+  }
+  function aquariumDraw(p, W, H, c, o) {
+    var W0 = PC(o, c, 0, c.ocean), i, y, col, wt = c.ocean2;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(1, 36, W - 2, 12, c.dwood); p.r(1, 36, W - 2, 1, c.lwood); p.r(3, 40, W - 6, 6, c.ol, 0.5); p.r(5, 41, 10, 4, c.dwood); p.r(33, 41, 10, 4, c.dwood);
+    p.r(1, 4, W - 2, 33, c.silverD); p.r(2, 5, W - 4, 31, c.glass);
+    for (y = 0; y < 29; y++) { col = mix(lite(mix(wt, W0, 0.45), 0.28), drk(mix(c.oceanD, W0, 0.25), 0.1), y / 28); p.r(3, 6 + y, W - 6, 1, col); }
+    p.r(3, 6, W - 6, 1, lite(wt, 0.55)); p.r(3, 31, W - 6, 4, c.sand); speck(p, 3, 31, W - 6, 4, c.sandD, 14, 3); speck(p, 3, 31, W - 6, 4, c.sandL, 8, 4);
+    p.ell(11, 32, 5, 3, c.rock); p.ell(10, 31, 3, 1, c.rockL); p.ell(37, 32, 4, 3, c.rockD);
+    for (i = 0; i < 6; i++) { p.r(22 + (i % 3), 31 - i * 2, 1, 2, i % 2 ? c.palmG : c.palmL); } for (i = 0; i < 5; i++) { p.r(5 + (i % 2), 31 - i * 2, 1, 2, i % 2 ? c.plant : c.palmL); } p.px(30, 31, c.fpk); p.px(31, 30, c.cream);
+    p.r(2, 2, W - 4, 3, c.graphite); p.r(4, 3, W - 8, 1, LIT.cream, 0.9); p.r(1, 4, 1, 32, "#FFFFFF", 0.25); p.r(W - 2, 4, 1, 32, "#000000", 0.2); p.r(2, 5, 3, 31, "#FFFFFF", 0.07);
+    p.r(14, 37, 20, 6, c.graphite); fit(p, up(o.label || "LOBSTERS"), 24, 38, 18, c.cream, 1);
+  }
+  function aquariumAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), f = fz(t), lx = 24 + Math.round(Math.sin(tt * 0.5) * 9), dir = Math.cos(tt * 0.5) >= 0 ? 1 : -1, i, bx, by, col = PC(o, c, 1, c.red);
+    if (still()) { lx = 28; dir = 1; }
+    lobster(p, lx, 28, f, c, col, dir);
+    for (i = 0; i < 5; i++) { bx = 16 + i * 6 + Math.round(Math.sin(tt * 2 + i) * 1); by = 30 - ((Math.floor(tt * 10) + i * 7) % 24); if (still()) { by = 28 - i * 4; } p.px(bx, by, c.white, 0.8); if (i % 2) { p.px(bx + 1, by - 1, c.white, 0.5); } }
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 24 * p.s, p.oy + 20 * p.s, 26 * p.s, LIT.jade, 0.14); p.r(4, 6, W - 8, 25, LIT.jade, 0.07); }
+  }
+
+  /* ---- griddle (Cosmos Burger), 3x2 ---- */
+  function griddleDraw(p, W, H, c, o) {
+    var R = PC(o, c, 0, c.red), O = PC(o, c, 1, c.orange), C = PC(o, c, 2, c.cream), i;
+    p.r(1, H - 3, W - 2, 3, "#000000", 0.22);
+    p.r(1, 1, W - 2, 12, c.silver); p.r(1, 1, W - 2, 1, c.white); p.r(1, 12, W - 2, 1, c.silverD);
+    p.r(3, 3, W - 6, 6, C); p.r(3, 3, W - 6, 1, lite(C, 0.4)); p.r(3, 8, W - 6, 1, R); fit(p, up(o.label || "SMASH"), W >> 1, 4, W - 10, R, 1);
+    for (i = 0; i < 5; i++) { p.r(6 + i * 8, 0, 4, 3, c.cream); p.r(6 + i * 8, 0, 4, 1, c.white); p.px(7 + i * 8, 1, c.red, 0.6); }
+    p.r(0, 13, W, 7, c.graphite); p.r(0, 13, W, 1, c.steel); p.r(2, 14, W - 4, 4, c.ink); p.r(2, 14, W - 4, 1, c.slate, 0.7);
+    p.r(1, 19, W - 2, 11, O); p.r(1, 19, W - 2, 1, lite(O, 0.3)); p.r(1, 27, W - 2, 3, drk(O, 0.25)); p.r(1, 22, W - 2, 1, R);
+    for (i = 0; i < 4; i++) { p.ell(7 + i * 11, 25, 2, 2, c.graphite); p.px(6 + i * 11, 24, c.silver); p.px(7 + i * 11, 26, c.red); }
+    p.r(W - 8, 6, 6, 8, C); p.r(W - 8, 6, 6, 3, c.tan); p.ell(W - 5, 10, 3, 1, c.tan);
+  }
+  function griddleAnim(p, W, H, c, o, t, mode) {
+    var f = fz(t), i, xs = [7, 16, 25, 34], tt = tm(t), a, ch = PC(o, c, 1, c.gold);
+    for (i = 0; i < 4; i++) {
+      p.ell(xs[i], 15, 4, 2, c.dwood); p.ell(xs[i], 15, 3, 1, c.wood); p.px(xs[i] - 1, 14, c.dwood);
+      p.r(xs[i] - 2, 14, 5, 2, lite(ch, 0.1)); p.px(xs[i] - 2, 16, ch); p.px(xs[i] + 2, 14, ch);
+      a = still() ? 0.5 : 0.25 + 0.3 * Math.abs(Math.sin(tt * 1.8 + i * 1.3)); p.px(xs[i] + ((f + i) % 3) - 1, 11 - ((f + i) % 4), c.white, a); p.px(xs[i] - 1 + ((f + i * 2) % 3), 9 - ((f + i) % 3), c.white, a * 0.7);
+    }
+    if (!still()) { p.px(3 + ((f * 7) % 40), 13, c.white, 0.5); }
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 24 * p.s, p.oy + 8 * p.s, 22 * p.s, LIT.orange, 0.12); }
+  }
+
+  /* ---- greenery (La Vida), 4x3 ---- */
+  function greeneryDraw(p, W, H, c, o) {
+    var X = PC(o, c, 0, c.fo), G = [c.dplant, c.plant, c.palmG, c.palmL, c.grassD], i, j, k, jc = [c.fo, c.yolk, c.palmL, c.fr];
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, 41, 40, c.dwood); p.r(2, 2, 37, 36, c.ol);
+    for (j = 0; j < 36; j += 2) { for (i = 0; i < 37; i += 2) { k = Math.floor(hash(i, j, 77) * 5); leaf(p, 3 + i + (j % 4 ? 1 : 0), 3 + j, G[k], c.palmL, hash(i, j, 78) > 0.6); } }
+    for (i = 0; i < 6; i++) { p.px(6 + Math.floor(hash(i, 1, 79) * 30), 5 + Math.floor(hash(i, 2, 79) * 30), X); p.px(6 + Math.floor(hash(i, 3, 79) * 30), 5 + Math.floor(hash(i, 4, 79) * 30), lite(X, 0.5)); }
+    for (i = 0; i < 12; i++) { p.r(5 + i * 3, 38, 1, 2 + (i % 4) * 2, i % 2 ? c.palmG : c.plant); }
+    p.r(0, 40, 41, 3, c.dwood); p.r(0, 40, 41, 1, c.lwood);
+    p.r(24, 6, 15, 8, c.graphite); p.r(24, 6, 15, 1, c.steel); fit(p, up(o.label || "JUICE"), 31, 8, 13, c.cream, 1); p.r(26, 12, 11, 1, X, 0.8);
+    p.r(43, 24, 20, 22, c.lwood); p.r(43, 24, 20, 2, c.cream); p.r(43, 26, 20, 1, c.dwood, 0.6); p.r(43, 44, 20, 2, c.dwood);
+    for (i = 0; i < 4; i++) { p.r(46 + i * 4, 28, 1, 14, c.dwood, 0.5); }
+    p.r(46, 17, 5, 7, c.glass); p.r(46, 20, 5, 4, X); p.r(46, 16, 5, 1, c.graphite); p.r(47, 14, 3, 2, c.steel);
+    for (i = 0; i < 3; i++) { p.r(53 + i * 3, 20, 2, 4, c.glass); p.r(53 + i * 3, 21, 2, 3, jc[i]); }
+    p.ell(58, 22, 2, 1, c.fo); p.px(58, 21, c.palmL);
+    p.ell(46, H - 3, 3, 1, "#000000", 0.0);
+  }
+  function greeneryAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), s1 = still() ? 0 : Math.round(Math.sin(tt * 1.6)), s2 = still() ? 0 : Math.round(Math.sin(tt * 1.6 + 2)), i;
+    for (i = 0; i < 7; i++) { leaf(p, 5 + i * 5 + s1, 40 + ((i % 3) + 1) * 2, i % 2 ? c.palmL : c.plant, c.palmL, false); }
+    leaf(p, 9 + s2, 11, c.palmL, c.white, true); leaf(p, 30 + s1, 28, c.palmL, c.white, true); leaf(p, 18 + s2, 22, c.palmG, c.palmL, true);
+    p.px(49, 19 - (still() ? 0 : fz(t) % 2), c.white, 0.5);
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 51 * p.s, p.oy + 22 * p.s, 14 * p.s, LIT.amber, 0.18); }
+  }
+
+  /* ---- brandwall (Tiger Hospitality), 4x3 ---- */
+  var BADGE_DEF = ["MM", "LV", "LL", "CB", "EO", "S8", "GF", "WH", "TH", "13"];
+  function badge(p, x, y, shape, bg, fg, txt, c) {
+    var s = 10;
+    if (shape === 0) { p.ell(x + 5, y + 5, 5, 5, bg); p.ell(x + 5, y + 4, 4, 3, lite(bg, 0.18)); }
+    else if (shape === 1) { p.r(x, y, s, s, bg); p.r(x, y, s, 1, lite(bg, 0.3)); p.r(x, y + s - 1, s, 1, drk(bg, 0.25)); p.px(x, y, c.dwood, 0.0); }
+    else if (shape === 2) { p.r(x, y, s, 6, bg); p.r(x + 1, y + 6, s - 2, 2, bg); p.r(x + 2, y + 8, s - 4, 1, bg); p.px(x + 4, y + 9, bg); p.r(x, y, s, 1, lite(bg, 0.3)); }
+    else { p.r(x + 2, y, s - 4, s, bg); p.r(x, y + 2, s, s - 4, bg); p.r(x + 1, y + 1, s - 2, s - 2, bg); p.r(x + 2, y, s - 4, 1, lite(bg, 0.3)); }
+    p.txt(txt, x + 5 - Math.floor(textW(txt, 1) / 2), y + 3, fg, 1);
+  }
+  function brandwallDraw(p, W, H, c, o) {
+    var bd = (o.badges && o.badges.length) ? o.badges.map(up) : BADGE_DEF, defs = [c.orange, c.jade, c.gold, c.red, c.blue, c.olive, c.cream, c.terra, c.djade, c.fo], i, j, n, bg, fg, label = up(o.label || "OUR BRANDS");
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, W, 40, c.dwood); p.r(2, 2, W - 4, 36, c.graphite); p.r(2, 2, W - 4, 1, c.steel);
+    p.r(2, 2, W - 4, 9, c.ink); for (i = 0; i < 9; i++) { p.r(4 + i * 2, 2, 1, 9, c.orange, 0.0); }
+    p.r(5, 4, 9, 5, c.orange); for (i = 0; i < 4; i++) { p.r(6 + i * 2, 4, 1, 5, c.graphite); } p.r(5, 4, 9, 1, LIT.orange, 0.6);
+    fit(p, label, 38, 4, 40, c.cream, 1);
+    for (j = 0; j < 2; j++) { for (i = 0; i < 5; i++) {
+      n = j * 5 + i; bg = PC(o, c, n, defs[n % 10]); fg = (hueSat(bg).v > 0.62 && hueSat(bg).s < 0.5) || bg === c.gold ? c.graphite : c.white;
+      if (hueSat(bg).v > 0.8 && hueSat(bg).s > 0.45) { fg = c.graphite; }
+      badge(p, 4 + i * 12, 13 + j * 12, (i + j) % 4, bg, fg, bd[n % bd.length].slice(0, 3), c);
+    } }
+    p.r(0, 40, W, 8, c.dwood); p.r(0, 40, W, 1, c.lwood); p.r(3, 43, W - 6, 1, c.ol, 0.35);
+    p.r(2, 38, W - 4, 2, c.brass); p.r(2, 38, W - 4, 1, "#FFE9A0", 0.5);
+  }
+  function brandwallAnim(p, W, H, c, o, t, mode) {
+    var k = still() ? 3 : Math.floor(tm(t) * 1.5) % 10, i = k % 5, j = Math.floor(k / 5);
+    p.ol(3 + i * 12, 12 + j * 12, 12, 12, c.cream); p.r(4 + i * 12, 13 + j * 12, 10, 10, "#FFFFFF", 0.14);
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 22 * p.s, 30 * p.s, LIT.orange, 0.1); }
+  }
+
+  /* ---- djbooth (CENGO): 4x3 full, 4x2 keeps the compact booth the club interior uses ---- */
+  function djFullDraw(p, W, H, c, o) {
+    var R = PC(o, c, 0, c.red), i, j;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, W, 34, c.graphite); p.r(0, 0, W, 1, c.steel);
+    for (i = 0; i < 2; i++) {
+      var x0 = i ? 50 : 2;
+      p.r(x0, 8, 12, 32, c.dark); p.ol(x0, 8, 12, 32, c.steel);
+      p.ell(x0 + 6, 16, 4, 4, c.graphite); p.ell(x0 + 6, 16, 2, 2, c.steel); p.px(x0 + 6, 16, c.silver);
+      p.ell(x0 + 6, 30, 4, 4, c.graphite); p.ell(x0 + 6, 30, 2, 2, c.steel); p.px(x0 + 6, 30, c.silver); p.px(x0 + 2, 10, c.red);
+    }
+    p.r(17, 5, 30, 12, c.dark); p.ol(17, 5, 30, 12, c.steel);
+    fit(p, up(o.label || "CENGO"), 32, 8, 28, mix(R, "#000000", 0.55), 2);
+    p.r(15, 25, 34, 14, c.ink); p.r(15, 25, 34, 1, c.slate); p.r(15, 38, 34, 2, c.steel);
+    for (j = 0; j < 2; j++) { var dx = j ? 35 : 17; p.r(dx, 27, 12, 10, c.graphite); p.ell(dx + 6, 32, 5, 4, c.dark); p.ell(dx + 6, 32, 4, 3, c.ink); p.ell(dx + 6, 32, 1, 1, R); p.r(dx + 10, 27, 1, 5, c.silver); }
+    p.r(29, 27, 6, 10, c.steel); p.r(30, 28, 1, 6, c.dark); p.r(32, 28, 1, 6, c.dark); p.r(33, 28, 1, 6, c.dark);
+    p.r(2, 40, W - 4, 8, c.graphite); p.r(2, 40, W - 4, 1, c.steel); p.r(4, 44, W - 8, 2, c.dark);
+    p.r(40, 21, 7, 4, c.silver); p.r(41, 22, 5, 2, c.dark); p.px(39, 23, c.silver); p.r(13, 38, 3, 2, c.red);
+  }
+  function djFullAnim(p, W, H, c, o, t, mode) {
+    var R = PC(o, c, 0, c.red), Rl = hueSat(R).v < 0.6 ? LIT.red : mix(R, "#FFFFFF", 0.1), f = fz(t), tt = tm(t), a = still() ? 0 : (Math.sin(tt * 9) > 0.93 ? 0.55 : 1), i, j, ang, cols = [LIT.red, LIT.gold, LIT.jade, LIT.orange];
+    fit(p, up(o.label || "CENGO"), 32, 8, 28, (a < 1) ? mix(Rl, "#000000", 0.4) : Rl, 2);
+    for (j = 0; j < 2; j++) { ang = (still() ? 0.6 : tt * 3.4) + j; p.px(23 + j * 18 + Math.round(Math.cos(ang) * 4), 32 + Math.round(Math.sin(ang) * 3), c.white); p.px(23 + j * 18 - Math.round(Math.cos(ang) * 3), 32 - Math.round(Math.sin(ang) * 2), c.silver); }
+    for (i = 0; i < 6; i++) { p.r(30 + (i % 2) * 2, 29 + i * 1, 1, 1, c.white); }
+    p.r(30, 28 + (still() ? 2 : f % 5), 1, 1, LIT.jade); p.r(32, 31 - (still() ? 0 : (f + 2) % 5), 1, 1, LIT.gold);
+    for (i = 0; i < 10; i++) { p.r(5 + i * 5, 46, 3, 1, cols[(i + f) % 4], 0.9); }
+    glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 10 * p.s, Math.max(28, 20) * p.s, Rl, 0.18 * a * (lampsOn(mode) ? 1.5 : 0.8));
+    glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 32 * p.s, 26 * p.s, LIT.jade, 0.08);
+  }
+  function djSwitchDraw(p, W, H, c, o) { if (H <= 36) { djDraw(p, W, H, c); } else { djFullDraw(p, W, H, c, o); } }
+  function djSwitchAnim(p, W, H, c, o, t, mode) { if (H <= 36) { djAnim(p, W, H, c, o, t); } else { djFullAnim(p, W, H, c, o, t, mode); } }
+
+  /* ---- ticker (TrustMeBro), 4x3 ---- */
+  function tickerDraw(p, W, H, c, o) {
+    var i;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, W, 38, c.steel); p.r(0, 0, W, 1, c.slate); p.r(2, 2, W - 4, 34, c.dark);
+    p.r(4, 4, 38, 20, c.graphite); p.ol(4, 4, 38, 20, c.slate);
+    for (i = 0; i < 4; i++) { p.r(5, 8 + i * 4, 36, 1, c.ink); }
+    p.r(44, 4, 16, 9, c.graphite); p.ol(44, 4, 16, 9, c.slate); p.r(44, 15, 16, 9, c.graphite); p.ol(44, 15, 16, 9, c.slate);
+    p.r(4, 27, 56, 8, c.ink); p.ol(4, 27, 56, 8, c.slate);
+    p.r(0, 38, W, 10, c.dwood); p.r(0, 38, W, 1, c.lwood); p.r(3, 41, W - 6, 1, c.ol, 0.35); p.r(6, 38, 8, 3, c.steel); p.r(46, 38, 12, 2, c.cream);
+  }
+  function tickerAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), stats = (o.stats && o.stats.length) ? o.stats.map(up) : ["+312", "4.2X", "98", "1.2M", "-18", "24H"], i, x, y, prev = 0, str = "", pos, up1 = [LIT.jade, LIT.plant], dn = LIT.red, f = fz(t), col, h, label = up(o.label || "LIVE");
+    for (i = 0; i < 11; i++) { h = 3 + Math.round((Math.sin(tt * 1.4 + i * 0.7) * 0.5 + 0.5) * 11 + i * 0.5); h = Math.min(h, 14); p.r(7 + i * 3, 22 - h, 2, h, i > 7 ? LIT.gold : up1[i % 2], 0.9); }
+    for (x = 0; x < 34; x++) { y = 12 + Math.round(Math.sin((x + (still() ? 12 : tt * 8)) * 0.3) * 2 + Math.sin(x * 0.11) * 3); p.px(6 + x, y, c.white, 0.55); }
+    fit(p, stats[0] || "+312", 52, 6, 14, LIT.jade, 1); fit(p, stats[1] || "4.2X", 52, 17, 14, LIT.gold, 1);
+    for (i = 0; i < stats.length; i++) { str += (i % 2 ? "- " : "+ ") + stats[i] + "   "; }
+    pos = still() ? 0 : Math.floor(tt * 14) % (textW(str, 1) + 4);
+    p.r(5, 28, 54, 6, c.ink); clipTo(p, 5, 28, 54, 6);
+    for (i = 0; i < 3; i++) { p.txt(str, 6 - pos + i * (textW(str, 1) + 4), 29, i % 2 ? LIT.jade : LIT.gold, 1); }
+    unclip(p);
+    p.ell(8, 6, 1, 1, ((f % 2) || still()) ? LIT.red : c.dwood); p.txt(label, 11, 5, c.cream, 1);
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 24 * p.s, p.oy + 14 * p.s, 30 * p.s, LIT.jade, 0.13); }
+  }
+
+  /* ---- plaster (baa atelier), 3x3 ---- */
+  function plasterDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.stucco), P1 = PC(o, c, 1, c.terraL), P2 = PC(o, c, 2, c.eucL), P3 = PC(o, c, 3, c.sandL), pan = [P0, P1, P2], i, j, x0, k;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.2);
+    p.r(1, 2, 3, 40, c.dwood); p.r(W - 4, 2, 3, 40, c.dwood); p.r(1, 2, W - 2, 3, c.dwood); p.r(3, 5, W - 6, 33, c.lime);
+    for (i = 0; i < 3; i++) {
+      x0 = 6 + i * 13;
+      p.r(x0, 7, 11, 17, pan[i]); p.ol(x0 - 1, 6, 13, 19, c.dwood);
+      if (i === 0) { for (k = 0; k < 16; k++) { p.r(x0 + Math.floor(hash(k, 1, 90) * 8), 8 + Math.floor(hash(k, 2, 90) * 14), 3 + (k % 3), 1, lite(pan[i], 0.35), 0.8); p.r(x0 + Math.floor(hash(k, 3, 90) * 8), 8 + Math.floor(hash(k, 4, 90) * 14), 2 + (k % 2), 1, drk(pan[i], 0.1), 0.7); } }
+      else if (i === 1) { for (j = 0; j < 4; j++) { p.r(x0 + 1, 9 + j * 4, 9, 1, lite(pan[i], 0.28), 0.8); p.r(x0 + 2 + (j % 2) * 3, 10 + j * 4, 6, 1, drk(pan[i], 0.14), 0.7); } p.ell(x0 + 5, 16, 3, 3, lite(pan[i], 0.2), 0.5); }
+      else { for (k = 0; k < 10; k++) { p.px(x0 + Math.floor(hash(k, 5, 90) * 10), 8 + Math.floor(hash(k, 6, 90) * 15), drk(pan[i], 0.2)); } p.r(x0 + 1, 9, 5, 1, lite(pan[i], 0.4)); p.r(x0 + 4, 16, 6, 1, lite(pan[i], 0.4)); }
+    }
+    for (i = 0; i < 6; i++) { p.r(6 + i * 6, 28, 5, 6, [P0, P1, P2, P3, drk(P0, 0.08), drk(P1, 0.12)][i]); p.ol(5 + i * 6, 27, 7, 8, c.dwood); }
+    p.r(3, 37, W - 6, 2, c.lwood); p.r(1, 39, W - 2, 2, c.dwood);
+    p.r(5, 42, 12, 5, c.white); p.r(5, 42, 12, 1, c.paper); p.r(5, 46, 12, 1, c.silverD); p.ell(11, 42, 5, 1, lite(P0, 0.25)); p.r(12, 36, 1, 7, c.silver, 0.0); p.r(17, 40, 1, 5, c.steel); p.r(17, 40, 6, 1, c.steel);
+    p.r(30, 44, 12, 2, c.silver); p.r(30, 43, 8, 1, c.silverD); p.r(38, 45, 6, 1, c.dwood);
+  }
+
+  /* ---- scalebar (BarFix), 4x3 ---- */
+  function scalebarDraw(p, W, H, c, o) {
+    var A = PC(o, c, 0, c.gold), i, j, cols = [c.gold, c.jade, c.cream, c.red, A, c.orange, c.glass];
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.22);
+    p.r(0, 0, W, 20, c.dwood); p.r(1, 1, W - 2, 18, c.ol);
+    for (j = 0; j < 2; j++) { p.r(2, 9 + j * 9, W - 4, 1, c.brass); for (i = 0; i < 10; i++) { bottleAt(p, 4 + i * 6, 2 + j * 9, 7, cols[(i + j * 3) % 7], c); } }
+    p.r(0, 22, W, 3, c.lwood); p.r(0, 22, W, 1, lite(c.lwood, 0.35)); p.r(0, 25, W, 22, c.dwood); p.r(0, 25, W, 1, c.ol, 0.4);
+    for (i = 6; i < W - 4; i += 14) { p.r(i, 28, 1, 15, c.ol, 0.35); }
+    p.r(0, 39, W, 2, c.brass); p.r(0, 39, W, 1, "#FFE9A0", 0.45);
+    bottleAt(p, 5, 13, 9, c.glass, c); bottleAt(p, 10, 14, 8, A, c); p.r(17, 19, 3, 4, c.glass, 0.7); p.px(18, 21, c.fo);
+    p.r(36, 20, 22, 3, c.silver); p.r(36, 20, 22, 1, c.white); p.r(38, 17, 18, 3, c.silverD); p.r(38, 17, 18, 1, c.silver);
+    bottleAt(p, 45, 7, 11, A, c);
+    p.r(34, 8, 22, 9, c.graphite, 0.0);
+  }
+  function scalebarAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), n = still() ? 523 : 523 + Math.round(Math.sin(tt * 3) * 2), s = String(n) + "G", on = lampsOn(mode);
+    p.r(26, 9, 18, 9, c.graphite); p.ol(26, 9, 18, 9, c.steel); p.r(27, 10, 16, 7, mix(c.dark, LIT.jade, 0.07)); p.txt(s, 28, 11, LIT.jade, 1, 0);
+    p.px(42, 10, (still() || Math.floor(tt * 2) % 2) ? LIT.gold : c.dark);
+    if (on) { glowAt(p.ctx, p.ox + 35 * p.s, p.oy + 13 * p.s, 12 * p.s, LIT.jade, 0.18); glowAt(p.ctx, p.ox + 32 * p.s, p.oy + 8 * p.s, 30 * p.s, LIT.amber, 0.1); }
+  }
+
+  /* ---- mural (Carlos Almaraz), 4x3 ---- */
+  function muralDraw(p, W, H, c, o) {
+    var F0 = PC(o, c, 0, c.red), F1 = PC(o, c, 1, c.orange), F2 = PC(o, c, 2, c.gold), F3 = PC(o, c, 3, c.dred), i, j, x, h, col;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.2);
+    p.r(0, 0, W, 36, c.dwood); p.r(2, 2, W - 4, 32, F3);
+    for (i = 0; i < 60; i++) { p.r(2 + i, 2, 1, 14, mix(F3, F0, i / 60 * 0.4), 0.8); }
+    p.ell(20, 14, 10, 10, F2); p.ell(20, 14, 7, 7, lite(F2, 0.3)); p.ell(20, 14, 4, 4, c.cream);
+    for (i = 0; i < 12; i++) { p.r(20 + Math.round(Math.cos(i * 0.52) * 12), 14 + Math.round(Math.sin(i * 0.52) * 12), 2, 2, F1); }
+    for (x = 0; x < 60; x++) { h = 7 + Math.round(Math.abs(Math.sin(x * 0.28 + 0.6)) * 12 + Math.sin(x * 0.11) * 3); for (j = 0; j < h; j++) { col = j > h * 0.72 ? F2 : (j > h * 0.38 ? F1 : F0); p.px(2 + x, 33 - j, col); } }
+    for (x = 0; x < 60; x += 5) { p.r(2 + x, 33 - (3 + Math.round(Math.abs(Math.sin(x * 0.3)) * 5)), 2, 1, c.graphite); }
+    p.r(40, 6, 3, 22, c.graphite); p.r(46, 9, 3, 19, c.graphite); p.r(52, 5, 3, 23, c.graphite); p.ell(41, 6, 4, 2, c.graphite); p.ell(47, 9, 4, 2, c.graphite); p.ell(53, 5, 4, 2, c.graphite);
+    p.r(2, 2, W - 4, 1, "#FFFFFF", 0.15);
+    p.r(0, 37, 38, 10, c.sheet); p.r(0, 37, 38, 1, c.sheetS); p.r(0, 46, 38, 1, c.sheetS, 0.7); speck(p, 0, 38, 38, 8, c.sheetS, 10, 5); p.px(30, 40, F0); p.px(33, 43, F2); p.px(27, 44, F1); p.px(35, 39, F0); p.r(0, 36, W, 1, c.dwood);
+    p.r(5, 40, 8, 5, c.lwood); p.r(5, 40, 8, 1, c.cream, 0.5); p.ell(8, 41, 1, 1, F0); p.ell(10, 41, 1, 1, F2); p.ell(12, 41, 1, 1, F1);
+    p.r(16, 41, 4, 4, c.silver); p.r(16, 41, 4, 1, F0); p.r(22, 42, 4, 3, c.silver); p.r(22, 42, 4, 1, F2);
+    p.r(44, 24, 1, 23, c.wood); p.r(58, 24, 1, 23, c.wood); p.r(51, 30, 1, 17, c.dwood); p.r(43, 40, 17, 1, c.wood);
+    p.r(44, 22, 15, 15, c.white); p.ol(44, 22, 15, 15, c.dwood); p.r(45, 23, 13, 13, F3); p.ell(51, 29, 3, 3, F2); p.r(46, 32, 11, 3, F1); p.r(48, 33, 7, 2, F0);
+  }
+  function muralAnim(p, W, H, c, o, t, mode) {
+    var x = still() ? 24 : Math.floor((tm(t) * 9) % 90) - 15, i;
+    for (i = 0; i < 3; i++) { p.r(2 + x + i, 4, 1, 28, "#FFFFFF", 0.07 - i * 0.02); }
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 24 * p.s, p.oy + 14 * p.s, 30 * p.s, LIT.orange, 0.12); }
+  }
+
+  /* ---- eggbar (Egg&Out), 4x2 ---- */
+  function eggbarDraw(p, W, H, c, o) {
+    var Y = PC(o, c, 0, c.yolk), i;
+    p.r(1, H - 3, W - 2, 3, "#000000", 0.22);
+    p.r(0, 16, W, H - 19, Y); p.r(0, 16, W, 1, lite(Y, 0.4)); p.r(0, H - 5, W, 2, drk(Y, 0.25));
+    for (i = 8; i < W - 4; i += 12) { p.ell(i, 23, 3, 4, c.cream); p.ell(i, 24, 1, 2, Y); p.px(i - 1, 21, c.white); }
+    p.r(0, 10, W, 7, c.cream); p.r(0, 10, W, 1, c.white); p.r(0, 16, W, 1, drk(c.cream, 0.2)); p.r(0, 14, W, 1, drk(c.cream, 0.06));
+    p.ell(14, 8, 9, 4, c.steel); p.ell(14, 8, 8, 3, c.graphite); p.r(22, 7, 8, 2, c.graphite); p.r(30, 7, 3, 1, c.dwood);
+    p.ell(38, 8, 9, 4, c.steel); p.ell(38, 8, 8, 3, c.graphite); p.r(46, 7, 8, 2, c.graphite);
+    p.r(W - 11, 6, 9, 9, c.lwood); p.ol(W - 11, 6, 9, 9, c.dwood); p.r(W - 11, 9, 9, 1, c.dwood);
+    p.ell(W - 8, 7, 2, 2, c.cream); p.ell(W - 4, 7, 2, 2, c.white); p.px(W - 9, 6, c.white); p.px(W - 10, 12, c.cream); p.px(W - 6, 12, c.cream);
+  }
+  function eggbarAnim(p, W, H, c, o, t, mode) {
+    var Y = PC(o, c, 0, c.yolk), f = fz(t), i, tt = tm(t), a, xs = [13, 37];
+    for (i = 0; i < 2; i++) {
+      p.ell(xs[i], 8, 6, 2, c.white); p.ell(xs[i] + 4, 8, 2, 1, c.white); p.ell(xs[i] - 1, 8, 2, 1, lite(Y, 0.0)); p.px(xs[i] - 2, 7, lite(Y, 0.55));
+      a = still() ? 0.5 : 0.25 + 0.3 * Math.abs(Math.sin(tt * 1.7 + i * 2)); p.px(xs[i] + ((f + i) % 3) - 1, 3 - ((f + i) % 3), c.white, a); p.px(xs[i] - 3, 2 + ((f + i) % 2), c.white, a * 0.7); p.px(xs[i] + 3, 4 - ((f + i * 2) % 3), c.white, a * 0.5);
+    }
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 28 * p.s, p.oy + 8 * p.s, 22 * p.s, LIT.gold, 0.15); }
+  }
+
+  function lum(h) { var q = hex2rgb(h); return (0.299 * q[0] + 0.587 * q[1] + 0.114 * q[2]) / 255; }
+  function onCol(c, bg) { return lum(bg) > 0.58 ? c.graphite : c.cream; }
+
+  /* ---- menu board: chalkboard (default) or lightbox (o.style 'light'); text is drawn live so a long menu pages itself ---- */
+  function wrapLines(txt, maxW) {
+    var words = txt.split(" "), out = [], cur = "", i, nx;
+    for (i = 0; i < words.length; i++) { nx = cur ? cur + " " + words[i] : words[i]; if (textW(nx, 1) <= maxW || !cur) { cur = nx; } else { out.push(cur); cur = words[i]; } }
+    if (cur) { out.push(cur); }
+    return out;
+  }
+  function menuLayout(W, H) { return { lines: Math.max(1, Math.floor((H - 13) / 6)), y0: 11 }; }
+  function menuBoardDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.djade), lightbox = o.style === "light", fr = lightbox ? c.steel : c.dwood, sf = lightbox ? mix(c.cream, P0, 0.1) : mix(c.graphite, P0, 0.22), i;
+    p.r(0, 0, W, H, fr); p.r(0, 0, W, 1, lightbox ? c.silver : c.lwood); p.r(0, H - 1, W, 1, c.ol, 0.5);
+    p.r(2, 2, W - 4, H - 4, sf);
+    if (!lightbox) { for (i = 0; i < 6; i++) { p.r(3 + Math.floor(hash(i, 1, 120) * (W - 10)), 3 + Math.floor(hash(i, 2, 120) * (H - 8)), 4, 1, c.white, 0.05); } }
+    p.r(2, 2, W - 4, 7, P0); p.r(2, 2, W - 4, 1, lite(P0, 0.3)); p.r(2, 8, W - 4, 1, drk(P0, 0.3));
+    p.txt(clip(up(o.title === undefined ? "MENU" : o.title), W - 22, 1), 4, 3, onCol(c, P0), 1);
+    p.r(2, H - 4, W - 4, 1, lightbox ? c.ink : c.cream, 0.18);
+  }
+  function menuBoardAnim(p, W, H, c, o, t) {
+    var lightbox = o.style === "light", L = menuLayout(W, H), items = o.items || [], n = items.length, pages = Math.max(1, Math.ceil(n / L.lines)), pg = still() ? 0 : Math.floor(tm(t) / 4) % pages, i, it, y, nm, pr, pw, mw, tr, cyc, u, pos, fg = lightbox ? c.graphite : c.cream, pc = PC(o, c, 1, c.gold), P0 = PC(o, c, 0, c.djade);
+    if (lightbox && lum(pc) > 0.55) { pc = c.dorange; }
+    clipTo(p, 3, 9, W - 6, H - 12);
+    if (n === 0) { wrapLines(up(o.empty || "ASK AT THE COUNTER"), W - 8).slice(0, L.lines).forEach(function (ln, k) { p.txt(ln, 4, L.y0 + 1 + k * 6, fg, 1); }); unclip(p); return; }
+    for (i = 0; i < L.lines; i++) {
+      it = items[pg * L.lines + i]; if (!it) { break; }
+      y = L.y0 + i * 6; pr = itemPrice(it); pw = pr ? textW(pr, 1) : 0;
+      nm = itemName(it); mw = W - 8 - pw - (pw ? 3 : 0);
+      if (textW(nm, 1) <= mw) { p.txt(nm, 4, y, fg, 1); }
+      else if (still()) { p.txt(clip(nm, mw - 4, 1) + ".", 4, y, fg, 1); }
+      else { tr = textW(nm, 1) - mw; cyc = 2 * (tr + 30); u = (tm(t) * 12 + i * 9) % cyc; pos = u < tr + 30 ? Math.min(tr, Math.max(0, u - 24)) : Math.min(tr, Math.max(0, cyc - u - 24)); clipTo(p, 4, y - 1, mw, 7); p.txt(nm, 4 - Math.round(pos), y, fg, 1); unclip(p); }
+      if (pr) { p.txt(pr, W - 4 - pw, y, pc, 1); }
+      if (i < L.lines - 1 && it) { p.r(4, y + 5, W - 8, 1, fg, 0.0); }
+    }
+    unclip(p);
+    if (pages > 1) { for (i = 0; i < pages; i++) { p.r(W - 6 - (pages - 1 - i) * 3, 5, 2, 2, i === pg ? onCol(c, P0) : drk(P0, 0.35)); } }
+  }
+
+  /* ---- brand sign (hangs from a wall, 4x1) and brand counter (4x2) ---- */
+  /* one line at size 1 or 2 if it fits, else split at the space nearest the middle (size 1) */
+  function brandLines(txt, maxW) {
+    var i, best = -1, d, bd = 999;
+    if (textW(txt, 1) <= maxW) { return [txt]; }
+    for (i = 1; i < txt.length - 1; i++) { if (txt.charAt(i) === " ") { d = Math.abs(i - txt.length / 2); if (d < bd) { bd = d; best = i; } } }
+    if (best < 0) { return [clip(txt, maxW, 1)]; }
+    return [txt.slice(0, best), txt.slice(best + 1)];
+  }
+  function brandSignDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.orange), fg = onCol(c, P0), txt = up(o.text || o.label || o.name || "BRAND");
+    p.r(8, 0, 1, 3, c.steel); p.r(W - 9, 0, 1, 3, c.steel); p.r(7, 0, 3, 1, c.slate); p.r(W - 10, 0, 3, 1, c.slate);
+    p.r(2, 2, W - 4, 14, drk(P0, 0.4)); p.r(3, 3, W - 6, 12, P0); p.r(3, 3, W - 6, 1, lite(P0, 0.35)); p.r(3, 14, W - 6, 1, drk(P0, 0.3));
+    p.px(4, 4, c.brass); p.px(W - 5, 4, c.brass); p.px(4, 13, c.brass); p.px(W - 5, 13, c.brass);
+    var lines = brandLines(txt, W - 16);
+    if (lines.length === 1) { fit(p, lines[0], W >> 1, 4, W - 16, fg, 2); }
+    else { fit(p, lines[0], W >> 1, 3, W - 14, fg, 1); fit(p, lines[1], W >> 1, 9, W - 14, fg, 1); }
+  }
+  function brandSignAnim(p, W, H, c, o, t, mode) {
+    var P0 = PC(o, c, 0, c.orange);
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + (W >> 1) * p.s, p.oy + 9 * p.s, 30 * p.s, mix(P0, "#FFFFFF", 0.35), 0.16); }
+  }
+  function brandKind(key) {
+    var k = String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (k.indexOf("egg") >= 0) { return "egg"; }
+    if (k.indexOf("cosmos") >= 0 || k.indexOf("burger") >= 0) { return "burger"; }
+    if (k.indexOf("lobster") >= 0) { return "lobster"; }
+    if (k.indexOf("vida") >= 0) { return "juice"; }
+    if (k.indexOf("tiger") >= 0 || k === "hq" || k.indexOf("k13") >= 0) { return "tiger"; }
+    if (k.indexOf("station") >= 0) { return "produce"; }
+    return "cups";
+  }
+  function brandCounterDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.orange), P1 = PC(o, c, 1, c.cream), kind = brandKind(o.brand), i, soon = (o.state === "soon");
+    p.r(1, H - 3, W - 2, 3, "#000000", 0.22);
+    p.r(0, 11, W, H - 14, P0); p.r(0, 11, W, 1, lite(P0, 0.3)); p.r(0, H - 5, W, 2, drk(P0, 0.3));
+    for (i = 16; i < W; i += 16) { p.r(i, 13, 1, H - 18, drk(P0, 0.3), 0.6); p.r(i + 1, 13, 1, H - 18, lite(P0, 0.2), 0.3); }
+    p.ell(12, 22, 5, 5, P1); p.ell(12, 21, 4, 3, lite(P1, 0.3)); p.txt(up(o.name || "").charAt(0), 11, 20, onCol(c, P1), 1); p.r(W - 22, 18, 16, 8, drk(P0, 0.22)); p.r(W - 21, 19, 14, 1, lite(P0, 0.15), 0.6);
+    p.r(0, 3, W, 9, lite(P1, 0.2)); p.r(0, 3, W, 1, c.white); p.r(0, 11, W, 1, drk(P1, 0.25));
+    if (soon) {
+      p.r(0, 2, W, H - 5, c.sheet); p.r(0, 2, W, 1, c.white); for (i = 0; i < W; i += 7) { p.r(i, 3, 1, H - 8, c.sheetS, 0.8); p.r(i + 1, 3, 1, H - 9, c.white, 0.25); }
+      p.r(0, H - 6, W, 3, c.sheetS); for (i = 0; i < W; i += 4) { p.r(i, H - 3, 2, 1, c.sheetS); }
+      p.r(W / 2 - 15, 8, 30, 14, c.cream); p.ol(W / 2 - 15, 8, 30, 14, c.graphite); p.r(W / 2 - 15, 8, 30, 1, c.white);
+      fit(p, "COMING", W >> 1, 10, 26, c.dorange, 1); fit(p, "SOON", W >> 1, 16, 26, c.graphite, 1);
+      p.px(W / 2 - 13, 10, c.graphite); p.px(W / 2 + 12, 10, c.graphite);
+      return;
+    }
+    if (kind === "egg") { for (i = 0; i < 4; i++) { p.ell(7 + i * 5, 5, 2, 2, c.white); } p.r(W - 18, 4, 12, 6, c.lwood); for (i = 0; i < 3; i++) { p.ell(W - 15 + i * 4, 5, 1, 2, c.cream); } p.px(24, 3, c.yolk); }
+    else if (kind === "burger") { for (i = 0; i < 2; i++) { p.ell(10 + i * 14, 8, 5, 2, c.tan); p.r(5 + i * 14, 7, 10, 1, c.palmL); p.r(5 + i * 14, 8, 10, 1, c.red); p.ell(10 + i * 14, 5, 5, 2, c.tan); p.px(8 + i * 14, 4, c.cream); p.px(11 + i * 14, 3, c.cream); } p.r(W - 14, 3, 8, 6, c.red); p.r(W - 13, 4, 6, 2, c.cream); }
+    else if (kind === "lobster") { p.r(6, 5, 18, 5, c.white); p.r(6, 5, 18, 1, c.cream); p.ell(15, 5, 6, 2, c.red); p.r(10, 3, 2, 2, c.red); p.r(18, 3, 2, 2, c.red); p.px(14, 4, c.graphite); p.r(W - 16, 4, 4, 6, c.glass); p.r(W - 16, 4, 4, 1, c.orange); p.r(W - 11, 5, 4, 5, c.glass); p.r(W - 11, 5, 4, 1, c.gold); }
+    else if (kind === "juice") { for (i = 0; i < 4; i++) { p.r(6 + i * 5, 3, 3, 7, c.glass); p.r(6 + i * 5, 5, 3, 5, [c.fo, c.palmL, c.fr, c.yolk][i]); } p.ell(W - 12, 7, 3, 2, c.fo); p.px(W - 12, 5, c.palmL); p.ell(W - 7, 7, 3, 2, c.palmL); }
+    else if (kind === "tiger") { p.r(6, 4, 12, 7, c.silver); p.r(7, 5, 10, 4, c.dark); p.r(7, 5, 10, 1, c.jade, 0.8); p.r(W - 18, 3, 6, 8, c.orange); for (i = 0; i < 3; i++) { p.r(W - 17 + i * 2, 3, 1, 8, c.graphite); } p.r(24, 5, 5, 5, c.cream); p.r(29, 6, 3, 4, c.brass); }
+    else if (kind === "produce") { for (i = 0; i < 5; i++) { p.ell(8 + i * 5, 7, 2, 2, [c.fo, c.palmL, c.fr, c.yolk, c.palmG][i]); } p.r(W - 16, 4, 10, 6, c.lwood); p.ol(W - 16, 4, 10, 6, c.dwood); p.ell(W - 13, 4, 2, 1, c.palmL); p.ell(W - 9, 4, 2, 1, c.fo); }
+    else { for (i = 0; i < 3; i++) { p.r(7 + i * 6, 5, 4, 5, c.white); p.r(11 + i * 6, 6, 1, 2, c.white); } p.r(W - 16, 3, 8, 7, c.brass); p.ell(W - 12, 3, 4, 2, "#FFE9A0"); p.px(W - 12, 1, c.brass); }
+  }
+
+  /* ---- site-screen kiosk, 1x2 ---- */
+  function kioskDraw(p, W, H, c) {
+    p.ell(8, H - 3, 6, 2, "#000000", 0.22);
+    p.r(3, 28, 10, 3, c.graphite); p.r(3, 28, 10, 1, c.steel); p.r(6, 20, 4, 9, c.steel); p.r(6, 20, 1, 9, c.slate);
+    p.r(1, 0, 14, 23, c.graphite); p.r(1, 0, 14, 1, c.steel); p.r(1, 22, 14, 1, c.ol); p.r(2, 1, 12, 20, c.cream);
+    p.r(2, 1, 12, 3, c.orange); p.px(3, 2, c.cream); p.px(5, 2, c.cream, 0.7); p.px(7, 2, c.cream, 0.7);
+    p.px(8, 24, c.red, 0.0); p.r(11, 24, 2, 1, c.jade);
+  }
+  function kioskAnim(p, W, H, c, o, t, mode) {
+    var tt = tm(t), off = still() ? 5 : Math.floor(tt * 8) % 36, i, y, k;
+    clipTo(p, 2, 4, 12, 14);
+    for (i = 0; i < 6; i++) {
+      y = 5 + i * 6 - off; if (y < 0) { y += 36; }
+      if (y >= 4 && y <= 17) {
+        k = (i + 1) % 3;
+        if (k === 0) { p.r(3, y, 10, 5, c.glass); p.r(3, y + 3, 4, 2, c.fo); p.px(9, y + 1, c.white); }
+        else if (k === 1) { p.r(3, y, 9, 1, c.slate); p.r(3, y + 2, 7, 1, c.slate, 0.7); p.r(3, y + 4, 8, 1, c.slate, 0.5); }
+        else { p.r(3, y, 5, 5, c.orange, 0.85); p.r(9, y + 1, 4, 1, c.slate); p.r(9, y + 3, 3, 1, c.slate, 0.6); }
+      }
+    }
+    unclip(p);
+    p.r(2, 18, 12, 3, c.cream); p.r(2, 18, 12, 1, c.paper);
+    p.r(3, 19, 4, 1, c.slate, 0.7); p.r(8, 19, 5, 1, c.slate, 0.4);
+    p.px(12, 24, still() || Math.floor(tt * 2) % 2 ? LIT.jade : c.dark);
+    if (lampsOn(mode)) { glowAt(p.ctx, p.ox + 8 * p.s, p.oy + 10 * p.s, 20 * p.s, LIT.cream, 0.18); }
+  }
+
+  /* ---- motif decor ---- */
+  var THEMES = ["coastal", "nautical", "sunshine", "fire", "theatre", "market", "neon", "vinyl", "plaster", "citrus", "botanical", "industrial"];
+  var WORDS = { coast: "coastal", beach: "coastal", surf: "coastal", sea: "coastal", ocean: "coastal", wave: "coastal", waves: "coastal",
+    nautical: "nautical", marine: "nautical", boat: "nautical", ship: "nautical", anchor: "nautical", lobster: "nautical", seafood: "nautical", harbor: "nautical", harbour: "nautical",
+    sunshine: "sunshine", sun: "sunshine", sunny: "sunshine", morning: "sunshine", breakfast: "sunshine", egg: "sunshine", eggs: "sunshine", yolk: "sunshine", golden: "sunshine",
+    fire: "fire", flame: "fire", flames: "fire", grill: "fire", burger: "fire", smash: "fire", burn: "fire", warm: "fire", sunset: "fire",
+    theatre: "theatre", theater: "theatre", stage: "theatre", cinema: "theatre", film: "theatre", curtain: "theatre", heritage: "theatre", history: "theatre",
+    market: "market", farm: "market", produce: "market", fresh: "market", stall: "market", stalls: "market", grocery: "market", local: "market",
+    neon: "neon", club: "neon", night: "neon", party: "neon", disco: "neon", dj: "neon",
+    vinyl: "vinyl", record: "vinyl", records: "vinyl", music: "vinyl", turntable: "vinyl", sound: "vinyl",
+    plaster: "plaster", limewash: "plaster", clay: "plaster", stucco: "plaster", lime: "plaster", atelier: "plaster", texture: "plaster",
+    citrus: "citrus", orange: "citrus", lemon: "citrus", juice: "citrus", fruit: "citrus", lime2: "citrus", tropical: "citrus",
+    botanical: "botanical", plant: "botanical", plants: "botanical", garden: "botanical", green: "botanical", leaf: "botanical", leaves: "botanical", vegan: "botanical", herb: "botanical", wellness: "botanical",
+    industrial: "industrial", metal: "industrial", steel: "industrial", factory: "industrial", workshop: "industrial", data: "industrial", tech: "industrial", bar: "industrial", cocktail: "industrial" };
+  function themeOf(word) {
+    var w = String(word || "").toLowerCase().replace(/[^a-z]/g, "");
+    if (WORDS.hasOwnProperty(w)) { return WORDS[w]; }
+    if (THEMES.indexOf(w) >= 0) { return w; }
+    return null;
+  }
+  var PIECES = {
+    coastal: ["poster", "buoy", "ropecoil", "stringlights", "picture"], nautical: ["poster", "buoy", "ropecoil", "cratestack", "picture"],
+    sunshine: ["poster", "stringlights", "planter", "picture", "cratestack"], fire: ["poster", "picture", "cratestack", "stringlights", "tilepatch"],
+    theatre: ["poster", "picture", "stringlights", "poster", "tilepatch"], market: ["cratestack", "stringlights", "poster", "planter", "tilepatch"],
+    neon: ["poster", "stringlights", "picture", "tilepatch", "poster"], vinyl: ["poster", "picture", "cratestack", "poster"],
+    plaster: ["picture", "tilepatch", "planter", "poster"], citrus: ["cratestack", "poster", "planter", "stringlights", "tilepatch"],
+    botanical: ["planter", "poster", "picture", "planter", "stringlights"], industrial: ["poster", "cratestack", "picture", "tilepatch", "stringlights"],
+    word: ["poster", "picture", "cratestack", "stringlights"]
+  };
+  var PIECE_SIZE = { poster: [1, 2, "wall"], picture: [2, 1, "wall"], planter: [1, 2, "object"], cratestack: [1, 1, "object"], stringlights: [4, 1, "wall"], tilepatch: [2, 2, "floor"], buoy: [1, 2, "object"], ropecoil: [1, 1, "object"] };
+  var THEME_COL = {
+    coastal: ["oceanL", "gold", "ocean"], nautical: ["oceanD", "cream", "red"], sunshine: ["gold", "cream", "fo"], fire: ["red", "orange", "gold"], theatre: ["red", "gold", "cream"], market: ["cream", "terra", "palmG"],
+    neon: ["graphite", "red", "jade"], vinyl: ["graphite", "orange", "cream"], plaster: ["stucco", "terraL", "eucL"], citrus: ["fo", "yolk", "palmG"], botanical: ["cream", "plant", "palmL"], industrial: ["steel", "silver", "orange"], word: ["cream", "orange", "graphite"]
+  };
+  function tcol(o, c, th, i) { var d = THEME_COL[th] || THEME_COL.word; return PC(o, c, i, c[d[i]]); }
+  /* the picture itself, inside the rect x,y,w,h */
+  function artDraw(p, th, x, y, w, h, c, o) {
+    var A = tcol(o, c, th, 0), B = tcol(o, c, th, 1), C = tcol(o, c, th, 2), cx = x + (w >> 1), cy = y + (h >> 1), r = Math.min(w, h) >> 1, i, k;
+    p.r(x, y, w, h, A);
+    if (th === "coastal") { p.r(x, y, w, h * 0.55, lite(c.oceanL, 0.45)); p.ell(x + w - 5, y + 5, 3, 3, B); for (i = 0; i < 4; i++) { p.r(x, y + h * 0.5 + i * 3, w, 2, i % 2 ? c.ocean : c.ocean2); for (k = 0; k < w; k += 4) { p.px(x + k + (i % 2) * 2, y + h * 0.5 + i * 3, c.foam); } } }
+    else if (th === "nautical") { p.ell(cx, y + 5, 2, 2, c.cream); p.ell(cx, y + 5, 1, 1, A); p.r(cx, y + 6, 1, h - 11, c.cream); p.r(cx - 3, y + 9, 7, 1, c.cream); for (i = 0; i < 5; i++) { p.px(cx - 5 + i, y + h - 7 + (i < 3 ? 4 - i : i - 2), c.cream); p.px(cx + 5 - i, y + h - 7 + (i < 3 ? 4 - i : i - 2), c.cream); } p.px(cx, y + h - 5, c.cream); p.r(x, y + h - 2, w, 1, C); }
+    else if (th === "sunshine") { for (i = 0; i < 12; i++) { p.r(cx + Math.round(Math.cos(i * 0.5236) * (r - 1)), cy + Math.round(Math.sin(i * 0.5236) * (r - 1)), 1, 1, B); p.r(cx + Math.round(Math.cos(i * 0.5236) * (r - 3)), cy + Math.round(Math.sin(i * 0.5236) * (r - 3)), 1, 1, c.fo); } p.ell(cx, cy, Math.max(2, r - 4), Math.max(2, r - 4), c.cream); p.ell(cx, cy, Math.max(1, r - 6), Math.max(1, r - 6), c.fo); }
+    else if (th === "fire") { p.r(x, y, w, h, c.graphite); p.ell(cx, y + h - 6, r - 1, r, B); p.ell(cx, y + h - 5, Math.max(2, r - 3), Math.max(3, r - 2), C); p.ell(cx, y + h - 4, Math.max(1, r - 5), Math.max(2, r - 4), c.yolk); p.px(cx, y + 3, A); p.px(cx - 1, y + 5, B); }
+    else if (th === "theatre") { p.r(x, y, 3, h, c.dred); p.r(x + w - 3, y, 3, h, c.dred); p.r(x, y, w, 3, c.dred); star(p, cx, cy, B); star(p, cx, cy, B); p.ell(cx, cy, 2, 2, B, 0.5); for (i = 0; i < w; i += 3) { p.px(x + i, y + 3, B); } }
+    else if (th === "market") { for (i = 0; i < w; i++) { p.r(x + i, y, 1, 5, (Math.floor(i / 2) % 2) ? C : c.white); } p.r(x + 2, y + h - 8, w - 4, 6, c.lwood); p.ol(x + 2, y + h - 8, w - 4, 6, c.dwood); for (i = 0; i < 3; i++) { p.ell(x + 4 + i * 3, y + h - 9, 2, 2, [c.fo, c.palmL, c.fr][i]); } }
+    else if (th === "neon") { p.r(x, y, w, h, c.dark); p.ell(cx, cy, Math.max(3, r - 2), Math.max(3, r - 2), B, 0.0); for (i = 0; i < 24; i++) { p.px(cx + Math.round(Math.cos(i * 0.2618) * (r - 2)), cy + Math.round(Math.sin(i * 0.2618) * (r - 2)), LIT.red); } for (i = 0; i < 5; i++) { p.px(cx - 1 + (i % 2) * 2, cy - 3 + i * 2, LIT.jade); } }
+    else if (th === "vinyl") { p.r(x, y, w, h, c.graphite); p.ell(cx, cy, r - 1, r - 1, c.dark); p.ell(cx, cy, Math.max(2, r - 4), Math.max(2, r - 4), c.ink); p.ell(cx, cy, Math.max(1, r - 6), Math.max(1, r - 6), B); p.px(cx, cy, c.dark); p.px(cx - 2, cy - 3, c.white, 0.4); }
+    else if (th === "plaster") { for (i = 0; i < 4; i++) { p.r(x + 1, y + 2 + i * Math.floor(h / 4), w - 2, 1, lite(A, 0.3), 0.8); p.r(x + 2 + i, y + 3 + i * Math.floor(h / 4), w - 6, 1, B, 0.6); } p.r(x + 3, y + h - 6, w - 8, 3, c.silver); p.r(x + w - 7, y + h - 4, 4, 1, c.dwood); }
+    else if (th === "citrus") { p.ell(cx, cy, r - 1, r - 1, B); p.ell(cx, cy, r - 3, r - 3, A); for (i = 0; i < 8; i++) { p.px(cx + Math.round(Math.cos(i * 0.785) * (r - 3)), cy + Math.round(Math.sin(i * 0.785) * (r - 3)), c.cream); p.px(cx + Math.round(Math.cos(i * 0.785) * (r - 5)), cy + Math.round(Math.sin(i * 0.785) * (r - 5)), c.cream); } p.px(cx, cy, c.cream); p.px(x + w - 3, y + 2, C); p.px(x + w - 4, y + 3, C); }
+    else if (th === "botanical") { p.ell(cx, cy, Math.max(3, r - 2), Math.max(4, r), B); for (i = -2; i <= 2; i++) { p.px(cx + i * 2, cy + Math.abs(i), C); p.px(cx + i * 2 + 1, cy + Math.abs(i) + 1, C); } p.r(cx, cy - r + 2, 1, r * 2 - 3, C); p.r(cx, y + h - 5, 1, 4, c.dwood); }
+    else if (th === "industrial") { p.r(x, y, w, h, c.steel); p.ell(cx, cy, r - 2, r - 2, B); p.ell(cx, cy, r - 5, r - 5, c.steel); for (i = 0; i < 8; i++) { p.r(cx + Math.round(Math.cos(i * 0.785) * (r - 1)) - 0, cy + Math.round(Math.sin(i * 0.785) * (r - 1)), 2, 2, B); } p.px(x + 1, y + 1, C); p.px(x + w - 2, y + 1, C); p.px(x + 1, y + h - 2, C); p.px(x + w - 2, y + h - 2, C); }
+    else { p.r(x, y, w, h, A); p.r(x + 1, y + 1, w - 2, 1, B); var tx = up(o.motifText || o.motif || ""); if (tx) { if (h > w * 1.3) { p.txt(tx.charAt(0), cx - 3, cy - 5, C, 2); } else { fit(p, clip(tx, w - 2, 1), cx, cy - 2, w - 2, C, 1); } } p.r(x + 1, y + h - 3, w - 2, 1, B); }
+  }
+  function posterDraw(p, W, H, c, o) {
+    var th = themeOf(o.motif) || "word";
+    var iw = W - 6, ih = H - 8, y0, A = tcol(o, c, th, 0), B = tcol(o, c, th, 1), C = tcol(o, c, th, 2);
+    p.r(1, 1, W - 2, H - 2, c.cream); p.ol(0, 0, W, H, c.dwood); p.r(1, 1, W - 2, 1, c.lwood);
+    if (th !== "word" && ih > iw * 1.3) {
+      artDraw(p, th, 3, 3, iw, iw, c, o); y0 = 3 + iw;
+      p.r(3, y0, iw, 3 + ih - y0, mix(A, "#FFFFFF", 0.55)); p.r(3, y0, iw, 1, A); p.r(4, y0 + 3, iw - 2, 1, B); p.r(4, y0 + 6, iw - 5, 1, C); p.r(4, y0 + 9, iw - 3, 1, B, 0.7); p.r(4, y0 + 12, iw - 7, 1, C, 0.7);
+    } else { artDraw(p, th, 3, 3, iw, ih, c, o); }
+    p.r(3, H - 4, iw, 1, c.dwood, 0.5);
+  }
+  function pictureDraw(p, W, H, c, o) {
+    var th = themeOf(o.motif) || "word";
+    p.r(0, 0, W, H, c.dwood); p.r(1, 1, W - 2, 1, c.lwood); p.r(1, 1, 1, H - 2, c.lwood, 0.6); p.r(2, 2, W - 4, H - 4, c.cream); p.r(0, H - 1, W, 1, c.ol, 0.5);
+    artDraw(p, th, 4, 4, W - 8, H - 8, c, o);
+  }
+  function planterDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.terra), th = themeOf(o.motif), v = (o.v || 0) % 3, i;
+    p.ell(8, H - 3, 6, 2, "#000000", 0.22); p.r(4, 20, 8, 9, P0); p.r(3, 19, 10, 2, lite(P0, 0.25)); p.r(4, 28, 8, 1, drk(P0, 0.3)); p.r(5, 22, 6, 1, drk(P0, 0.18), 0.6);
+    if (v === 0) { p.ell(8, 11, 6, 8, c.dplant); p.ell(6, 10, 4, 6, c.plant); p.ell(10, 9, 3, 5, c.palmG); p.px(7, 6, c.palmL); p.px(10, 11, c.palmL); p.px(5, 14, c.palmD); }
+    else if (v === 1) { for (i = 0; i < 5; i++) { p.r(8 + (i - 2) * 2, 6 + Math.abs(i - 2) * 2, 1, 14 - Math.abs(i - 2) * 2, c.palmG); p.ell(8 + (i - 2) * 3, 6 + Math.abs(i - 2) * 2, 2, 3, i % 2 ? c.palmL : c.plant); } }
+    else { p.ell(8, 14, 4, 5, c.plant); p.ell(8, 14, 2, 3, c.palmL); for (i = 0; i < 6; i++) { p.px(8 + Math.round(Math.cos(i) * 5), 14 + Math.round(Math.sin(i) * 5), c.white); } if (th === "citrus") { p.ell(5, 12, 1, 1, c.fo); p.ell(11, 15, 1, 1, c.fo); } p.px(8, 8, c.fpk); p.px(7, 9, c.fpk); }
+  }
+  function cratestackDraw(p, W, H, c, o) {
+    var th = themeOf(o.motif), i, A = tcol(o, c, th || "word", 1);
+    p.ell(8, 14, 7, 2, "#000000", 0.2); p.r(1, 9, 14, 6, c.lwood); p.ol(1, 9, 14, 6, c.dwood); p.r(1, 12, 14, 1, c.dwood); p.r(3, 4, 11, 5, c.wood); p.ol(3, 4, 11, 5, c.dwood);
+    if (th === "vinyl") { for (i = 0; i < 6; i++) { p.r(4 + i * 2, 1, 2, 4, [c.graphite, A, c.ink, c.orange, c.cream, c.graphite][i]); } }
+    else if (th === "nautical" || th === "coastal") { p.ell(7, 4, 3, 1, c.red); p.ell(11, 5, 2, 1, c.fo); p.px(5, 3, c.red); p.px(4, 4, c.red); p.r(12, 1, 1, 4, c.cream); }
+    else if (th === "industrial") { p.r(4, 2, 4, 3, c.silver); p.r(9, 1, 4, 4, c.steel); p.px(5, 3, c.dark); }
+    else { for (i = 0; i < 4; i++) { p.ell(5 + i * 3, 4, 2, 2, [A, c.palmL, c.fo, A][i]); p.px(4 + i * 3, 3, lite([A, c.palmL, c.fo, A][i], 0.5)); } }
+  }
+  function stringLightsDraw(p, W, H, c, o) {
+    var i, x, y, cols = [PC(o, c, 0, LIT.gold), PC(o, c, 1, LIT.orange), PC(o, c, 2, LIT.cream)];
+    for (x = 0; x < W; x++) { y = 2 + Math.round(Math.sin((x / W) * Math.PI * (W / 16)) * 0.0) + Math.round(Math.abs(Math.sin((x % 16) / 16 * Math.PI)) * 3); p.px(x, y, c.ol); }
+    for (i = 4; i < W - 2; i += 8) { y = 2 + Math.round(Math.abs(Math.sin(((i % 16) / 16) * Math.PI)) * 3); p.r(i, y + 1, 1, 2, c.ol); p.r(i - 1, y + 3, 3, 3, mixPal(c, "#B8A678")); }
+  }
+  function stringLightsAnim(p, W, H, c, o, t, mode) {
+    var i, y, f = fz(t), cols = [PC(o, c, 0, LIT.gold), PC(o, c, 1, LIT.orange), PC(o, c, 2, LIT.cream)], on = lampsOn(mode), k = 0, col;
+    for (i = 4; i < W - 2; i += 8) {
+      y = 2 + Math.round(Math.abs(Math.sin(((i % 16) / 16) * Math.PI)) * 3); col = cols[(k + (still() ? 0 : Math.floor(f / 3))) % 3];
+      p.r(i - 1, y + 3, 3, 3, on ? col : mix(col, "#7A6A40", 0.5)); p.px(i, y + 3, "#FFFFFF", on ? 0.7 : 0.3);
+      if (on) { glowAt(p.ctx, p.ox + i * p.s, p.oy + (y + 4) * p.s, 7 * p.s, col, 0.28); }
+      k++;
+    }
+  }
+  function tilePatchDraw(p, W, H, c, o) {
+    var th = themeOf(o.motif) || "word", A = tcol(o, c, th, 0), B = tcol(o, c, th, 1), C = tcol(o, c, th, 2), i, j, t, q;
+    if (th === "fire" || th === "neon" || th === "theatre" || th === "industrial") { A = mix(A, c.cream, 0.55); }
+    for (j = 0; j < H; j += 8) { for (i = 0; i < W; i += 8) {
+      t = ((i + j) / 8) % 2; q = (Math.floor(i / 8) + Math.floor(j / 8));
+      p.r(i, j, 8, 8, t ? mix(A, "#FFFFFF", 0.35) : mix(A, "#000000", 0.05)); p.r(i, j, 8, 1, "#000000", 0.12); p.r(i, j, 1, 8, "#000000", 0.12);
+      p.px(i + 4, j + 4, t ? B : C); p.px(i + 3, j + 4, t ? B : C); p.px(i + 4, j + 3, t ? B : C); p.px(i + 5, j + 4, t ? B : C); p.px(i + 4, j + 5, t ? B : C);
+    } }
+    p.ol(0, 0, W, H, c.dwood);
+  }
+  function ring(p, cx, cy, rx, ry, ix, iy, col, a) {
+    var j, wo, wi;
+    for (j = -ry; j <= ry; j++) {
+      wo = Math.round(rx * Math.sqrt(Math.max(0, 1 - (j * j) / ((ry + 0.5) * (ry + 0.5)))));
+      wi = (Math.abs(j) <= iy) ? Math.round(ix * Math.sqrt(Math.max(0, 1 - (j * j) / ((iy + 0.5) * (iy + 0.5))))) : -1;
+      if (wi < 0) { p.r(cx - wo, cy + j, wo * 2 + 1, 1, col, a); } else { p.r(cx - wo, cy + j, wo - wi, 1, col, a); p.r(cx + wi + 1, cy + j, wo - wi, 1, col, a); }
+    }
+  }
+  function buoyDraw(p, W, H, c, o) {
+    var A = PC(o, c, 0, c.red), i;
+    p.ell(8, H - 3, 5, 2, "#000000", 0.2);
+    p.r(7, 18, 3, 12, c.dwood); p.r(7, 18, 1, 12, c.lwood); p.r(4, 28, 9, 2, c.dwood);
+    ring(p, 8, 12, 7, 7, 3, 3, c.white);
+    p.r(1, 11, 4, 3, A); p.r(12, 11, 4, 3, A); p.r(7, 5, 3, 3, A); p.r(7, 17, 3, 2, A); p.r(5, 6, 1, 1, "#FFFFFF", 0.5); p.r(6, 5, 2, 1, "#FFFFFF", 0.5);
+    p.r(3, 7, 1, 1, c.tan); p.r(12, 7, 1, 1, c.tan); p.r(2, 5, 1, 2, c.tan); p.r(13, 5, 1, 2, c.tan);
+  }
+  function ropeCoilDraw(p, W, H, c) {
+    var i;
+    p.ell(8, 13, 7, 2, "#000000", 0.2);
+    for (i = 0; i < 3; i++) { ring(p, 8, 10 - i, 7 - i, 4, 4 - i, 2, i % 2 ? c.tan : c.sandD); ring(p, 8, 10 - i, 7 - i, 4, 6 - i, 3, c.sandL, 0.0); }
+    for (i = 0; i < 6; i++) { p.px(3 + i * 2, 12 - (i % 3), c.dwood, 0.55); p.px(4 + i * 2, 7 + (i % 3), c.dwood, 0.4); }
+    p.r(11, 5, 4, 1, c.tan); p.r(14, 6, 1, 3, c.sandD);
+  }
+  function communalDraw(p, W, H, c, o) {
+    var cl = [PC(o, c, 0, c.red), PC(o, c, 1, c.orange), PC(o, c, 2, c.jade), PC(o, c, 3, c.blue)], i, n = Math.floor((W - 8) / 18), x;
+    p.r(3, H - 3, W - 6, 3, "#000000", 0.2);
+    for (i = 0; i < n; i++) { x = 10 + i * 18; p.r(x - 1, 8, 8, 2, c.dwood, 0.0); p.ell(x + 3, 12, 4, 2, cl[i % 4]); p.ell(x + 3, 11, 4, 2, lite(cl[i % 4], 0.25)); p.r(x + 1, 13, 1, 4, c.graphite); p.r(x + 5, 13, 1, 4, c.graphite); }
+    p.r(2, 15, W - 4, 18, c.lwood); p.r(2, 15, W - 4, 2, lite(c.lwood, 0.35)); p.r(2, 31, W - 4, 3, c.dwood); for (i = 0; i < W - 4; i += 14) { p.r(2 + i, 18, 1, 12, c.wood, 0.45); }
+    p.r(4, 34, 3, 8, c.dwood); p.r(W - 7, 34, 3, 8, c.dwood); p.r(W / 2 - 1, 34, 3, 8, c.dwood);
+    p.r(4, 22, W - 8, 4, PC(o, c, 4, c.cream), 0.55);
+    for (i = 0; i < n; i++) { x = 10 + i * 18; p.ell(x + 4, 22, 4, 2, c.white); p.px(x + 3, 21, c.coralL); p.px(x + 5, 21, c.palmL); p.r(x + 10, 20, 2, 3, c.cream); }
+    p.r(W / 2 - 3, 12, 6, 5, c.glass); p.r(W / 2 - 1, 8, 2, 5, c.palmG); p.px(W / 2 - 2, 8, c.palmL); p.px(W / 2 + 1, 9, c.palmL);
+    for (i = 0; i < n; i++) { x = 10 + i * 18; p.ell(x + 3, 41, 4, 2, "#000000", 0.0); p.ell(x + 3, 38, 4, 2, cl[(i + 2) % 4]); p.ell(x + 3, 37, 4, 2, lite(cl[(i + 2) % 4], 0.25)); p.r(x + 1, 39, 1, 4, c.graphite); p.r(x + 5, 39, 1, 4, c.graphite); p.r(x, 43, 7, 1, c.steel); }
+  }
+  function sharedSeatDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.jade), i;
+    p.r(2, H - 3, W - 4, 3, "#000000", 0.2);
+    p.r(1, 2, W - 2, 12, c.dwood); p.r(2, 3, W - 4, 9, drk(P0, 0.12)); for (i = 2; i < W - 4; i += 8) { p.r(i, 3, 1, 9, drk(P0, 0.35), 0.7); p.r(i + 1, 3, 1, 3, lite(P0, 0.3), 0.5); }
+    p.r(1, 12, W - 2, 8, P0); p.r(1, 12, W - 2, 1, lite(P0, 0.35)); p.r(1, 19, W - 2, 1, drk(P0, 0.3)); p.r(2, 20, 3, 4, c.dwood); p.r(W - 5, 20, 3, 4, c.dwood);
+    p.r(6, 22, W - 12, 4, c.lwood); p.r(6, 22, W - 12, 1, lite(c.lwood, 0.3)); p.r(W / 2 - 1, 26, 3, 4, c.dwood);
+    p.ell(14, 22, 3, 1, c.white); p.r(W - 16, 19, 3, 3, c.cream); p.r(W - 13, 20, 1, 1, c.cream);
+    p.ell(8, 28, 4, 2, c.graphite); p.ell(8, 27, 4, 2, PC(o, c, 1, c.orange)); p.ell(W - 8, 28, 4, 2, c.graphite); p.ell(W - 8, 27, 4, 2, PC(o, c, 2, c.gold));
+  }
+  function hallSignDraw(p, W, H, c, o) {
+    var P0 = PC(o, c, 0, c.orange), fg = onCol(c, P0), txt = up(o.text || "FOOD HALL"), sub = up(o.sub || ""), i;
+    p.r(14, 0, 1, 5, c.steel); p.r(W - 15, 0, 1, 5, c.steel); p.r(13, 0, 3, 1, c.slate); p.r(W - 16, 0, 3, 1, c.slate);
+    p.r(3, 4, W - 6, 26, c.dwood); p.r(4, 5, W - 8, 24, c.ol); p.r(5, 6, W - 10, 22, P0); p.r(5, 6, W - 10, 1, lite(P0, 0.35)); p.r(5, 27, W - 10, 1, drk(P0, 0.3));
+    fit(p, txt, W >> 1, sub ? 9 : 12, W - 20, fg, 2); if (sub) { fit(p, sub, W >> 1, 20, W - 20, fg, 1); }
+    for (i = 6; i < W - 6; i += 6) { p.px(i, 5, c.brass); p.px(i, 28, c.brass); }
+  }
+  function hallSignAnim(p, W, H, c, o, t, mode) {
+    var i, f = fz(t), on = lampsOn(mode);
+    for (i = 6; i < W - 6; i += 6) { p.px(i, 5, ((Math.floor(i / 6) + f) % 3 === 0) ? LIT.white : LIT.gold); p.px(i, 28, ((Math.floor(i / 6) + f) % 3 === 1) ? LIT.white : LIT.gold); }
+    if (on) { glowAt(p.ctx, p.ox + (W >> 1) * p.s, p.oy + 16 * p.s, 44 * p.s, PC(o, c, 0, LIT.orange), 0.14); }
+  }
+
+  var NEW_OBJ = {
+    "stage": { w: 4, h: 3, draw: stageDraw, anim: stageAnim, glow: { color: "#FFC83D", r: 3.4, ox: 0.5, oy: 0.8, a: 0.18 } },
+    "stalls": { w: 4, h: 3, draw: stallsDraw, anim: stallsAnim },
+    "aquarium": { w: 3, h: 3, draw: aquariumDraw, anim: aquariumAnim, glow: { color: "#5FD1BE", r: 3, ox: 0.5, oy: 0.4, a: 0.15 } },
+    "griddle": { w: 3, h: 2, draw: griddleDraw, anim: griddleAnim },
+    "greenery": { w: 4, h: 3, draw: greeneryDraw, anim: greeneryAnim },
+    "brandwall": { w: 4, h: 3, draw: brandwallDraw, anim: brandwallAnim },
+    "ticker": { w: 4, h: 3, draw: tickerDraw, anim: tickerAnim, glow: { color: "#5FD1BE", r: 3.4, ox: 0.5, oy: 0.4, a: 0.12 } },
+    "plaster": { w: 3, h: 3, draw: plasterDraw },
+    "scalebar": { w: 4, h: 3, draw: scalebarDraw, anim: scalebarAnim, glow: { color: "#FFB347", r: 3.6, ox: 0.5, oy: 0.3, a: 0.14 } },
+    "mural": { w: 4, h: 3, draw: muralDraw, anim: muralAnim },
+    "eggbar": { w: 4, h: 2, draw: eggbarDraw, anim: eggbarAnim },
+    "menuboard": { w: 3, h: 2, layer: "wall", draw: menuBoardDraw, anim: menuBoardAnim },
+    "brandsign": { w: 4, h: 1, layer: "wall", draw: brandSignDraw, anim: brandSignAnim },
+    "brandcounter": { w: 4, h: 2, draw: brandCounterDraw },
+    "kiosk": { w: 1, h: 2, draw: kioskDraw, anim: kioskAnim, glow: { color: "#FFF3D6", r: 1.6, ox: 0.5, oy: 0.3, a: 0.16 } },
+    "poster": { w: 1, h: 2, layer: "wall", draw: posterDraw },
+    "picture": { w: 2, h: 1, layer: "wall", draw: pictureDraw },
+    "planter": { w: 1, h: 2, draw: planterDraw },
+    "cratestack": { w: 1, h: 1, draw: cratestackDraw },
+    "stringlights": { w: 4, h: 1, layer: "wall", draw: stringLightsDraw, anim: stringLightsAnim },
+    "tilepatch": { w: 2, h: 2, layer: "floor", draw: tilePatchDraw },
+    "buoy": { w: 1, h: 2, draw: buoyDraw },
+    "ropecoil": { w: 1, h: 1, draw: ropeCoilDraw },
+    "communal": { w: 6, h: 3, draw: communalDraw },
+    "sharedseat": { w: 3, h: 2, draw: sharedSeatDraw },
+    "hallsign": { w: 6, h: 2, layer: "wall", draw: hallSignDraw, anim: hallSignAnim }
+  };
+  var SIG_KINDS = ["stage", "stalls", "aquarium", "griddle", "greenery", "brandwall", "djbooth", "ticker", "plaster", "scalebar", "mural", "eggbar"];
+  (function () {
+    var k, d;
+    for (k in NEW_OBJ) { if (NEW_OBJ.hasOwnProperty(k)) { d = NEW_OBJ[k]; d.layer = d.layer || "object"; OBJ[k] = d; if (objectNames.indexOf(k) < 0) { objectNames.push(k); } } }
+    /* the compact club booth keeps its 4x2 sprite; the same name at 4x3 is CENGO's full booth */
+    OBJ.djbooth = { w: 4, h: 3, layer: "object", draw: djSwitchDraw, anim: djSwitchAnim, glow: { color: "#FF5A3C", r: 3.4, ox: 0.5, oy: 0.4, a: 0.2 } };
+  })();
+
+
+  /* =====================================================================================
      INTERIORS
      ===================================================================================== */
   var INT_STYLE = {
@@ -2286,6 +3023,126 @@
   }
 
   /* =====================================================================================
+     ROUND 4 INTERIORS: a food hall with N counters, and a standalone place
+     ===================================================================================== */
+  function rowsFor(w, h, wallRows, S, dx) {
+    var rows = [], x, y, row;
+    for (y = 0; y < h; y++) {
+      row = "";
+      for (x = 0; x < w; x++) {
+        if (y === 0) { row += (x === 0 || x === w - 1) ? "#" : "U"; }
+        else if (y < wallRows) { row += (x === 0 || x === w - 1) ? "#" : "W"; }
+        else if (y === h - 1) { row += (x === dx || x === dx + 1) ? "d" : "#"; }
+        else if (x === 0 || x === w - 1) { row += "#"; }
+        else { row += ((x + y) % 2 === 0 || S.floor === S.floor2) ? "f" : "g"; }
+      }
+      rows.push(row);
+    }
+    return rows;
+  }
+  function legendFor(st) {
+    return { " ": { solid: true, tile: "void" }, "#": { wall: true, tile: "wall-cap" }, "U": { wall: true, tile: wallUp(st.wall) }, "W": { wall: true, tile: st.wall },
+      "f": { floor: true, tile: st.floor }, "g": { floor: true, tile: st.floor2 }, "d": { floor: true, tile: "mat-k13", door: true } };
+  }
+  function mkAdder(objs, prefix) {
+    var n = 0;
+    return function (kind, x0, y0, ow, oh, opt) {
+      var d = OBJ[kind], o = { id: prefix + kind + "-" + (++n), kind: kind, x: x0, y: y0, w: ow || d.w, h: oh || d.h, solid: true, layer: d.layer }, k;
+      opt = opt || {};
+      if (o.layer === "floor" || o.layer === "wall") { o.solid = false; }
+      for (k in opt) { if (opt.hasOwnProperty(k)) { o[k] = opt[k]; } }
+      objs.push(o); return o;
+    };
+  }
+  function counterSpec(c0, i) {
+    var o = (typeof c0 === "string") ? { key: c0 } : (c0 || {}), key = String(o.key || o.id || ("counter" + i)), sk = shopKey(key), nm = o.name || (sk ? SHOPS[sk].name : labelOf(key));
+    return { key: key, name: String(nm), palette: o.palette || null, state: (o.state === "soon" || o.soon || o.state === "coming-soon") ? "soon" : "live", menu: o.menu || o.items || [], toy: o.toy === undefined ? true : !!o.toy, motif: o.motif || null };
+  }
+  /* counters: ['EggOut', {key:'LobsterLab', name, palette:[...], menu:[{item,price}], state:'soon'|'live', toy:true|false}, ...]
+     Returns a map description like interior(). The back wall (three tiles tall) carries each counter's sign and menu board;
+     the counters stand one tile in front of it with a staff aisle behind; the host spot of each is its slot:'host'. */
+  function hallInterior(counters, opts) {
+    var list = (counters || []).map(counterSpec), N = Math.max(1, list.length), S = INT_STYLE.foodhall, w = Math.max(16, N * 5 + 3), h = 15, dx = (w >> 1) - 1, rows = rowsFor(w, h, 4, S, dx), objs = [], A = mkAdder(objs, "hall-"),
+      start = Math.floor((w - (N * 5 - 1)) / 2), hosts = [], toys = [], cs = [], i, k, x0, sp, left, nT, tx, t0 = (opts && opts.name) || "FOOD HALL", pal0 = (opts && opts.palette) || (list[0] && list[0].palette) || null, kiosk, sigX, tp;
+    for (i = 0; i < N; i++) {
+      sp = list[i]; x0 = start + i * 5;
+      A("brandsign", x0, 0, 4, 1, { solid: false, text: sp.name, palette: sp.palette, label: sp.name });
+      A("menuboard", x0, 1, 4, 2, { solid: false, items: sp.state === "soon" ? [] : sp.menu, empty: sp.state === "soon" ? "COMING SOON" : "ASK AT THE COUNTER", title: sp.state === "soon" ? "SOON" : "MENU", palette: sp.palette });
+      A("brandcounter", x0, 5, 4, 2, { slot: "host", fh: 1, brand: sp.key, name: sp.name, palette: sp.palette, state: sp.state, counter: sp.key, label: sp.state === "soon" ? "Coming soon: " + sp.name : "Talk to the " + sp.name + " host" });
+      hosts.push({ key: sp.key, x: x0 + 1.5, y: 5.0, counter: i });
+      cs.push({ key: sp.key, name: sp.name, state: sp.state, x: x0, y: 5, w: 4, h: 2, host: hosts[i] });
+    }
+    left = Math.ceil(N / 2);
+    for (i = 0; i < N; i++) {
+      sp = list[i]; if (!sp.toy) { toys.push(null); continue; }
+      k = i % 2 === 0 ? Math.floor(i / 2) : Math.floor(i / 2);
+      tp = (i % 2 === 0) ? { x: 1 + k * 3, y: h - 5 } : { x: w - 3 - k * 3, y: h - 5 };
+      A("toybench", tp.x, tp.y, 2, 2, { slot: "toy", label: "Try the " + sp.name + " toy", fh: 1, counter: sp.key });
+      toys.push({ key: sp.key, x: tp.x, y: tp.y, w: 2, h: 2 });
+    }
+    nT = w >= 22 ? 2 : 1;
+    A("rug", 3, 7, w - 6, 3, { tone: "orange", w: w - 6, h: 3 }).solid = false;
+    for (i = 0; i < nT; i++) { tx = Math.round(w * (i + 1) / (nT + 1) - 3); A("communal", tx, 7, 6, 3, { palette: pal0, fh: 2 }); }
+    A("sharedseat", 1, 7, 3, 2, { palette: pal0, fh: 1 }); A("sharedseat", w - 4, 7, 3, 2, { palette: pal0, fh: 1 });
+    A("planter", 1, 4, 1, 2, { motif: "botanical", v: 0, fh: 1 }); A("planter", w - 2, 4, 1, 2, { motif: "botanical", v: 1, fh: 1 });
+    kiosk = A("kiosk", dx + 5, h - 3, 1, 2, { slot: "kiosk", fh: 1, label: "Read the live site" });
+    A("hallsign", dx - 2, h - 3, 6, 2, { solid: false, text: t0, sub: opts && opts.sub, palette: pal0 });
+    return {
+      id: "interior-hall", category: "foodhall", name: S.name, w: w, h: h, tiles: rows, legend: legendFor(S), objects: objs,
+      spawn: { x: dx + 1, y: h - 1.7 }, door: { x: dx, y: h - 1, w: 2 }, host: hosts[0], hosts: hosts, counters: cs, toys: toys, kiosk: { x: kiosk.x, y: kiosk.y, w: 1, h: 2 },
+      slots: { toy: toys[0], toys: toys, host: hosts[0], hosts: hosts, kiosk: { x: kiosk.x, y: kiosk.y, w: 1, h: 2 } }
+    };
+  }
+  /* a standalone place: its counter and host, a menu board, the signature object on the back wall, the kiosk and one toy bench */
+  function shopInterior(key, palette, signatureKind, opts) {
+    var sk = shopKey(key), spec = sk ? SHOPS[sk] : GENERIC, cat = INT_STYLE[spec.cat] ? spec.cat : "office", S = INT_STYLE[cat], w = Math.max(16, S.w), h = 12, dx = (w >> 1) - 1,
+      rows = rowsFor(w, h, 4, S, dx), objs = [], A = mkAdder(objs, "shop-"), nm = (opts && opts.name) || spec.name || labelOf(key), kind = (signatureKind && OBJ[signatureKind] && SIG_KINDS.indexOf(signatureKind) >= 0) ? signatureKind : null,
+      sd = kind ? OBJ[kind] : null, sw = sd ? sd.w : 4, sh = sd ? sd.h : 3, sx = w - 2 - sw, menu = (opts && opts.menu) || [], host = { x: 3.5, y: 5.0 }, toy = { x: 1, y: 8, w: 2, h: 2 }, kx = w - 2, ky = 4, i, soon = !!(opts && opts.state === "soon");
+    A("brandsign", 2, 0, 4, 1, { solid: false, text: nm, palette: palette, label: nm });
+    A("menuboard", 2, 1, 4, 2, { solid: false, items: menu, palette: palette, title: (opts && opts.title) || "MENU" });
+    if (kind) { A(kind, sx, 4, sw, sh, { fh: Math.min(2, sh), palette: palette, label: opts && opts.label, signature: kind, stats: opts && opts.stats, badges: opts && opts.badges }); }
+    A("brandcounter", 2, 5, 4, 2, { slot: "host", fh: 1, brand: sk || key, name: nm, palette: palette, state: soon ? "soon" : "live", label: "Talk to the host" });
+    A("kiosk", kx, ky, 1, 2, { slot: "kiosk", fh: 1, label: "Read the live site" });
+    A("toybench", toy.x, toy.y, 2, 2, { slot: "toy", label: "Try the toy", fh: 1 });
+    A("rug", 5, 8, 8, 3, { tone: "orange", w: 8, h: 3 }).solid = false;
+    A("table", 6, 8, 2, 2, {}); A("table", 10, 8, 2, 2, {}); A("stool", 5, 10, 1, 1, {}); A("stool", 8, 10, 1, 1, {}); A("stool", 9, 10, 1, 1, {}); A("stool", 12, 10, 1, 1, {});
+    A("planter", 1, 4, 1, 2, { motif: (opts && opts.motif) || "botanical", v: 0, fh: 1, palette: palette });
+    return {
+      id: "interior-shop-" + String(sk || key).toLowerCase(), category: cat, name: nm, w: w, h: h, tiles: rows, legend: legendFor(S), objects: objs,
+      spawn: { x: dx + 1, y: h - 1.7 }, door: { x: dx, y: h - 1, w: 2 }, host: host, hosts: [{ key: String(key), x: host.x, y: host.y }], toys: [toy], kiosk: { x: kx, y: ky, w: 1, h: 2 },
+      signature: kind ? { kind: kind, x: sx, y: 4, w: sw, h: sh } : null,
+      slots: { toy: toy, host: host, hosts: [{ key: String(key), x: host.x, y: host.y }], kiosk: { x: kx, y: ky, w: 1, h: 2 }, signature: kind ? { kind: kind, x: sx, y: 4, w: sw, h: sh } : null }
+    };
+  }
+
+  /* ---------- round 4 convenience drawers (x,y are DESTINATION PIXELS like objectAt) ---------- */
+  function signature(ctx, kind, palette, px, py, s, t, light, label) {
+    if (SIG_KINDS.indexOf(kind) < 0) { return false; }
+    objectAt(ctx, { id: kind, kind: kind, palette: palette, label: label }, px, py, s, t, light); return true;
+  }
+  function menuBoard(ctx, items, x, y, w, h, s, palette, t, light, title) {
+    objectAt(ctx, { id: "menuboard", w: w || 3, h: h || 2, items: items || [], palette: palette, title: title }, x, y, s, t, light);
+  }
+  function counter(ctx, key, name, palette, px, py, s, t, light, state) {
+    var soon = (state === "soon" || state === "coming-soon" || key === "coming-soon"), nm = name || key;
+    if (!soon) { objectAt(ctx, { id: "brandsign", w: 4, h: 1, text: nm, label: nm, palette: palette }, px, py - TS * s, s, t, light); }
+    else { objectAt(ctx, { id: "brandsign", w: 4, h: 1, text: nm, label: nm, palette: palette }, px, py - TS * s, s, t, light); }
+    objectAt(ctx, { id: "brandcounter", w: 4, h: 2, brand: key, name: nm, palette: palette, state: soon ? "soon" : "live" }, px, py, s, t, light);
+  }
+  function kiosk(ctx, px, py, s, t, light) { objectAt(ctx, { id: "kiosk" }, px, py, s, t, light); }
+  function motifPieces(word) {
+    var th = themeOf(word) || "word", ids = PIECES[th], out = [], i, z;
+    for (i = 0; i < ids.length; i++) { z = PIECE_SIZE[ids[i]]; out.push({ id: ids[i], w: z[0], h: z[1], layer: z[2], motif: th, text: th === "word" ? up(word) : undefined }); }
+    return out;
+  }
+  function motif(ctx, word, x, y, s, palette, variant, t, light) {
+    var ps = motifPieces(word), pc = ps[Math.abs(variant || 0) % ps.length];
+    objectAt(ctx, { id: pc.id, w: pc.w, h: pc.h, motif: pc.motif, motifText: pc.text, palette: palette, v: variant || 0 }, x, y, s, t, light);
+    return pc;
+  }
+  function signatureInfo(kind) { var d = OBJ[kind]; return (d && SIG_KINDS.indexOf(kind) >= 0) ? { kind: kind, w: d.w, h: d.h, layer: d.layer } : null; }
+
+  /* =====================================================================================
      RESOLVE + PUBLIC API
      ===================================================================================== */
   function vehInfo(obj) {
@@ -2319,7 +3176,7 @@
   function objectAt(ctx, obj, px, py, s, t, light) {
     var d = resolve(obj || {}), z = sizeOf(obj, d), mode = modeOf(light), c = pal(mode), st = still(), tt = st ? STILL_T : (t || 0), v = 0, cv, g, o = obj || {}, key, a, amt;
     if (d.sway) { v = swayV(tt, o, d.sway); }
-    key = "o:" + d.key + ":" + z.w + "x" + z.h + ":" + mode + ":" + v + ":" + (o.tone || "") + "|" + (o.text || "") + "|" + (o.color || "") + "|" + (o.art || "") + "|" + (o.stock || "");
+    key = "o:" + d.key + ":" + z.w + "x" + z.h + ":" + mode + ":" + v + ":" + (o.tone || "") + "|" + (o.text || "") + "|" + (o.color || "") + "|" + (o.art || "") + "|" + (o.stock || "") + "|" + okey(o) + (o.motifText ? "|" + o.motifText : "");
     cv = sprite(key, z.w, z.h, function (p, W, H) { curMode = mode; d.draw(p, W, H, c, o, v, mode); });
     blit(ctx, cv, px, py, s);
     if (d.anim) { curMode = mode; d.anim(mkP(ctx, px, py, s), z.w, z.h, c, o, tt, mode); }
@@ -2360,9 +3217,11 @@
   var shopKeys = shopList.map(function (s) { return s.key; });
 
   K.town = {
-    version: "2026-10-06", tileSize: TS, tileNames: tileNames, objectNames: objectNames, shopKeys: shopKeys, shops: shopList, categories: intCategories,
+    version: "2026-10-06-r4", tileSize: TS, tileNames: tileNames, objectNames: objectNames, shopKeys: shopKeys, shops: shopList, categories: intCategories,
     carColors: CAR_NAMES, directions: DIRS.slice(), frameInner: FRAME_INNER,
     tile: tile, object: object, objectAt: objectAt, info: info, lights: lights,
+    signature: signature, signatureInfo: signatureInfo, signatureKinds: SIG_KINDS.slice(), menuBoard: menuBoard, counter: counter, kiosk: kiosk, motif: motif, motifPieces: motifPieces, motifThemes: THEMES.slice(),
+    hallInterior: hallInterior, shopInterior: shopInterior,
     diagRun: diagRun, storefront: storefront, storefrontInfo: shopInfo, storefrontLights: shopLights, interior: interior, shopKey: shopKey
   };
 })();

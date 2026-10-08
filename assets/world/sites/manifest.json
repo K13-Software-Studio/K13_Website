@@ -1,0 +1,416 @@
+{
+ "baa": {
+  "full": {
+   "bytes": 275098,
+   "cut": false,
+   "h": 5872,
+   "src": "/assets/world/sites/baa-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "Warm, textured interior with hand-finished feature wall",
+    "bytes": 32788,
+    "h": 375,
+    "src": "/assets/world/sites/baa-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "Ornate vintage frame from the baa atelier collection",
+    "bytes": 17520,
+    "h": 254,
+    "src": "/assets/world/sites/baa-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "A craftsman's hand pulling a steel trowel across wet plaster",
+    "bytes": 13140,
+    "h": 454,
+    "src": "/assets/world/sites/baa-3.webp",
+    "w": 363
+   }
+  ],
+  "key": "baa",
+  "page": "https://www.atelierbaa.com/"
+ },
+ "barfix": {
+  "full": {
+   "bytes": 132062,
+   "cut": false,
+   "h": 4201,
+   "src": "/assets/world/sites/barfix-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "BarFix akıllı tartı, bar tezgahında, ekranda hazır durumda",
+    "bytes": 11806,
+    "h": 372,
+    "src": "/assets/world/sites/barfix-1.webp",
+    "w": 561
+   },
+   {
+    "alt": "BarFix marka cihaz yakın çekim",
+    "bytes": 1984,
+    "h": 156,
+    "src": "/assets/world/sites/barfix-2.webp",
+    "w": 236
+   }
+  ],
+  "key": "barfix",
+  "page": "https://bfx.k13projects.com"
+ },
+ "carlos": {
+  "full": {
+   "bytes": 407002,
+   "cut": true,
+   "h": 9000,
+   "src": "/assets/world/sites/carlos-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "carlos page view",
+    "bytes": 19420,
+    "h": 422,
+    "src": "/assets/world/sites/carlos-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "carlos page view",
+    "bytes": 16772,
+    "h": 422,
+    "src": "/assets/world/sites/carlos-2.webp",
+    "w": 600
+   }
+  ],
+  "key": "carlos",
+  "page": "https://carlos.k13projects.com"
+ },
+ "cengo": {
+  "full": {
+   "bytes": 119950,
+   "cut": false,
+   "h": 4814,
+   "src": "/assets/world/sites/cengo-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "CENGO performing under moonlight",
+    "bytes": 7502,
+    "h": 422,
+    "src": "/assets/world/sites/cengo-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "CENGO -",
+    "bytes": 22666,
+    "h": 338,
+    "src": "/assets/world/sites/cengo-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "CENGO at the club",
+    "bytes": 19338,
+    "h": 900,
+    "src": "/assets/world/sites/cengo-3.webp",
+    "w": 600
+   }
+  ],
+  "key": "cengo",
+  "page": "https://cengo.party"
+ },
+ "cosmos": {
+  "full": {
+   "bytes": 313220,
+   "cut": false,
+   "h": 4948,
+   "src": "/assets/world/sites/cosmos-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "A table spread of Cosmos burgers, chicken tenders and loaded fries on white plates",
+    "bytes": 35328,
+    "h": 401,
+    "src": "/assets/world/sites/cosmos-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "A guest photographing a Cosmos burger and a beer with their phone",
+    "bytes": 19846,
+    "h": 370,
+    "src": "/assets/world/sites/cosmos-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "Seven Cosmos smash burgers stacked on a wooden board under warm string lights",
+    "bytes": 36632,
+    "h": 363,
+    "src": "/assets/world/sites/cosmos-3.webp",
+    "w": 600
+   }
+  ],
+  "key": "cosmos",
+  "page": "https://cosmos.k13projects.com"
+ },
+ "egg": {
+  "full": {
+   "bytes": 306896,
+   "cut": false,
+   "h": 5619,
+   "src": "/assets/world/sites/egg-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "egg photo",
+    "bytes": 19130,
+    "h": 364,
+    "src": "/assets/world/sites/egg-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "Egg&Out brioche sandwiches with scrambled egg, avocado, cheddar and chives",
+    "bytes": 34630,
+    "h": 701,
+    "src": "/assets/world/sites/egg-2.webp",
+    "w": 560
+   },
+   {
+    "alt": "egg photo",
+    "bytes": 10334,
+    "h": 436,
+    "src": "/assets/world/sites/egg-3.webp",
+    "w": 580
+   }
+  ],
+  "key": "egg",
+  "page": "https://egg.k13projects.com"
+ },
+ "globalfork": {
+  "full": {
+   "bytes": 222696,
+   "cut": false,
+   "h": 4421,
+   "src": "/assets/world/sites/globalfork-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "globalfork photo",
+    "bytes": 33960,
+    "h": 329,
+    "src": "/assets/world/sites/globalfork-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "globalfork photo",
+    "bytes": 23454,
+    "h": 178,
+    "src": "/assets/world/sites/globalfork-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "globalfork photo",
+    "bytes": 20754,
+    "h": 521,
+    "src": "/assets/world/sites/globalfork-3.webp",
+    "w": 520
+   }
+  ],
+  "key": "globalfork",
+  "page": "https://globalforkfh.com"
+ },
+ "lavida": {
+  "full": {
+   "bytes": 232260,
+   "cut": false,
+   "h": 4131,
+   "src": "/assets/world/sites/lavida-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "Fresh healthy salmon bowl with colorful vegetables",
+    "bytes": 52826,
+    "h": 422,
+    "src": "/assets/world/sites/lavida-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "lavida page view",
+    "bytes": 20428,
+    "h": 422,
+    "src": "/assets/world/sites/lavida-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "lavida page view",
+    "bytes": 18388,
+    "h": 422,
+    "src": "/assets/world/sites/lavida-3.webp",
+    "w": 600
+   }
+  ],
+  "key": "lavida",
+  "page": "https://lavida.fit"
+ },
+ "lobsterlab": {
+  "full": {
+   "bytes": 199816,
+   "cut": false,
+   "h": 3341,
+   "src": "/assets/world/sites/lobsterlab-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "Four Lobster Lab rolls on steel trays, lobster with drawn butter, crab, shrimp and Connecticut style",
+    "bytes": 40920,
+    "h": 338,
+    "src": "/assets/world/sites/lobsterlab-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "An overhead spread of Lobster Lab lobster rolls, seafood sandwiches and grilled cheese on steel trays",
+    "bytes": 39718,
+    "h": 270,
+    "src": "/assets/world/sites/lobsterlab-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "Two Lobster Lab chefs plating lobster rolls and grilled cheese onto steel trays lined up along a wooden table",
+    "bytes": 33636,
+    "h": 617,
+    "src": "/assets/world/sites/lobsterlab-3.webp",
+    "w": 560
+   }
+  ],
+  "key": "lobsterlab",
+  "page": "https://lobsterlab.us"
+ },
+ "miramar": {
+  "full": {
+   "bytes": 386042,
+   "cut": false,
+   "h": 8440,
+   "src": "/assets/world/sites/miramar-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "The Spanish-style exterior of Miramar Food Hall at 150 W Avenida Pico, San Clemente, with guests dining on the arched ba",
+    "bytes": 42578,
+    "h": 1069,
+    "src": "/assets/world/sites/miramar-1.webp",
+    "w": 568
+   },
+   {
+    "alt": "Guests dining on Miramar Food Hall's sunlit patio, framed by the building's signature arch",
+    "bytes": 32246,
+    "h": 851,
+    "src": "/assets/world/sites/miramar-2.webp",
+    "w": 568
+   },
+   {
+    "alt": "The Anchor Inn House of Sea Food, a beloved San Clemente restaurant",
+    "bytes": 33020,
+    "h": 792,
+    "src": "/assets/world/sites/miramar-3.webp",
+    "w": 568
+   }
+  ],
+  "key": "miramar",
+  "page": "https://miramarfoodhall.com"
+ },
+ "station8": {
+  "full": {
+   "bytes": 201700,
+   "cut": false,
+   "h": 4100,
+   "src": "/assets/world/sites/station8-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "STATION8 Public Market bar interior by Basile Studio",
+    "bytes": 27430,
+    "h": 232,
+    "src": "/assets/world/sites/station8-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "station8 photo",
+    "bytes": 33012,
+    "h": 232,
+    "src": "/assets/world/sites/station8-2.webp",
+    "w": 600
+   },
+   {
+    "alt": "station8 photo",
+    "bytes": 31758,
+    "h": 232,
+    "src": "/assets/world/sites/station8-3.webp",
+    "w": 600
+   }
+  ],
+  "key": "station8",
+  "page": "https://station8publicmarket.com"
+ },
+ "thg": {
+  "full": {
+   "bytes": 178774,
+   "cut": false,
+   "h": 4989,
+   "src": "/assets/world/sites/thg-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "thg page view",
+    "bytes": 53272,
+    "h": 422,
+    "src": "/assets/world/sites/thg-1.webp",
+    "w": 600
+   },
+   {
+    "alt": "thg page view",
+    "bytes": 20456,
+    "h": 422,
+    "src": "/assets/world/sites/thg-2.webp",
+    "w": 600
+   }
+  ],
+  "key": "thg",
+  "page": "https://tigerhospitalitygroup.com"
+ },
+ "tmb": {
+  "full": {
+   "bytes": 59824,
+   "cut": false,
+   "h": 1914,
+   "src": "/assets/world/sites/tmb-full.webp",
+   "w": 720
+  },
+  "images": [
+   {
+    "alt": "TrustMeBro mascot",
+    "bytes": 10172,
+    "h": 289,
+    "src": "/assets/world/sites/tmb-1.webp",
+    "w": 288
+   },
+   {
+    "alt": "tmb page view",
+    "bytes": 19586,
+    "h": 422,
+    "src": "/assets/world/sites/tmb-2.webp",
+    "w": 600
+   }
+  ],
+  "key": "tmb",
+  "page": "https://tmb.k13projects.com"
+ }
+}

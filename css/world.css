@@ -309,3 +309,24 @@
 .kw-who-ar{min-width:40px}
 .kw-who-card{padding-top:16px;padding-bottom:16px}
 @media(max-width:620px){ .kw-who-ar,.kw-who-val{min-height:44px} .kw-who-ar{min-width:44px} .kw-who-pv{padding:6px} .kw-who-card{padding:12px} }
+
+/* round 4: the site screen inside a shop. A scrollable copy of the public page, its pictures and menu, a link to the real site. */
+.kw-site{width:min(920px,calc(100vw - 20px))}
+.kw-site-b{display:grid;grid-auto-rows:max-content;gap:12px;align-content:start;padding:14px;color:var(--ink)}
+.kw-site-live{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:100px;background:#EA5E14;color:#FFFFFF;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;text-decoration:none}
+.kw-site-live:focus-visible,.kw-site-tab:focus-visible,.kw-site-scroll:focus-visible,.kw-site-strip:focus-visible{outline:3px solid #F0B429;outline-offset:3px}
+.kw-site-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.kw-site-tl{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kw-site-tab{min-height:44px;padding:0 16px;border-radius:100px;background:var(--paper-2);color:var(--ink);border:1px solid var(--line-2);font-weight:600;font-size:14px}
+.kw-site-tab[aria-pressed="true"]{background:#1F2023;color:#F6EEDC;border-color:#1F2023}
+.kw-site-note{font-size:14px;line-height:1.5;color:var(--muted)}
+.kw-site-scroll{height:min(54vh,560px);overflow:auto;overscroll-behavior:contain;border-radius:12px;border:2px solid #1F2023;background:#26272B;-webkit-overflow-scrolling:touch}
+:root[data-theme="dark"] .kw-site-scroll{border-color:var(--line-2)}
+.kw-site-full{display:block;width:100%;height:auto}
+.kw-site-wait{padding:16px;font-size:14px;color:#F6EEDC}
+.kw-site-strip{display:flex;min-height:136px;gap:10px;overflow-x:auto;padding:2px 2px 8px}
+.kw-site-pic{flex:none;height:120px;width:auto;max-width:none;border-radius:8px;border:2px solid #1F2023;background:#26272B}
+.kw-site-mh{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.kw-site-ml{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.kw-site-ml li{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:var(--paper-2);font-size:15px}
+@media(max-width:560px){ .kw-site .kw-cab-top{flex-wrap:wrap} .kw-site .kw-cab-title{flex-basis:100%;order:-1} .kw-site-scroll{height:46vh} }

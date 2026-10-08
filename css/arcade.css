@@ -146,3 +146,25 @@
 }
 .wb-map-district{font-family:var(--body);font-weight:700;font-size:26px;letter-spacing:.06em;fill:#F6EEDC;stroke:#1F2023;stroke-width:5px;paint-order:stroke;stroke-linejoin:round;pointer-events:none}
 .wb-map-ocean{font-family:var(--disp);font-style:italic;font-size:30px;fill:rgba(246,238,220,.75);pointer-events:none}
+
+/* full screen for a game or toy card: the button sits in the card head; the full-screen card scrolls if a board is tall */
+.wb-fs{flex:none;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px 0 10px;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper-2);border:1px solid var(--line-2);cursor:pointer;transition:color .3s var(--work,ease),border-color .3s var(--work,ease)}
+.wb-fs:hover{color:var(--blue);border-color:var(--blue)}
+.wb-fs:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wb-fs svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* the card keeps its natural height (nothing shrinks, it scrolls if needed) and is only as wide as the screen's height
+   allows, so most boards fit whole */
+.bench-card:fullscreen{--fsw:min(1280px,calc((100vh - 230px)*1.55));overflow:auto;background:var(--paper);border-radius:0;border:0;margin:0;max-width:none;width:100vw;height:100vh;
+  justify-content:flex-start;gap:10px;padding:clamp(12px,2vw,24px) max(16px,calc((100vw - var(--fsw))/2))}
+.bench-card:fullscreen>*{flex-shrink:0}
+.bench-card:-webkit-full-screen{--fsw:min(1280px,calc((100vh - 230px)*1.55));overflow:auto;background:var(--paper);width:100vw;height:100vh;justify-content:flex-start;gap:10px;
+  padding:clamp(12px,2vw,24px) max(16px,calc((100vw - var(--fsw))/2))}
+.bench-card:-webkit-full-screen>*{flex-shrink:0}
+@media(max-width:560px){ .wb-fs span{display:none} .wb-fs{padding:0 10px} }
+@media(prefers-reduced-motion:reduce){ .wb-fs{transition:none} }
+/* in full screen a card leaves the bench's shared row grid (subgrid) and stacks its own parts tightly */
+.bench-card.wb:fullscreen{display:flex;flex-direction:column;grid-template-rows:none;grid-row:auto;align-content:start}
+.bench-card.wb:-webkit-full-screen{display:flex;flex-direction:column;grid-template-rows:none;grid-row:auto;align-content:start}
+/* tall boards (Cut the Scope is 4:5) take their width from the screen height in full screen, so the whole board shows */
+.bench-card:fullscreen .rp13-view,.bench-card:-webkit-full-screen .rp13-view{width:min(100%,calc((100vh - 310px)*0.8));margin-inline:auto}
