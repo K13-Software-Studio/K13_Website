@@ -34,4 +34,39 @@ document.querySelectorAll(".arc-index a[href^='#']").forEach(function(a){
     var cv=card.querySelector("canvas[tabindex]"); if(cv) setTimeout(function(){ try{ cv.focus({preventScroll:true}); }catch(x){} },reduced?0:500);
   });
 });
+
+/* full screen for every game and toy card (Kazim, 2026-10-06): a button in each card's head puts the whole card on
+   the screen; Esc or the same button brings it back. Works in list mode and inside the world's cabinet, where the
+   card is moved into the dialog. Hidden where the browser cannot do it (iPhone Safari allows only video). */
+function fsEl(){ return document.fullscreenElement||document.webkitFullscreenElement||null; }
+function fsEnter(el){ var f=el.requestFullscreen||el.webkitRequestFullscreen; if(!f) return; try{ var r=f.call(el); if(r&&r.catch) r.catch(function(){}); }catch(e){} }
+function fsExit(){ var f=document.exitFullscreen||document.webkitExitFullscreen; if(f){ try{ var r=f.call(document); if(r&&r.catch) r.catch(function(){}); }catch(e){} } }
+var fsOk=!!(document.fullscreenEnabled||document.webkitFullscreenEnabled);
+var FS_IN='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+var FS_OUT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+function fsSync(){
+  var cur=fsEl();
+  document.querySelectorAll(".wb-fs").forEach(function(b){
+    var on=cur&&cur===b.closest(".bench-card");
+    b.innerHTML=(on?FS_OUT:FS_IN)+"<span>"+(on?"Exit full screen":"Full screen")+"</span>";
+    b.setAttribute("aria-pressed",String(!!on));
+  });
+  if(cur){ try{ window.dispatchEvent(new Event("resize")); }catch(e){} var cv=cur.querySelector&&cur.querySelector("canvas[tabindex]"); if(cv) setTimeout(function(){ try{ cv.focus({preventScroll:true}); }catch(x){} },60); }
+  else setTimeout(function(){ try{ window.dispatchEvent(new Event("resize")); }catch(e){} },60);
+}
+function fsAdd(){
+  if(!fsOk) return;
+  document.querySelectorAll(".bench-card .wb-head").forEach(function(h){
+    if(h.querySelector(".wb-fs")) return;
+    var card=h.closest(".bench-card"); if(!card) return;
+    var title=(h.querySelector(".wb-title")||{}).textContent||"this game";
+    var b=document.createElement("button"); b.type="button"; b.className="wb-fs"; b.setAttribute("aria-label","Full screen: "+title);
+    b.addEventListener("click",function(){ if(fsEl()===card) fsExit(); else fsEnter(card); });
+    h.appendChild(b);
+  });
+  fsSync();
+}
+document.addEventListener("fullscreenchange",fsSync); document.addEventListener("webkitfullscreenchange",fsSync);
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){ fsAdd(); setTimeout(fsAdd,1500); });
+else { fsAdd(); setTimeout(fsAdd,1500); }
 })();

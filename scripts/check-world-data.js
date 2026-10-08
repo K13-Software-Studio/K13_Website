@@ -94,6 +94,75 @@ Object.keys(D.activity).forEach(function (k) {
 if (D.news.length > 13) fail('more than 13 news lines');
 D.news.forEach(function (n) { if (/[—–]/.test(n.text)) fail('dash in news line: ' + n.text); });
 
+// shops and halls (round 4): every project has a shop, with files on disk, no purple, no dashes, a menu
+var fsx = require('fs'), pathx = path;
+function hexToHsl(h) {
+  var m = /^#([0-9a-f]{6})$/i.exec(h); if (!m) return null;
+  var n = parseInt(m[1], 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  var mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn, hh = 0, ss = 0;
+  if (d) {
+    ss = d / (1 - Math.abs(2 * l - 1));
+    hh = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    hh = (hh * 60 + 360) % 360;
+  }
+  return { h: hh, s: ss, l: l };
+}
+function walkText(v, cb) {
+  if (typeof v === 'string') cb(v);
+  else if (Array.isArray(v)) v.forEach(function (x) { walkText(x, cb); });
+  else if (v && typeof v === 'object') Object.keys(v).forEach(function (k) { walkText(v[k], cb); });
+}
+var root = pathx.join(__dirname, '..');
+var SIG = 'stage stalls aquarium griddle greenery brandwall djbooth ticker plaster scalebar mural eggbar'.split(' ');
+var TOYS = 'eggtoss carlos miramar tide egg cengo stack sandwich goldenhour roof eggcursor pours limewash dumpling angry13'.split(' ');
+if (!D.shops || !D.halls) fail('K13World.data.shops / halls are missing');
+else {
+  works.forEach(function (k) { if (!D.shops[k]) fail('no shop entry for ' + k); });
+  Object.keys(D.shops).forEach(function (k) {
+    var s = D.shops[k], tag = 'shop ' + k + ': ';
+    if (!perProject[k]) fail(tag + 'no place for this project');
+    if (!s.menu || !s.menu.length) fail(tag + 'menu is empty');
+    if (s.menu && s.menu.length > 8) fail(tag + 'more than 8 menu items');
+    (s.menu || []).forEach(function (m) { if (!m.item) fail(tag + 'a menu row has no item'); });
+    if (!s.palette || s.palette.length < 2) fail(tag + 'palette has fewer than 2 colours');
+    (s.palette || []).forEach(function (h) {
+      var c = hexToHsl(h);
+      if (!c) { fail(tag + 'bad hex ' + h); return; }
+      if (c.h >= 245 && c.h <= 330 && c.s > 0.15 && c.l > 0.08 && c.l < 0.97) fail(tag + 'purple hex ' + h);
+    });
+    if (!s.motifs || s.motifs.length < 3 || s.motifs.length > 6) fail(tag + 'needs 3 to 6 motifs');
+    if (!s.signature || SIG.indexOf(s.signature.kind) < 0) fail(tag + 'signature kind ' + (s.signature && s.signature.kind) + ' is not in the contract list');
+    if (s.toy !== null && TOYS.indexOf(s.toy) < 0) fail(tag + 'unknown toy id ' + s.toy);
+    ['ask', 'item', 'give', 'thanks'].forEach(function (f) { if (!s.task || !s.task[f]) fail(tag + 'task.' + f + ' is missing'); });
+    ['morning', 'noon', 'evening', 'night'].forEach(function (f) {
+      if (!s.crowd || typeof s.crowd[f] !== 'number' || s.crowd[f] < 0 || s.crowd[f] > 1) fail(tag + 'crowd.' + f + ' is not 0..1');
+    });
+    var files = [s.full].concat(s.images || []);
+    if (!s.images || s.images.length < 2 || s.images.length > 4) fail(tag + 'needs 2 to 4 images');
+    files.forEach(function (f) {
+      if (!f || !f.src) { fail(tag + 'a capture has no src'); return; }
+      var fp = pathx.join(root, f.src.replace(/^\//, ''));
+      if (!fsx.existsSync(fp)) fail(tag + 'file missing: ' + f.src);
+      else if (/-full\.webp$/.test(f.src) && fsx.statSync(fp).size > 650 * 1024) fail(tag + f.src + ' is over 650 KB');
+      else if (!/-full\.webp$/.test(f.src) && fsx.statSync(fp).size > 130 * 1024) fail(tag + f.src + ' is over 130 KB');
+    });
+    if (s.full && s.full.w !== 720) fail(tag + 'full capture is not 720 wide');
+    walkText(s, function (t) { if (/[\u2014\u2013]/.test(t)) fail(tag + 'dash in text: ' + t); });
+    if (/(edisyn|halil|okto|\btlc\b|\bicp\b)/i.test(JSON.stringify(s))) fail(tag + 'names a non-public project');
+  });
+  D.halls.forEach(function (h) {
+    var tag = 'hall ' + h.id + ': ';
+    if (!D.shops[h.host]) fail(tag + 'host ' + h.host + ' has no shop');
+    if (!h.counters.length) fail(tag + 'no counters');
+    h.counters.forEach(function (c) {
+      if (!ids[c]) fail(tag + 'counter ' + c + ' is not a place');
+      var pl = D.places.filter(function (p) { return p.id === c; })[0];
+      if (pl && pl.address && h.address && pl.address.replace(/\W/g, '').slice(0, 6) !== h.address.replace(/\W/g, '').slice(0, 6) && h.id !== 'miramar-hall')
+        fail(tag + 'counter ' + c + ' has a different street address');
+    });
+  });
+}
+
 if (fails.length) {
   console.error('check-world-data: ' + fails.length + ' problem(s)');
   fails.forEach(function (m) { console.error('  - ' + m); });
