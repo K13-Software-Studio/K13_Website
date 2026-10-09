@@ -55,3 +55,10 @@ earlier feature.
 items, a counter with a brand sign (`counter(ctx, key, ...)`), the site-screen kiosk, decor from motifs
 (plants, posters, crates, string lights, tiles), hall furniture (shared seating, a long communal table),
 all in the stage 1 and 2 style, day and night, never purple.
+
+## Open polish after round 4 (live 2026-10-07, PR #45)
+Picked up at the start of the next world round:
+- **Hall signs cut off**: in busy food halls a counter's name can be clipped ("THE LOBSTER TA…"); fit or shorten the sign text per counter.
+- **People in front of signs**: staff and customers can stand over a counter's sign or menu board; keep them out of the sign rows.
+- **Three doors off their real spot**: Station 8, Oceanside and Del Mar stand about 10 to 12 tiles from their real addresses; move them closer without moving any other shop.
+- **Sound not heard yet**: the WebAudio ambience, footsteps and blips have only been checked for errors; someone should listen once on desktop and phone.
